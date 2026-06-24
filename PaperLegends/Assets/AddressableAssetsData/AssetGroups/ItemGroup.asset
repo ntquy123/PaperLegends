@@ -1,0 +1,257 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: ItemGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: ItemGroup
+  m_GUID: 8c4cac34cb2ece844ba5eceb2498769a
+  m_SerializeEntries:
+  - m_GUID: 0b9a2049432cac64bb18e44011fcc0cf
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000006.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1768195bdc8079e4181ca46eaaeb586a
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPortraits/thanhgiongembe.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 211903722070c004493d8f4e9a774a26
+    m_Address: Assets/AddressableAsset/Items/ImageItem/98000002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21247e848f3818b4fa0df109305663d0
+    m_Address: Assets/AddressableAsset/Items/ImageItem/97000002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2767bd4b18b49ac469a85c3484852668
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000003.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 357a92341b3b07d4aa5260ca881c797c
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000005.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e26546ee309fb74b8734151efb1381d
+    m_Address: Assets/AddressableAsset/Items/ImageItem/ItemGame.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43afc24d40eb5ce44973ecc97f8bbd19
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000013.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5041b73bc19622447afd086a02fb4395
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000008.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52889011aeba79d4aa25ce4f54055f3a
+    m_Address: Assets/AddressableAsset/Items/ImageItem/98000003.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5921705f0aa3d7840a0339b105542e8e
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000012.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 598dd98903a788a419333d0d6164c068
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000007.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 628e886feef304e418e2846e6540d5ed
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000006.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67f4cc3a8be8c194792f56867c0081d2
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPortraits/10000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 697ccf6113c39d0438667faef87f25d6
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 765daec50d79d5d419d677fd8c57d8f8
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85fa1ca807cb6784eb5153030100291d
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000010.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89c14aa474130f545a27f94b4db5ec60
+    m_Address: Assets/AddressableAsset/Items/ImageItem/3.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8d78c3ca61fe53446926666b478fac44
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000011.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93bfde28c5990874a943aa38c0d2213a
+    m_Address: Assets/AddressableAsset/Items/ImageItem/cancel2.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b72b132671bf5045b3af9b40d9b6947
+    m_Address: Assets/AddressableAsset/Items/ImageItem/6.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0f35eecc32bae646ac7200fae0de6de
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000004.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a42ea5a1f16315345b5d924bac0bfead
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000016.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a7f577a9f6a997b4b8260f6a84b90ae5
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000003.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa7004d595e6e7447adfb0d61c003abc
+    m_Address: Assets/AddressableAsset/Items/ImageItem/97000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afab8f093533acf488cb8549c3363102
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000014.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1bc826c7914ac24c9aae67d27338d4d
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000017.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4f5e3a776aec3e4d9c5eff38d82cd77
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bae6532fc9c3c4b44a09c4bbc263d120
+    m_Address: Assets/AddressableAsset/Items/ImageItem/88000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc7f898df6c7f7c438e1e0b31ab6e138
+    m_Address: Assets/AddressableAsset/Items/ImageItem/5.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccb938a799d8a924c9e873ef6ea11b6b
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000009.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d49c2f9ad967f6e4ca80cc05155b48d8
+    m_Address: Assets/AddressableAsset/Items/ImageItem/cancel.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc7b8d2f39e803a4a89fa9e75546ea3b
+    m_Address: Assets/AddressableAsset/Items/ImageItem/9.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd3484d8d1aaab242a7dd6edfe943200
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000005.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ecf81ccc743818e4cbafce8d33fe96fe
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f038cecae98872841909ba65069ab047
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000004.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f532b5413d946d44eaaee1abb049dd3f
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000015.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc90781fa2498e64f9dcbc7b4a6679c9
+    m_Address: Assets/AddressableAsset/Items/ImageItem/98000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe726c5f61b377d49a0f555f81bbeb83
+    m_Address: Assets/AddressableAsset/Items/ImageItem/99000018.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7392f04d42c06754693add1add6d5d7d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 59232bc842ce08d45bb1d4bf9b53e7c7, type: 2}
+    - {fileID: 11400000, guid: df8fc10fe1d815d4fabe8a5cc4513cc7, type: 2}

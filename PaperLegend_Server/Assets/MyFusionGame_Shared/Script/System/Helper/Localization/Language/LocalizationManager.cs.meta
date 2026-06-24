@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 6a39b34ca640f184084afe6202f031d8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - englishData: {fileID: 11400000, guid: c595ae9d857d1fa4fae96f5a7f4c7c2a, type: 2}
+  - vietnameseData: {fileID: 11400000, guid: c887da1cf8394074d90012bb07691f08, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

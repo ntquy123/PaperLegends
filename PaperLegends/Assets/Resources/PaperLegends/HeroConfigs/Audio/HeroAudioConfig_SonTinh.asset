@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44272513dd574d94f97229a81a421ad2, type: 3}
+  m_Name: HeroAudioConfig_SonTinh
+  m_EditorClassIdentifier: 
+  heroId: 10000003
+  normalAttack: {fileID: 0}
+  flick: {fileID: 0}
+  move: {fileID: 0}
+  hit: {fileID: 0}
+  die: {fileID: 0}

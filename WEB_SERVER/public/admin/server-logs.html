@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Legends - API Logs</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero docker-hero">
+        <div>
+          <p class="eyebrow">API Monitor</p>
+          <h1>API Logs</h1>
+          <p class="subtitle">Theo doi runtime log va loi API da luu trong database.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="back-dashboard" class="chip-action chip-button" type="button">Back dashboard</button>
+          <div class="hero-badge">
+            <span class="badge-label">Status</span>
+            <span id="session-state" class="badge-value offline">Checking...</span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">API Server</p>
+              <h2>Log monitor</h2>
+              <p class="subtitle">Runtime log realtime va API error log chi ghi khi request bi loi.</p>
+            </div>
+            <div class="admin-chip">
+              <div class="chip-icon">LOG</div>
+              <div class="chip-text">
+                <span id="admin-name">Admin</span>
+                <small id="admin-meta">Authenticating...</small>
+              </div>
+              <button id="logout" class="chip-action" type="button" title="Logout">x</button>
+            </div>
+          </div>
+
+          <div class="tab-nav log-tab-nav">
+            <button class="tab-button active" data-tab="runtime" type="button">Runtime log</button>
+            <button class="tab-button" data-tab="api-errors" type="button">API error log</button>
+          </div>
+
+          <div class="tab-panel active" data-tab-panel="runtime">
+            <div class="docker-grid-toolbar">
+              <div class="docker-grid-meta">
+                <div class="pill neutral" id="runtime-log-count">0 dong</div>
+                <button id="refresh-logs" class="chip-action chip-button" type="button">Refresh</button>
+              </div>
+              <div class="table-toolbar">
+                <label class="field compact">
+                  <span>So dong</span>
+                  <input id="log-tail" type="number" min="10" max="2000" step="10" value="200" />
+                </label>
+                <label class="field compact">
+                  <span>Auto refresh (giay)</span>
+                  <input id="auto-refresh" type="number" min="0" max="60" step="5" value="5" />
+                </label>
+                <button id="toggle-auto" class="chip-action chip-button" type="button">Pause</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Runtime</p>
+                  <h3>Noi dung log server</h3>
+                  <p class="subtitle">Lay tu bo dem realtime cua API process.</p>
+                </div>
+              </div>
+              <pre id="runtime-log-content" class="log-content">Dang tai log...</pre>
+            </div>
+          </div>
+
+          <div class="tab-panel" data-tab-panel="api-errors">
+            <div class="docker-grid-toolbar">
+              <div class="docker-grid-meta">
+                <div class="pill neutral" id="api-error-count">0 loi</div>
+                <button id="refresh-api-error-logs" class="chip-action chip-button" type="button">Refresh</button>
+              </div>
+              <div class="table-toolbar">
+                <label class="field compact">
+                  <span>Search</span>
+                  <input id="api-error-search" type="search" placeholder="path, method, error..." />
+                </label>
+                <label class="field compact">
+                  <span>From</span>
+                  <input id="api-error-from" type="datetime-local" />
+                </label>
+                <label class="field compact">
+                  <span>To</span>
+                  <input id="api-error-to" type="datetime-local" />
+                </label>
+                <label class="field compact">
+                  <span>Page size</span>
+                  <input id="api-error-page-size" type="number" min="10" max="200" step="10" value="50" />
+                </label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Database</p>
+                  <h3>API error log</h3>
+                  <p class="subtitle">Chi luu request GET/POST tra ve loi, khong luu request thanh cong.</p>
+                </div>
+                <div class="pagination-controls">
+                  <button id="api-error-prev" class="chip-action chip-button" type="button">Prev</button>
+                  <div class="pagination-info" id="api-error-pagination">Page 1/1</div>
+                  <button id="api-error-next" class="chip-action chip-button" type="button">Next</button>
+                </div>
+              </div>
+              <div id="api-error-content" class="api-error-list">Dang tai API error log...</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="module" src="./server-logs.js"></script>
+  </body>
+</html>

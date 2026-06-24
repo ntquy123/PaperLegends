@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "PaperLegend_Server"
+		},
+		{
+			"path": "PaperLegends"
+		},
+		{
+			"path": "WEB_SERVER"
+		}
+	],
+	"settings": {
+		"dotnet.preferCSharpExtension": true
+	}
+}

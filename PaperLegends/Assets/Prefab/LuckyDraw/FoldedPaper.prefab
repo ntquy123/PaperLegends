@@ -1,0 +1,183 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_Name: FoldedPaper
+  m_Component:
+  - component: {fileID: 22400000}
+  m_Layer: 5
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!224 &22400000
+RectTransform:
+  m_GameObject: {fileID: 100000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 22400001}
+  - {fileID: 22400002}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &100001
+GameObject:
+  m_Name: ResultText
+  m_Component:
+  - component: {fileID: 22400001}
+  - component: {fileID: 22200000}
+  - component: {fileID: 11400000}
+  m_Layer: 5
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!224 &22400001
+RectTransform:
+  m_GameObject: {fileID: 100001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Father: {fileID: 22400000}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &22200000
+CanvasRenderer:
+  m_GameObject: {fileID: 100001}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_GameObject: {fileID: 100001}
+  m_Script: {fileID: 11500000, guid: 5f7201a4e5a41634b8a8e83ef9d8b03d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Text: Result
+--- !u!1 &100002
+GameObject:
+  m_Name: SkipButton
+  m_Component:
+  - component: {fileID: 22400002}
+  - component: {fileID: 22200001}
+  - component: {fileID: 11400001}
+  - component: {fileID: 11400002}
+  m_Layer: 5
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!224 &22400002
+RectTransform:
+  m_GameObject: {fileID: 100002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 22400003}
+  m_Father: {fileID: 22400000}
+  m_RootOrder: 1
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -10, y: -10}
+  m_SizeDelta: {x: 60, y: 30}
+  m_Pivot: {x: 1, y: 1}
+--- !u!222 &22200001
+CanvasRenderer:
+  m_GameObject: {fileID: 100002}
+--- !u!114 &11400001
+MonoBehaviour:
+  m_GameObject: {fileID: 100002}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &11400002
+MonoBehaviour:
+  m_GameObject: {fileID: 100002}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 0
+  m_TargetGraphic: {fileID: 11400001}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &100003
+GameObject:
+  m_Name: Text (TMP)
+  m_Component:
+  - component: {fileID: 22400003}
+  - component: {fileID: 22200002}
+  - component: {fileID: 11400003}
+  m_Layer: 5
+  m_TagString: Untagged
+  m_IsActive: 1
+--- !u!224 &22400003
+RectTransform:
+  m_GameObject: {fileID: 100003}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Father: {fileID: 22400002}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &22200002
+CanvasRenderer:
+  m_GameObject: {fileID: 100003}
+--- !u!114 &11400003
+MonoBehaviour:
+  m_GameObject: {fileID: 100003}
+  m_Script: {fileID: 11500000, guid: 5f7201a4e5a41634b8a8e83ef9d8b03d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  m_Text: Skip

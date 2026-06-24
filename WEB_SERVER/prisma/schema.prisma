@@ -1,0 +1,510 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum HeroRole {
+  WARRIOR
+  ASSASSIN
+  TANK
+  MAGE
+  SUPPORT
+  MARKSMAN
+}
+
+model Player {
+  id                     Int                       @id @default(autoincrement())
+  friendCode             String                    @unique // mã công khai để tìm
+  PlayerName             String?
+  Level                  Int?
+  Exp                    Int?
+  Body                   Int?
+  RingBall               Int?
+  GlassShard             Int?                      @default(0)
+  LuckyRate              Int                       @default(5)
+  Money                  Int?
+  TalentPoint            Int?
+  IdAccount              String
+  IsActive               Boolean
+  Email                  String?
+  ProviderType           String?
+  AvatarUrl              String?                   @map("avatarUrl")
+  isTutorialCompleted    Boolean                   @default(false)
+  createdAt              DateTime                  @default(now())
+  lastLoginAt            DateTime?
+  refreshTokens          UserRefreshToken[]
+  roomUsers              RoomUser[]
+  playerItems            PlayerItem[]
+  histories              History[]
+  balanceHistories       BalanceHistory[]
+  effectPlayers          EffectPlayer[]
+  achievementStatuses    PlayerAchievementStatus[]
+  dailyRareItem          DailyRareItem[]
+  dailyShopPurchases     DailyShopPurchase[]
+  equipPlayers           EquipPlayer[]
+  sentFriendRequests     FriendRequest[]           @relation("SentFriendRequests")
+  receivedFriendRequests FriendRequest[]           @relation("ReceivedFriendRequests")
+  friendships            Friendship[]              @relation("PlayerFriendships")
+  friends                Friendship[]              @relation("FriendPlayerShips")
+  messagesSent           FriendMessage[]           @relation("MessagesSent")
+  messagesReceived       FriendMessage[]           @relation("MessagesReceived")
+  buyRequestOrders       BuyRequestOrder[]
+
+  @@index([IsActive])
+  @@index([IdAccount])
+  @@index([ProviderType])
+  @@index([Email])
+}
+
+model UserRefreshToken {
+  id               BigInt    @id @default(autoincrement())
+  userId           Int       @map("user_id")
+  refreshTokenHash String    @unique @map("refresh_token_hash")
+  deviceId         String    @map("device_id")
+  jti              String    @unique
+  expiresAt        DateTime  @map("expires_at")
+  revokedAt        DateTime? @map("revoked_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  lastUsedAt       DateTime? @map("last_used_at")
+  user             Player    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_user_id_active")
+  @@index([refreshTokenHash], map: "idx_token_hash")
+  @@index([jti], map: "idx_jti")
+}
+
+// SYSTEM
+model Room {
+  id             Int        @id @default(autoincrement())
+  roomName       String
+  maxPlayers     Int
+  currentPlayers Int
+  roomUsers      RoomUser[]
+  bet            Int        @default(0)
+  createId       Int
+  createDate     DateTime   @default(now())
+  typeMatchGid   Int
+  mapId          Int        @default(0)
+
+  @@index([roomName])
+  @@index([typeMatchGid])
+  @@unique([roomName])
+}
+
+model ServerPortPool {
+  portNo       Int       @id
+  isBusy       Int       @default(0) //0: free, 1: busy
+  lastUpdate   DateTime  @default(now())
+  containerId  String?
+  roomNameRef  String?
+  typeMatchGid Int
+
+  @@index([containerId])
+  @@index([roomNameRef])
+  @@index([typeMatchGid])
+}
+
+model ApiErrorLog {
+  logId         Int      @id @default(autoincrement())
+  method        String
+  path          String
+  statusCode    Int?
+  requestParams Json?
+  errorMessage  String
+  errorStack    String?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([method, path])
+  @@index([ipAddress, createdAt])
+}
+
+model RoomUser {
+  id       Int      @id @default(autoincrement())
+  roomId   Int
+  userId   Int
+  joinedAt DateTime @default(now())
+  hasLeft  Boolean  @default(false)
+
+  player Player @relation(fields: [userId], references: [id]) // Quan hệ với bảng Player
+  room   Room   @relation(fields: [roomId], references: [id]) // Quan hệ với bảng Room
+
+  @@unique([roomId, userId]) // Đảm bảo mỗi người dùng chỉ có thể tham gia một phòng một lần
+}
+
+model Item {
+  id               Int           @id
+  name             String
+  SkillGid         Int?
+  ElementType      Int? //Loại nguyên tố của vật phẩm
+  description      String
+  level            Int
+  typeGid          Int           @map("Type_Gid")
+  rarityGid        Int           @default(11300001) @map("Rarity_Gid")
+  price            Int
+  priceByBall      Int?
+  maxPurchasePerDay Int?
+  isLevelUp        Boolean       @map("is_Level_Up")
+  isOpen           Boolean
+  locationGid      Int           @map("Location_Gid")
+  Levelrequired    Int?
+  Mass             Float?
+  GravityScale     Float?
+  Drag             Float?
+  Bounciness       Float?
+  Elasticity       Float?
+  ImpactResistance Float?
+  isCateye         Boolean       @default(true)
+  playerItems      PlayerItem[]
+  equipPlayers     EquipPlayer[]
+  activeSkill      SysMasGeneral? @relation("ItemActiveSkill", fields: [SkillGid], references: [GenCode])
+  dailyShopPurchases  DailyShopPurchase[]
+  buyRequestOrders    BuyRequestOrder[]
+  itemPriceHistories  ItemPriceHistory[]
+
+  @@index([typeGid])
+  @@index([rarityGid])
+  @@index([level])
+  @@index([ElementType])
+  @@index([isLevelUp])
+  @@index([isOpen])
+  @@index([locationGid])
+  @@index([Levelrequired])
+  @@index([isCateye])
+  @@index([SkillGid])
+}
+
+
+model ItemPriceHistory {
+  id            Int      @id @default(autoincrement())
+  itemId         Int
+  oldPrice       Float
+  newPrice       Float
+  buyDemand      Int
+  sellSupply     Int
+  changePercent  Float
+  reason         String?
+  createdAt      DateTime @default(now())
+
+  item Item @relation(fields: [itemId], references: [id])
+
+  @@index([itemId])
+  @@index([createdAt])
+}
+
+model PlayerItem {
+  playerId    Int
+  itemId      Int
+  seq         Int
+  level       Int
+  SkillGid    Int?
+  description String
+  Price       Int?   @default(0)
+  damage      Decimal @default(0)
+  IsSolded    Int    @default(0) // 0: chưa bán, 1: đang bán, 2: đã bán, 3: không thể bán
+  Isbought    Int    @default(0) // 0: chưa mua qua market, 1: đã mua
+
+  player      Player         @relation(fields: [playerId], references: [id])
+  item        Item           @relation(fields: [itemId], references: [id])
+  activeSkill SysMasGeneral? @relation("PlayerItemActiveSkill", fields: [SkillGid], references: [GenCode])
+
+  @@id([playerId, itemId, seq])
+  @@index([SkillGid])
+}
+
+model History {
+  playerId     Int
+  transno      BigInt
+  turnOrder    Int?
+  typeMatchGid Int?
+  statusWin    Int?
+  mapGame      String?
+  maxPlayer    Int?
+  rounds       Int
+  marbBet      Int
+  marblesWon   Int
+  marblesLost  Int
+  expGained    Int
+  rankPoints   Int      @default(0)
+  description  String?
+  createdAt    DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@id([playerId, transno])
+  @@index([statusWin])
+  @@index([createdAt])
+}
+
+model BalanceHistory {
+  userId      Int
+  seq         Int
+  ringBall    Int      @default(0)
+  money       Int      @default(0)
+  description String?
+  eventType   String
+  createdAt   DateTime @default(now())
+
+  player Player @relation(fields: [userId], references: [id])
+
+  @@id([userId, seq])
+  @@index([createdAt])
+  @@index([eventType])
+}
+
+model SysMasGeneral {
+  GenCode     Int     @id
+  GenCate     Int     @default(0)
+  GenName     String
+  ParentCode  Int?
+  description String?
+
+  effectPlayers         EffectPlayer[]
+  itemActiveSkills      Item[]       @relation("ItemActiveSkill")
+  playerItemActiveSkills PlayerItem[] @relation("PlayerItemActiveSkill")
+
+  @@index([GenCate])
+}
+
+model SysMasLanguage {
+  code        String @id
+  vietnamText String
+  englishText String
+}
+
+model EffectPlayer {
+  playerId    Int
+  effectId    Int
+  power       Float
+  spin        Float
+  level       Int
+  isPassive   Boolean
+  charges     Int
+  description String
+  IsActive    Boolean @default(false)
+  IsEquiped   Boolean @default(false)
+
+  player        Player        @relation(fields: [playerId], references: [id])
+  sysMasGeneral SysMasGeneral @relation(fields: [effectId], references: [GenCode])
+
+  @@id([playerId, effectId])
+  @@index([IsActive])
+  @@index([IsEquiped])
+}
+
+model PlayerAchievement {
+  seq          Int
+  rewardType   String
+  locationId   Int?
+  rewardAmount Int?
+  itemId       Int?
+  countGif     Int?
+  isUsed       Boolean  @default(false)
+  achievedAt   DateTime @default(now())
+
+  statuses PlayerAchievementStatus[] @relation("PlayerAchievementToStatus")
+
+  @@id([rewardType, seq])
+}
+
+model PlayerAchievementStatus {
+  playerId       Int
+  typeGid        String
+  achievementId  Int
+  itemId         Int?
+  TransDate      DateTime          @default(dbgenerated("CURRENT_DATE"))
+  isComplete     Boolean?          @default(false)
+  isGiftReceived Boolean?          @default(false)
+  updatedAt      DateTime          @default(now())
+  player         Player            @relation(fields: [playerId], references: [id])
+  achievement    PlayerAchievement @relation("PlayerAchievementToStatus", fields: [typeGid, achievementId], references: [rewardType, seq])
+
+  @@id([playerId, typeGid, achievementId, TransDate])
+}
+
+model DailyRareItem {
+  playerId Int
+  date     DateTime
+  count    Int      @default(0)
+
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@id([playerId, date])
+}
+
+model DailyShopPurchase {
+  userId            Int
+  itemId            Int
+  purchaseDate      DateTime @default(dbgenerated("CURRENT_DATE"))
+  purchaseCount     Int      @default(0)
+  maxPurchasePerDay Int
+
+  player Player @relation(fields: [userId], references: [id])
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  @@id([userId, itemId, purchaseDate])
+}
+
+model EquipPlayer {
+  playerId    Int
+  locationId  Int
+  itemId      Int
+  seqItem     Int
+  createdDate DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id])
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  @@id([playerId, locationId])
+}
+
+model ItemTradeHistory {
+  playerIdBuy  Int
+  playerIdSold Int
+  itemId       Int
+  seq          Int
+  price        Int      @default(0)
+  quantity     Int      @default(1)
+  createdAt    DateTime @default(now())
+
+  @@id([playerIdBuy, playerIdSold, itemId, seq])
+  @@index([createdAt])
+}
+
+model FriendRequest {
+  senderId   Int
+  receiverId Int
+  status     String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt  DateTime @default(now())
+
+  sender   Player @relation("SentFriendRequests", fields: [senderId], references: [id])
+  receiver Player @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+
+  @@id([senderId, receiverId])
+  @@index([createdAt])
+}
+
+model Friendship {
+  playerId Int
+  friendId Int
+  since    DateTime @default(now())
+
+  player Player @relation("PlayerFriendships", fields: [playerId], references: [id])
+  friend Player @relation("FriendPlayerShips", fields: [friendId], references: [id])
+
+  @@id([playerId, friendId])
+  @@index([since])
+}
+
+model FriendMessage {
+  senderId         Int
+  seqMess          Int
+  receiverId       Int
+  status           String   @default("PENDING") // PENDING, READ
+  message          String
+  itemId           Int?
+  seqId            Int?
+  ringBallReward   Int      @default(0)
+  moneyReward      Int      @default(0)
+  itemRewardId     Int?
+  isSenderDelete   Boolean  @default(false)
+  isReceiverDelete Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  sender           Player   @relation("MessagesSent", fields: [senderId], references: [id])
+  receiver         Player   @relation("MessagesReceived", fields: [receiverId], references: [id])
+
+  @@id([senderId, seqMess])
+  @@index([createdAt])
+}
+
+
+model BuyRequestOrder {
+  playerId   Int
+  itemId     Int
+  seq        Int
+  price      Int
+  status     Int      @default(0)
+  createDate DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id])
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  @@id([playerId, itemId, seq])
+  @@index([itemId, status])
+}
+
+model Hero {
+  id                String      @id @default(cuid())
+  code              String      @unique
+  name              String
+  role              HeroRole    @default(WARRIOR)
+  description       String?
+
+  hp                Int         @default(100)
+  attack            Int         @default(10)
+  defense           Int         @default(0)
+  speed             Float       @default(1)
+
+  // Paper flick physics. Server/Unity uses these values to tune how each paper hero moves.
+  weight            Float       @default(1)
+  bounce            Float       @default(0.35)
+  friction          Float       @default(0.5)
+  flickForce        Float       @default(1)
+
+  modelId           String?     @unique
+  prefabAddress     String?
+  iconUrl           String?
+  portraitUrl       String?
+  selectionImageUrl String?
+  sortOrder         Int         @default(0)
+  isActive          Boolean     @default(true)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  skills      HeroSkill[]
+
+  @@index([role])
+  @@index([isActive, sortOrder])
+}
+
+model HeroSkill {
+  id          String    @id @default(cuid())
+  heroId      String
+  hero        Hero      @relation(fields: [heroId], references: [id], onDelete: Cascade)
+
+  slot        Int       // 1,2,3,4
+  code        String    // DAM_LAC_CHARGE
+  name        String
+  description String?
+
+  cooldown    Float     @default(0)
+  manaCost    Int       @default(0)
+  damage      Float     @default(0)
+  range       Float     @default(0)
+  duration    Float     @default(0)
+
+  config      Json?     // thông số riêng từng skill
+  iconUrl     String?
+  vfxCode     String?
+  sfxCode     String?
+
+  isPassive   Boolean   @default(false)
+  isActive    Boolean   @default(true)
+
+  @@unique([heroId, slot])
+  @@unique([heroId, code])
+  @@index([heroId])
+  @@index([isActive])
+}

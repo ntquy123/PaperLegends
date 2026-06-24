@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c94af2c7a8f4a258abfb8e5c06b40cb, type: 3}
+  m_Name: PaperLegendCharacterServerCatalog
+  m_EditorClassIdentifier: 
+  characterModels:
+  - modelId: 10000001
+    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+  - modelId: 10000002
+    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+  - modelId: 10000003
+    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+  - modelId: 10000004
+    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+  - modelId: 10000005
+    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+  - modelId: 10000006
+    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}

@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: SoundGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: SoundGroup
+  m_GUID: 7770c18919eff9f489998f3aa4dd1f4a
+  m_SerializeEntries:
+  - m_GUID: 063aa9f5e364c7f4cb808abff0f0630f
+    m_Address: Assets/AddressableAsset/Audio/YourTurn.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0a1a41242ee18c840b0cd93dd6dfdbe7
+    m_Address: Assets/AddressableAsset/Audio/BanCuli.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1330509d8833b2943ab2c3bfeb79a067
+    m_Address: Assets/AddressableAsset/Audio/LuotDoiThu.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bcc2446828e1b3439a48fb49eee04d1
+    m_Address: Assets/AddressableAsset/Audio/Mua.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2869b3c729ba9d340b0b840c935dbdc3
+    m_Address: Assets/AddressableAsset/Audio/Culi_lan2.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2dcf4b23b60456a4e9e4d2057a424847
+    m_Address: Assets/AddressableAsset/Audio/Culi_lan.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3af945a845c2a2a4188070349c9897f3
+    m_Address: Assets/AddressableAsset/Audio/Lullaby-Enzalla.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40dd4eeb1a7663c4c94ee77ba8c4bc2c
+    m_Address: Assets/AddressableAsset/Audio/BanDem.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63f05cb6496648f41a4e4d9914a8e65f
+    m_Address: Assets/AddressableAsset/Audio/Ditrongnuoc.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73bbe66e9f4fc224e827359cdf27c75a
+    m_Address: Assets/AddressableAsset/Audio/CuliVaCham.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 807019194748d334bbdeae10d47f2cf3
+    m_Address: Assets/AddressableAsset/Audio/Whispers_of_the_Jade_River.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81584c16d2fbaac498963b79b368ec30
+    m_Address: Assets/AddressableAsset/Audio/LuotCuaBan.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b4e14879342f4d44a980f42792061c3
+    m_Address: Assets/AddressableAsset/Audio/Bitrongnuoc.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92385d32c27b4ee43b00936094230022
+    m_Address: Assets/AddressableAsset/Audio/CulivaCham3.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93c946779b8c76f4596660949ad5ed21
+    m_Address: Assets/AddressableAsset/Audio/xaoxac.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97ac252fa33391443ac0a7d360b0377f
+    m_Address: Assets/AddressableAsset/Audio/OpenItem.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e2341a558e1c29479b36efe83845dcc
+    m_Address: Assets/AddressableAsset/Audio/nuoclu.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bcc6193150c1420b925138b5a7f3399e
+    m_Address: Assets/AddressableAsset/Audio/heartbeat.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4bfb6166bef0a146a973210e484c094
+    m_Address: Assets/AddressableAsset/Audio/OpenCuli.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee535b914ed9d64409d28cd806d19b9a
+    m_Address: Assets/AddressableAsset/Audio/short-beep-tone-47916.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f652c45df05ce384bbae613571d6e28a
+    m_Address: Assets/AddressableAsset/Audio/LuotThi.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb9884a11d6e6f744b9ba724b002b32e
+    m_Address: Assets/AddressableAsset/Audio/CuliVaCham2.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7392f04d42c06754693add1add6d5d7d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 360ab684df576e34aa9b05056b1f4803, type: 2}
+    - {fileID: 11400000, guid: afa92077f56df144c9d4f16bd90fd851, type: 2}

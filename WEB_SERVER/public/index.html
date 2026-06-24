@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Paper Legends - Đấu Tướng Giấy là game online nơi người chơi búng tướng giấy, canh lực, đè trúng đối thủ và trở thành người đầu tiên đạt 15 mạng."
+    />
+    <title>Paper Legends - Đấu Tướng Giấy</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__scene" aria-hidden="true">
+        <div class="paper-board">
+          <span class="lane lane--top"></span>
+          <span class="lane lane--middle"></span>
+          <span class="lane lane--bottom"></span>
+          <span class="base base--left"></span>
+          <span class="base base--right"></span>
+          <span class="paper-fighter paper-fighter--one"></span>
+          <span class="paper-fighter paper-fighter--two"></span>
+          <span class="paper-fighter paper-fighter--three"></span>
+          <span class="paper-fighter paper-fighter--four"></span>
+          <span class="impact impact--one"></span>
+          <span class="impact impact--two"></span>
+        </div>
+      </div>
+
+      <div class="hero__content">
+        <span class="hero__badge">Online board action game</span>
+        <h1>Paper Legends - Đấu Tướng Giấy</h1>
+        <p>
+          Chọn một tướng giấy, giữ lực, búng nhân vật bay lên khỏi mặt bàn rồi rơi xuống đè lên
+          đối thủ. Luật chơi dễ hiểu như trò tự chế ngày nhỏ, nhưng được phát triển thành một trận
+          đấu online có tướng, cấp độ, kỹ năng, BOT và xử lý vật lý từ server.
+        </p>
+        <div class="hero__actions">
+          <span class="pill">4 người hỗn chiến</span>
+          <span class="pill">Có BOT khi thiếu người</span>
+          <span class="pill">Thắng khi đạt 15 mạng</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section section--intro">
+        <div class="section__header">
+          <p class="eyebrow">Ý tưởng cốt lõi</p>
+          <h2>Búng giấy, canh lực, rơi đè trúng là hạ gục</h2>
+          <p>
+            Paper Legends chuyển nền tảng game online cũ sang một game mới lấy cảm hứng từ trò
+            chơi tướng giấy ngoài đời: nhân vật là thẻ giấy cứng 3D, mỗi thẻ có hình dáng, kích
+            thước, trọng lượng và kỹ năng riêng.
+          </p>
+        </div>
+
+        <div class="features">
+          <article class="feature-card">
+            <span class="feature-card__icon">01</span>
+            <h3>Điều khiển bằng lực búng</h3>
+            <p>
+              Người chơi chạm vào cạnh tướng giấy, thanh lực tăng dần, thả tay để tạo lực theo
+              hướng ngược điểm chạm. Khi tướng đang ở trên không, thao tác búng sẽ không có tác
+              dụng.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon">02</span>
+            <h3>Server quyết định va chạm</h3>
+            <p>
+              Client chỉ gửi input. Host/server xử lý lực, trạng thái chạm đất, cú rơi, hạ gục,
+              điểm số và kết thúc trận để giảm gian lận trong môi trường online.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon">03</span>
+            <h3>Mỗi tướng có bản sắc riêng</h3>
+            <p>
+              Tướng có model riêng, kích thước lạ nhau, hitbox riêng và kỹ năng riêng. Dữ liệu
+              tướng được cấu hình theo mã ID để server spawn đúng model đã chọn.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-card__icon">04</span>
+            <h3>BOT biết tự chơi</h3>
+            <p>
+              Khi không đủ người, server thêm BOT. BOT ưu tiên mục tiêu gần, tránh mục tiêu vượt
+              cấp quá mạnh và tự búng nhân vật để tìm cách rơi đè lên đối thủ.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--band">
+        <div class="section__header">
+          <p class="eyebrow">Luồng trận đấu</p>
+          <h2>Từ ghép trận đến kết thúc game</h2>
+        </div>
+
+        <ol class="step-list">
+          <li>
+            <strong>Ghép trận 4 người.</strong>
+            Chế độ đầu tiên là 4 người đánh hỗn chiến. Nếu thiếu người chơi thật, server tự thêm
+            BOT để đủ trận.
+          </li>
+          <li>
+            <strong>Chọn tướng trong 40 giây.</strong>
+            Sau khi ghép trận thành công, client mở UI chọn tướng. Ai chọn trước được giữ trước,
+            không chọn trùng. BOT và người hết giờ sẽ được random tướng còn trống.
+          </li>
+          <li>
+            <strong>Load map và spawn nhân vật.</strong>
+            Server nhận danh sách ID tướng đã chọn, load scene map, rồi spawn model tương ứng cho
+            từng người chơi và BOT.
+          </li>
+          <li>
+            <strong>Chiến đấu tự do, không theo lượt.</strong>
+            Tất cả người chơi búng tướng giấy liên tục khi nhân vật đang chạm đất. Mục tiêu là canh
+            lực để rơi đè trúng đối thủ.
+          </li>
+          <li>
+            <strong>Hồi sinh sau 5 giây.</strong>
+            Người bị hạ sẽ hồi sinh tại vị trí được cấu hình sẵn. Trận chỉ kết thúc khi có người
+            đầu tiên đạt 15 mạng.
+          </li>
+        </ol>
+      </section>
+
+      <section class="section">
+        <div class="section__header">
+          <p class="eyebrow">Chiều sâu gameplay</p>
+          <h2>Cấp độ, kinh nghiệm và nhịp trận MOBA thu gọn</h2>
+          <p>
+            Mỗi nhân vật bắt đầu ở cấp 1 và có thể lên tối đa cấp 25 trong trận. Người chơi nhận
+            nhiều kinh nghiệm khi hạ đối thủ, nhận một phần khi hỗ trợ và có thể thu thập EXP được
+            spawn trên map.
+          </p>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat">
+            <span>Cấp tối đa</span>
+            <strong>25</strong>
+          </div>
+          <div class="stat">
+            <span>Hồi sinh</span>
+            <strong>5s</strong>
+          </div>
+          <div class="stat">
+            <span>Mục tiêu thắng</span>
+            <strong>15 mạng</strong>
+          </div>
+          <div class="stat">
+            <span>Mode đầu tiên</span>
+            <strong>4 FFA</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--band">
+        <div class="split">
+          <div>
+            <p class="eyebrow">Nền tảng kỹ thuật</p>
+            <h2>Unity client, Photon Fusion 2 và API riêng cho Paper Legends</h2>
+            <p>
+              Project gồm Unity client cho người chơi, Unity dedicated/server dùng Photon Fusion 2
+              và WEB_SERVER làm API/admin riêng. API Paper Legends dùng port riêng để có thể vận
+              hành song song với các dịch vụ khác trên cùng máy chủ.
+            </p>
+          </div>
+          <ul class="check-list">
+            <li>Client Unity: giao diện, input búng, hiệu ứng và HUD.</li>
+            <li>Server Unity: spawn tướng, mô phỏng vật lý, kill, respawn, end game.</li>
+            <li>Web API/admin: tài khoản, dữ liệu tướng, cấu hình trận, leaderboard.</li>
+            <li>Android là nền tảng ưu tiên ở giai đoạn đầu.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section__header">
+          <p class="eyebrow">Trạng thái phát triển</p>
+          <h2>Đang phát triển từ nền tảng online sẵn có sang Paper Legends</h2>
+          <p>
+            Nhiều module nền như đăng nhập, matchmaking, server online, admin web và Docker deploy
+            được giữ lại. Những phần không còn phù hợp với gameplay tướng giấy sẽ được thay dần
+            bằng dữ liệu tướng, kỹ năng, cấp độ và luật đấu mới.
+          </p>
+        </div>
+
+        <div class="timeline">
+          <article>
+            <span>Hiện tại</span>
+            <h3>Prototype gameplay</h3>
+            <p>Tạo input búng, nhân vật giấy, BOT, chọn tướng, spawn map và luật thắng 15 mạng.</p>
+          </article>
+          <article>
+            <span>Tiếp theo</span>
+            <h3>Nội dung tướng</h3>
+            <p>Thêm danh sách tướng, kỹ năng riêng, cân bằng kích thước, trọng lượng và cấp độ.</p>
+          </article>
+          <article>
+            <span>Sau đó</span>
+            <h3>Admin live game</h3>
+            <p>Hoàn thiện CRUD dữ liệu tướng, cấu hình trận, lịch sử đấu và bảng xếp hạng.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--download">
+        <div class="download">
+          <div>
+            <p class="eyebrow">Theo dõi dự án</p>
+            <h2>Paper Legends đang trong giai đoạn phát triển</h2>
+            <p>
+              Trang này sẽ được cập nhật khi có hình ảnh gameplay, video giới thiệu và bản thử
+              nghiệm Android đầu tiên.
+            </p>
+          </div>
+          <a class="download__link" href="mailto:ringthe60@gmail.com">Liên hệ góp ý</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <section class="section">
+        <h2>Cam kết bảo mật</h2>
+        <p>
+          Paper Legends tôn trọng quyền riêng tư của người chơi. Trò chơi có thể dùng đăng nhập qua
+          nền tảng thứ ba như Google hoặc Unity Authentication, chỉ thu thập dữ liệu cần thiết để
+          vận hành tài khoản, ghép trận, lưu kết quả và bảo vệ hệ thống.
+        </p>
+        <p>
+          Mọi thắc mắc hoặc góp ý vui lòng liên hệ qua email
+          <a href="mailto:ringthe60@gmail.com">ringthe60@gmail.com</a>.
+        </p>
+      </section>
+      <p>© 2026 Paper Legends - Đấu Tướng Giấy. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

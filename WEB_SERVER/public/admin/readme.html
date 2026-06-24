@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Legends - Giới thiệu server</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero readme-hero">
+        <div>
+          <p class="eyebrow">Giới thiệu</p>
+          <h1>ReadMe server</h1>
+          <p class="subtitle">Tổng quan nhanh về vận hành, API và kiến trúc backend.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="back-dashboard" class="chip-action chip-button" type="button">← Quay lại dashboard</button>
+          <div class="hero-badge">
+            <span class="badge-label">Trạng thái</span>
+            <span id="session-state" class="badge-value offline">Đang kiểm tra...</span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Tài liệu</p>
+              <h2>Hướng dẫn vận hành server</h2>
+              <p class="subtitle">Nội dung được tải trực tiếp từ file ReadMe.</p>
+            </div>
+            <div class="admin-chip">
+              <div class="chip-icon">📘</div>
+              <div class="chip-text">
+                <span id="admin-name">Admin</span>
+                <small id="admin-meta">Đang xác thực...</small>
+              </div>
+              <button id="logout" class="chip-action" type="button" title="Đăng xuất">✕</button>
+            </div>
+          </div>
+
+          <div id="readme-content" class="readme-content">
+            <div class="readme-loading">Đang tải nội dung...</div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="loading-backdrop" class="backdrop hidden">
+      <div class="spinner"></div>
+      <p id="loading-text">Đang xử lý...</p>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="module" src="./readme.js"></script>
+  </body>
+</html>

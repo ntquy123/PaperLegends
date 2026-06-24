@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e934f35213073c44ab2e08d4ee40ee1b, type: 3}
+  m_Name: HeroConfig_SonTinh
+  m_EditorClassIdentifier: 
+  heroId: 10000003
+  heroName: Son Tinh
+  nameKey: hero_10000003_name
+  avatarIconRef: {fileID: 0}
+  avatarFullRef: {fileID: 0}
+  materialRef: {fileID: 0}
+  prefabRef: {fileID: 0}
+  audioConfig: {fileID: 11400000, guid: 4f84b5fae7b4428ca7ac1eda99840d99, type: 2}
+  vfxConfig: {fileID: 11400000, guid: 58c3d8a2951d4e6fa32c03414306d49c, type: 2}
+  skills:
+  - {fileID: 11400000, guid: fdbdf233cb38447e931b4046f9017b17, type: 2}
+  - {fileID: 11400000, guid: e70ee23ab4fd44339fc01dc27f4c154e, type: 2}
+  - {fileID: 11400000, guid: 760771f19b1a45f098cff4387c865289, type: 2}
+  - {fileID: 11400000, guid: 63cf31399ede47fdb72caf03dfc3240e, type: 2}

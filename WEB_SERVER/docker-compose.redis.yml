@@ -1,0 +1,12 @@
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: banculi-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - /var/www/BanCuLi_Backend/redis-config/redis.conf:/etc/redis/redis.conf:ro
+      - /var/www/BanCuLi_Backend/redis-data:/data
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    

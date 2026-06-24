@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a951b1c7988fe043bd87a1be56233b3, type: 3}
+  m_Name: LocalizationData_EN
+  m_EditorClassIdentifier: 
+  texts:
+  - key: start_button
+    value: Start Game
+  - key: inventory_button
+    value: Inventory
+  - key: skill_button
+    value: Skill
+  - key: shop_button
+    value: Shop
+  - key: exit_button
+    value: Exit
+  - key: tab_all
+    value: All
+  - key: tab_hair
+    value: Hair
+  - key: tab_clother
+    value: Clother
+  - key: noti_buy_false
+    value: You don't have enough money
+  - key: noti_login_failed
+    value: Login failed. Please try again
+  - key: noti_login_conflict
+    value: This account is already logged in on another device
+  - key: noti_ringball_not_enough
+    value: Not enough RingBall to join this match
+  - key: noti_buy_true
+    value: Purchase successful
+  - key: buy_button
+    value: Buy
+  - key: noti_sold_false
+    value: Can't sell mom's stuff
+  - key: noti_sold_true
+    value: Sold successful
+  - key: sold_button
+    value: Sold
+  - key: surrender_button
+    value: Surrender
+  - key: noti_skill
+    value: You have used the skill
+  - key: text_bet_20
+    value: Bet on marbles, maximum 20 marbles/ 1 round
+  - key: uplevel_button
+    value: Up Level
+  - key: uplevel_button_max_level
+    value: Max level reached
+  - key: create_room_button
+    value: Create Room
+  - key: ready_button
+    value: Ready
+  - key: start_game_button
+    value: Start Game
+  - key: quick_match_button
+    value: Quick Match
+  - key: noti_player_eliminated
+    value: Eliminated
+  - key: noti_player_eliminated_by_messing
+    value: Eliminated for messing around
+  - key: noti_player_eliminated_timeout
+    value: Eliminated for being inactive
+  - key: game_over_title
+    value: GAME OVER
+  - key: game_over_subtitle
+    value: The match has ended
+  - key: CoreShootingTutorial
+    value: Shooting Tutorial
+  - key: tutorial_big_ball_skill_name
+    value: Power Shot
+  - key: tutorial_big_ball_skill_description
+    value: Enlarges your ball so the shot can push other balls out of the ring more easily.

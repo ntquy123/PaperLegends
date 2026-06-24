@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a951b1c7988fe043bd87a1be56233b3, type: 3}
+  m_Name: LocalizationData_VI
+  m_EditorClassIdentifier: 
+  texts:
+  - key: start_button
+    value: "B\u1EAFt \u0110\u1EA7u"
+  - key: inventory_button
+    value: "T\xFAi \u0111\u1ED3"
+  - key: shop_button
+    value: "Ch\u1EE3"
+  - key: skill_button
+    value: "K\u1EF9 n\u0103ng"
+  - key: exit_button
+    value: "Tho\xE1t"
+  - key: tab_all
+    value: "T\u1EA5t c\u1EA3"
+  - key: tab_hair
+    value: "T\xF3c"
+  - key: tab_clother
+    value: "\u0110\u1ED3"
+  - key: noti_buy_false
+    value: "Kh\xF4ng \u0111\u1EE7 ti\u1EC1n"
+  - key: noti_login_failed
+    value: "\u0110\u0103ng nh\u1EADp th\u1EA5t b\u1EA1i. Vui l\xF2ng th\u1EED l\u1EA1i"
+  - key: noti_login_conflict
+    value: "T\xE0i kho\u1EA3n \u0111ang \u0111\u0103ng nh\u1EADp tr\xEAn thi\u1EBFt b\u1ECB kh\xE1c"
+  - key: noti_ringball_not_enough
+    value: "Kh\xF4ng \u0111\u1EE7 RingBall \u0111\u1EC3 tham gia tr\u1EADn n\xE0y"
+  - key: noti_buy_true
+    value: "\u0110\xE3 mua"
+  - key: buy_button
+    value: Mua
+  - key: noti_sold_false
+    value: "Kh\xF4ng th\u1EC3 b\xE1n \u0111\u1ED3 m\u1EB9 cho"
+  - key: noti_sold_true
+    value: "\u0110\xE3 b\xE1n"
+  - key: sold_button
+    value: "B\xE1n"
+  - key: surrender_button
+    value: "\u0110\u1EA7u h\xE0ng"
+  - key: noti_skill
+    value: "S\u1EED d\u1EE5ng k\u1EF9 n\u0103ng"
+  - key: text_bet_20
+    value: "\u0110\u1EB7t c\u01B0\u1EE3c culi, t\u1ED1i \u0111a 20 vi\xEAn/ 1 l\u01B0\u1EE3t
+      ch\u01A1i"
+  - key: uplevel_button
+    value: "N\xE2ng C\u1EA5p"
+  - key: uplevel_button_max_level
+    value: "\u0110\xE3 \u0111\u1EA1t c\u1EA5p t\u1ED1i \u0111a"
+  - key: quick_match_button
+    value: "T\xECm Tr\u1EADn Nhanh"
+  - key: noti_player_eliminated
+    value: "\u0110\xE3 b\u1ECB lo\u1EA1i"
+  - key: noti_player_eliminated_by_messing
+    value: "\u0110\xE3 b\u1ECB lo\u1EA1i do qu\u1EADy"
+  - key: noti_player_eliminated_timeout
+    value: "\u0110\xE3 b\u1ECB lo\u1EA1i do kh\xF4ng h\xE0nh \u0111\u1ED9ng"
+  - key: game_over_title
+    value: GAME OVER
+  - key: game_over_subtitle
+    value: "Tr\u1EADn \u0111\u1EA5u \u0111\xE3 k\u1EBFt th\xFAc"
+  - key: CoreShootingTutorial
+    value: "H\u01B0\u1EDBng d\u1EABn t\u1EADp b\u1EAFn"
+  - key: tutorial_big_ball_skill_name
+    value: "B\u1EAFn M\u1EA1nh"
+  - key: tutorial_big_ball_skill_description
+    value: "Ph\xF3ng to vi\xEAn bi c\u1EE7a b\u1EA1n, gi\xFAp c\xFA b\u1EAFn d\u1EC5 \u0111\u1EA9y bi kh\xE1c ra kh\u1ECFi v\xF2ng h\u01A1n."

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11fbd2083d9d40b4b93db6fce7e9c8a0, type: 3}
+  m_Name: PaperLegendCharacterVisualCatalog
+  m_EditorClassIdentifier: 
+  visualModels:
+  - modelId: 10000001
+    visualPrefab: {fileID: 1902456256777553756, guid: 07200075139b6b64d83dfb7e650e5c7a,
+      type: 3}
+    resourcesPath: 
+  - modelId: 10000002
+    visualPrefab: {fileID: 1902456256777553756, guid: 07200075139b6b64d83dfb7e650e5c7a,
+      type: 3}
+    resourcesPath: 
+  - modelId: 10000003
+    visualPrefab: {fileID: 1902456256777553756, guid: 07200075139b6b64d83dfb7e650e5c7a,
+      type: 3}
+    resourcesPath: 
+  - modelId: 10000004
+    visualPrefab: {fileID: 1902456256777553756, guid: 07200075139b6b64d83dfb7e650e5c7a,
+      type: 3}
+    resourcesPath: 
+  - modelId: 10000005
+    visualPrefab: {fileID: 1902456256777553756, guid: 07200075139b6b64d83dfb7e650e5c7a,
+      type: 3}
+    resourcesPath: 
+  - modelId: 10000006
+    visualPrefab: {fileID: 1902456256777553756, guid: 07200075139b6b64d83dfb7e650e5c7a,
+      type: 3}
+    resourcesPath: 

@@ -1,0 +1,85 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vs/
+.idea/
+.vscode/
+*.user
+*.userprefs
+*.suo
+*.tmp
+*.log
+
+# Unity generated folders
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+**/MemoryCaptures/
+**/Recordings/
+**/.utmp/
+
+# Unity / Visual Studio generated project files
+*.csproj
+*.sln
+*.booproj
+*.pidb
+*.svd
+*.opendb
+*.VC.db
+UpgradeLog*.htm
+
+# Unity build artifacts
+*.apk
+*.aab
+*.app
+*.unitypackage
+*.unitypackage.meta
+apkfile/
+
+# Unity Addressables build output only.
+# Keep source assets such as Assets/AddressableAsset/** tracked.
+**/ServerData/
+**/Assets/StreamingAssets/aa/
+**/Assets/StreamingAssets/aa.meta
+**/Assets/AddressableAssetsData/*/*.bin*
+**/Library/com.unity.addressables/
+
+# Local databases / generated runtime data
+*.db
+*.sqlite
+*.sqlite3
+
+# Node / web API generated files
+WEB_SERVER/node_modules/
+WEB_SERVER/dist/
+WEB_SERVER/generated/
+WEB_SERVER/.turbo/
+WEB_SERVER/.cache/
+
+# Secrets and private deployment data
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+WEB_SERVER/ssl/
+*.pem
+*.key
+*.crt
+*.p12
+
+# Docker / deployment build outputs
+WEB_SERVER/docker/unity-server/build/*
+!WEB_SERVER/docker/unity-server/build/.gitkeep
+WEB_SERVER/addressables/
+
+# Archives and backups
+*.zip
+*.rar
+*.7z
+*.bak
+*.backup

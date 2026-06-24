@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: MaterialGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: MaterialGroup
+  m_GUID: ab7807e7ae6d30547a5c133ae22c9c2c
+  m_SerializeEntries:
+  - m_GUID: 1592dbf754eec054d960ec8cd26e71ab
+    m_Address: Assets/AddressableAsset/Items/Culi/99000009.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d9373bf7a256634ab3078c72b957902
+    m_Address: Assets/AddressableAsset/Items/Culi/99000018.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dfcf4a0a18aff8449b268e5e76099b7
+    m_Address: Assets/AddressableAsset/Items/Culi/99000002.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3129510ca1707e34996023b026cbb6a7
+    m_Address: Assets/AddressableAsset/Items/Culi/99000013.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40d504bfc425f6c4fa064755184411a1
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroMaterial/10000003.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41a78c0f2b5f3b246abaf6ff52d9f583
+    m_Address: Assets/AddressableAsset/Items/Culi/99000007.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ac368219e163a44c85d2dafbfb1311f
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroMaterial/10000004.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5472a9649aecfe74fa47fd87beabeca2
+    m_Address: Assets/AddressableAsset/Items/Culi/99000011.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54e999bf443ca154ba5dc6fc1362eeb5
+    m_Address: Assets/AddressableAsset/Items/Culi/99000006.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63e26c39add250e4a8da7e7774f12a30
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroMaterial/10000006.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 640b15d223f2ec04e836ad48cda19ed8
+    m_Address: Assets/AddressableAsset/Items/Culi/99000014.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64dd23d4e754fb7469e2d07770fb97fa
+    m_Address: Assets/AddressableAsset/Items/Culi/99000008.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 660ece45e0945e242bc1b166ec43ed33
+    m_Address: Assets/AddressableAsset/Items/Culi/99000017.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 696304cdf3e50f04898d474c31be402c
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/RingBall/3.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73dc4bb04afec9f4680b983b6a73f3c7
+    m_Address: Assets/AddressableAsset/Items/Culi/99000004.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98f37b27740fccd419fccb79ea99d707
+    m_Address: Assets/AddressableAsset/Items/Culi/99000005.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9946e0e55e597c549959e1af0b0f5b87
+    m_Address: Assets/AddressableAsset/Items/Culi/99000003.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9995605cf57a7e64da696a200e7554dd
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroMaterial/10000005.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1c57367d9e1e56478d90c77cbe54772
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/RingBall/4.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aca9bfac34b64064fb061de81bd02b16
+    m_Address: Assets/AddressableAsset/Items/Culi/99000003.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0e3365d68148e44dbaad2f6d642bc00
+    m_Address: Assets/AddressableAsset/Items/Culi/99000012.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb0f089fb42de40439c0fe908f3fcb65
+    m_Address: Assets/AddressableAsset/Items/Culi/99000010.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb0f50a7e66188c44acabf98d8af9a19
+    m_Address: Assets/AddressableAsset/Character/Materials/DefaultPlayer.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0d072fd676e6da48b850557b214acb7
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroMaterial/10000001.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbcbe595d5b6f0947a811986d4da2773
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroMaterial/10000002.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd190df7c5c526b439d99fda14f89ba0
+    m_Address: Assets/AddressableAsset/Items/Culi/99000015.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2e6e7170e9834146a53abd472fa5672
+    m_Address: Assets/AddressableAsset/Items/Culi/99000001.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea4e0569eb78f2d40a42431c1868b2d6
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/RingBall/2.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb4541ceaf2e40d41a1e29b4bca649d2
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/RingBall/1.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: effaccdd13cb8044cadaf3d1816675a8
+    m_Address: Assets/AddressableAsset/Items/Culi/99000016.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7392f04d42c06754693add1add6d5d7d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: bf296fcef2abb2b479d65bfdbee4c655, type: 2}
+    - {fileID: 11400000, guid: d2e3b71f6facd514e8f825b04ee8e0d6, type: 2}

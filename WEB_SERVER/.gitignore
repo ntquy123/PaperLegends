@@ -1,0 +1,15 @@
+node_modules
+dist/
+generated/
+
+# Keep environment variables out of version control
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Build archives
+BanCuLi.zip
+*.zip
+docker/unity-server/build/*
+!docker/unity-server/build/.gitkeep

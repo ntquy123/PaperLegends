@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Privacy Policy for Ban Bi Tuoi Tho by Game Nha Lam."
+    />
+    <title>Privacy Policy | Ban Bi Tuoi Tho</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f8fb;
+        --paper: #ffffff;
+        --ink: #18202f;
+        --muted: #5c667a;
+        --line: #dfe4ee;
+        --brand: #1767d2;
+        --brand-dark: #0f3f82;
+        --accent: #1f9f73;
+        --soft: #edf4ff;
+        --warning: #fff7e8;
+        --radius: 8px;
+        --shadow: 0 18px 45px rgba(21, 34, 58, 0.1);
+        font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          linear-gradient(180deg, #eef5ff 0, rgba(238, 245, 255, 0) 460px),
+          var(--bg);
+        color: var(--ink);
+        line-height: 1.7;
+      }
+
+      a {
+        color: var(--brand);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .topbar {
+        border-bottom: 1px solid rgba(223, 228, 238, 0.75);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .topbar__inner {
+        align-items: center;
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: 1120px;
+        padding: 14px 24px;
+      }
+
+      .brand {
+        align-items: center;
+        display: inline-flex;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .brand__mark {
+        align-items: center;
+        background: linear-gradient(135deg, var(--brand), var(--accent));
+        border-radius: 8px;
+        color: #ffffff;
+        display: inline-flex;
+        font-size: 14px;
+        height: 34px;
+        justify-content: center;
+        width: 34px;
+      }
+
+      .topbar nav {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: flex-end;
+      }
+
+      .topbar nav a {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 650;
+      }
+
+      .wrap {
+        margin: 0 auto;
+        max-width: 1120px;
+        padding: 56px 24px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 28px;
+        grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.9fr);
+        padding: 32px 0 22px;
+      }
+
+      .eyebrow {
+        color: var(--brand);
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        margin: 0 0 10px;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.2;
+        margin: 0;
+      }
+
+      h1 {
+        color: var(--brand-dark);
+        font-size: clamp(2.1rem, 5vw, 4.2rem);
+        letter-spacing: 0;
+        max-width: 760px;
+      }
+
+      .hero__summary {
+        color: var(--muted);
+        font-size: clamp(1rem, 1.8vw, 1.16rem);
+        margin: 20px 0 0;
+        max-width: 780px;
+      }
+
+      .facts {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+
+      .facts h2 {
+        font-size: 1rem;
+        margin-bottom: 16px;
+      }
+
+      .fact {
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 4px;
+        padding: 12px 0;
+      }
+
+      .fact:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .fact:last-child {
+        padding-bottom: 0;
+      }
+
+      .fact span {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .fact strong {
+        font-size: 15px;
+      }
+
+      .notice {
+        background: var(--warning);
+        border: 1px solid #f1d9a8;
+        border-radius: var(--radius);
+        color: #5f4517;
+        margin-top: 24px;
+        padding: 16px 18px;
+      }
+
+      .layout {
+        align-items: start;
+        display: grid;
+        gap: 26px;
+        grid-template-columns: 280px minmax(0, 1fr);
+        margin-top: 34px;
+      }
+
+      .toc {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        position: sticky;
+        top: 82px;
+      }
+
+      .toc h2 {
+        border-bottom: 1px solid var(--line);
+        font-size: 1rem;
+        padding: 16px 18px;
+      }
+
+      .toc a {
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        display: block;
+        font-size: 14px;
+        font-weight: 650;
+        padding: 11px 18px;
+      }
+
+      .toc a:last-child {
+        border-bottom: 0;
+      }
+
+      .policy {
+        display: grid;
+        gap: 18px;
+      }
+
+      .section {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: 0 10px 28px rgba(21, 34, 58, 0.05);
+        padding: 28px;
+      }
+
+      .section h2 {
+        color: var(--brand-dark);
+        font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+        margin-bottom: 14px;
+      }
+
+      .section h3 {
+        font-size: 1.05rem;
+        margin-top: 18px;
+      }
+
+      .section p {
+        color: var(--muted);
+        margin: 10px 0 0;
+      }
+
+      .section ul {
+        color: var(--muted);
+        margin: 12px 0 0;
+        padding-left: 22px;
+      }
+
+      .section li {
+        margin: 8px 0;
+      }
+
+      .data-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 16px;
+      }
+
+      .data-card {
+        background: var(--soft);
+        border: 1px solid #d8e7ff;
+        border-radius: var(--radius);
+        padding: 16px;
+      }
+
+      .data-card strong {
+        color: var(--brand-dark);
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .badge {
+        background: #edf8f4;
+        border: 1px solid #ccebdd;
+        border-radius: 999px;
+        color: #176247;
+        font-size: 13px;
+        font-weight: 750;
+        padding: 6px 10px;
+      }
+
+      .contact-card {
+        background: linear-gradient(135deg, var(--brand-dark), #12315d);
+        border-radius: var(--radius);
+        color: #ffffff;
+        margin-top: 16px;
+        padding: 22px;
+      }
+
+      .contact-card p {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .contact-card a {
+        color: #ffffff;
+        font-weight: 800;
+      }
+
+      .footer {
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 34px;
+        padding: 24px 0 0;
+      }
+
+      @media (max-width: 860px) {
+        .hero,
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .toc {
+          position: static;
+        }
+
+        .data-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .topbar__inner {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 12px 18px;
+        }
+
+        .wrap {
+          padding: 32px 18px;
+        }
+
+        .section,
+        .facts {
+          padding: 20px;
+        }
+
+        .topbar nav {
+          justify-content: flex-start;
+        }
+      }
+
+      @media print {
+        .topbar,
+        .toc {
+          display: none;
+        }
+
+        body {
+          background: #ffffff;
+        }
+
+        .wrap {
+          max-width: none;
+          padding: 0;
+        }
+
+        .section,
+        .facts {
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="/" aria-label="Ban Bi Tuoi Tho home">
+          <span class="brand__mark" aria-hidden="true">BB</span>
+          <span>Ban Bi Tuoi Tho</span>
+        </a>
+        <nav aria-label="Privacy page navigation">
+          <a href="#data">Data We Collect</a>
+          <a href="#children">Children</a>
+          <a href="#delete-account">Delete Account</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Privacy Policy</p>
+          <h1 id="page-title">Privacy Policy for Ban Bi Tuoi Tho</h1>
+          <p class="hero__summary">
+            This Privacy Policy explains how Game Nha Lam handles information for
+            Ban Bi Tuoi Tho, also displayed in Vietnamese as B&#7855;n Bi
+            Tu&#7893;i Th&#417;. It applies to the mobile game, related online
+            gameplay services, support, and this website.
+          </p>
+          <div class="notice">
+            If the information shown in Google Play Console is different from
+            this policy, the Play Console declarations should be updated so both
+            disclosures stay accurate and consistent.
+          </div>
+        </div>
+
+        <aside class="facts" aria-label="Policy summary">
+          <h2>Policy Details</h2>
+          <div class="fact">
+            <span>Effective date</span>
+            <strong>June 13, 2026</strong>
+          </div>
+          <div class="fact">
+            <span>Developer</span>
+            <strong>Game Nha Lam</strong>
+          </div>
+          <div class="fact">
+            <span>App</span>
+            <strong>Ban Bi Tuoi Tho</strong>
+          </div>
+          <div class="fact">
+            <span>Privacy contact</span>
+            <strong><a href="mailto:ringthe60@gmail.com">ringthe60@gmail.com</a></strong>
+          </div>
+        </aside>
+      </section>
+
+      <div class="layout">
+        <aside class="toc" aria-label="Table of contents">
+          <h2>Contents</h2>
+          <a href="#overview">1. Overview</a>
+          <a href="#data">2. Data We Collect</a>
+          <a href="#use">3. How We Use Data</a>
+          <a href="#share">4. Sharing</a>
+          <a href="#permissions">5. Device Permissions</a>
+          <a href="#children">6. Children and Families</a>
+          <a href="#retention">7. Retention</a>
+          <a href="#delete-account">8. Account Deletion</a>
+          <a href="#security">9. Security</a>
+          <a href="#rights">10. Your Choices</a>
+          <a href="#changes">11. Changes</a>
+          <a href="#contact">12. Contact</a>
+        </aside>
+
+        <article class="policy">
+          <section class="section" id="overview">
+            <h2>1. Overview</h2>
+            <p>
+              We respect player privacy and only process information that is
+              needed to operate the game, provide online features, protect fair
+              play, improve stability, respond to support requests, and comply
+              with legal or platform requirements.
+            </p>
+            <p>
+              This policy covers personal information, device information,
+              gameplay data, support information, and data processed by trusted
+              service providers used by the game.
+            </p>
+          </section>
+
+          <section class="section" id="data">
+            <h2>2. Data We Collect</h2>
+            <p>
+              The exact information collected depends on the features you use,
+              your device settings, your region, and the platform services
+              enabled for your account.
+            </p>
+
+            <div class="data-grid">
+              <div class="data-card">
+                <strong>Account and profile data</strong>
+                Player ID, display name, avatar or profile image if provided,
+                Google Play Games or Firebase authentication identifiers,
+                friend code, account status, and login records.
+              </div>
+              <div class="data-card">
+                <strong>Gameplay and online match data</strong>
+                Match history, room information, ranking, score, inventory,
+                virtual items, achievements, rewards, anti-cheat events,
+                connection state, and server logs needed to run multiplayer
+                sessions.
+              </div>
+              <div class="data-card">
+                <strong>Device and diagnostics data</strong>
+                Device model, operating system version, app version, language,
+                network connection information, IP address, approximate region,
+                crash reports, performance logs, and error diagnostics.
+              </div>
+              <div class="data-card">
+                <strong>Ads, rewards, and purchases</strong>
+                Advertising identifiers where allowed, ad interaction data,
+                rewarded ad completion status, fraud prevention signals, and
+                Google Play purchase status. We do not receive full payment card
+                numbers from Google Play.
+              </div>
+              <div class="data-card">
+                <strong>Support and communication data</strong>
+                Email address and message content when you contact support,
+                request account deletion, report a problem, or send feedback.
+              </div>
+              <div class="data-card">
+                <strong>Optional user content</strong>
+                Information you choose to submit through social, friend, profile,
+                market, or community features made available in the game.
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="use">
+            <h2>3. How We Use Data</h2>
+            <ul>
+              <li>To create, authenticate, and maintain player accounts.</li>
+              <li>To run online matches, rooms, rankings, rewards, inventory, and game progress.</li>
+              <li>To provide support, troubleshoot bugs, improve performance, and recover accounts.</li>
+              <li>To detect abuse, cheating, fraud, spam, security incidents, and policy violations.</li>
+              <li>To serve ads or rewarded ads when enabled, measure ad performance, and prevent ad fraud.</li>
+              <li>To process purchase entitlements and virtual item delivery through Google Play.</li>
+              <li>To comply with law, platform policies, safety requirements, and lawful requests.</li>
+            </ul>
+          </section>
+
+          <section class="section" id="share">
+            <h2>4. When We Share Data</h2>
+            <p>
+              We do not sell personal information. We may share limited
+              information with service providers and platforms that help us
+              operate the game. These providers process data under their own
+              privacy terms and technical safeguards.
+            </p>
+            <ul>
+              <li>Authentication and platform services, such as Google Play Games Services and Firebase.</li>
+              <li>Hosting, database, server monitoring, and multiplayer infrastructure providers.</li>
+              <li>Analytics, crash reporting, diagnostics, and performance monitoring providers.</li>
+              <li>Advertising and rewarded ad providers, such as Google AdMob or Google Mobile Ads, when ads are enabled.</li>
+              <li>Payment processors, including Google Play Billing, for purchase confirmation and fraud prevention.</li>
+              <li>Law enforcement, regulators, or other parties when required to protect users, rights, safety, or legal obligations.</li>
+            </ul>
+          </section>
+
+          <section class="section" id="permissions">
+            <h2>5. Device Permissions and Sensitive Data</h2>
+            <p>
+              The game requests only the permissions needed for gameplay,
+              platform services, security, networking, ads, and optional
+              features. Android may show permissions used by included SDKs even
+              when a specific feature is optional or only active in certain
+              builds.
+            </p>
+            <ul>
+              <li>Internet access is used for login, multiplayer, rewards, support, updates, ads, and server communication.</li>
+              <li>Vibration may be used for gameplay feedback.</li>
+              <li>Bluetooth, Wi-Fi state, or approximate location may be requested by Google Play Games or nearby networking features where required by Android. We do not use precise GPS location for core gameplay.</li>
+              <li>We do not request SMS, call log, contacts, camera, microphone, or precise background location for core gameplay.</li>
+            </ul>
+            <p>
+              If a future feature requires a new sensitive permission, we will
+              explain the purpose before the permission is used and update this
+              policy when required.
+            </p>
+          </section>
+
+          <section class="section" id="children">
+            <h2>6. Children and Families</h2>
+            <p>
+              Ban Bi Tuoi Tho may appeal to a broad audience, including younger
+              players. If a player is under the age required by local law to
+              manage their own account or give valid consent, the player should
+              use the game only with permission from a parent or legal guardian.
+            </p>
+            <p>
+              We do not knowingly collect more personal information from children
+              than is reasonably necessary to provide the game. If we learn that
+              we collected personal information from a child in a way that does
+              not meet applicable requirements, we will take reasonable steps to
+              delete or limit that information.
+            </p>
+            <ul>
+              <li>Parents or guardians may contact us to review, correct, or request deletion of a child's information.</li>
+              <li>If ads are served to children or users of unknown age, they should be served only through ad providers allowed for child-directed services where required by Google Play policy.</li>
+              <li>We encourage parents to supervise online play, friend features, purchases, and ad interactions.</li>
+            </ul>
+          </section>
+
+          <section class="section" id="retention">
+            <h2>7. Data Retention</h2>
+            <p>
+              We keep information only for as long as needed for the purposes
+              described in this policy, including gameplay continuity, account
+              recovery, fraud prevention, dispute handling, security, and legal
+              requirements.
+            </p>
+            <ul>
+              <li>Account, inventory, ranking, and match data may be retained while your account is active.</li>
+              <li>Server logs, anti-cheat logs, diagnostic records, and security records may be retained for a limited period unless needed for investigation or compliance.</li>
+              <li>Support messages may be retained to resolve your request and maintain a support history.</li>
+              <li>Deleted account data is removed or anonymized within a reasonable period unless retention is required for security, fraud prevention, legal, tax, or dispute reasons.</li>
+            </ul>
+          </section>
+
+          <section class="section" id="delete-account">
+            <h2>8. Account and Data Deletion</h2>
+            <p>
+              You can request deletion of your game account and associated
+              personal data by emailing us from the account email, or by
+              providing enough information for us to verify ownership of the
+              player account.
+            </p>
+            <div class="contact-card">
+              <h3>Account deletion request</h3>
+              <p>
+                Email
+                <a href="mailto:ringthe60@gmail.com?subject=Ban%20Bi%20Tuoi%20Tho%20account%20deletion%20request">ringthe60@gmail.com</a>
+                with the subject "Ban Bi Tuoi Tho account deletion request".
+                Include your player ID, friend code, login method, and any
+                details that help us identify the account.
+              </p>
+            </div>
+            <p>
+              Some information may be retained after deletion if necessary for
+              security, fraud prevention, legal compliance, payment records, or
+              unresolved disputes. When retention is not required, we will delete
+              or anonymize the data.
+            </p>
+          </section>
+
+          <section class="section" id="security">
+            <h2>9. Security</h2>
+            <p>
+              We use reasonable administrative, technical, and organizational
+              measures to protect information, including access controls,
+              server-side authentication, secure transport where available,
+              monitoring, and restricted access to operational systems.
+            </p>
+            <p>
+              No online service is completely secure. Players should keep their
+              platform accounts safe, avoid sharing login credentials, and
+              report suspicious activity to us.
+            </p>
+          </section>
+
+          <section class="section" id="rights">
+            <h2>10. Your Choices and Rights</h2>
+            <p>
+              Depending on your region, you may have rights to access, correct,
+              delete, export, restrict, or object to certain processing of your
+              personal information. You may also control some data through your
+              device settings, Google Play settings, ad personalization settings,
+              or platform account settings.
+            </p>
+            <ul>
+              <li>You can disable or reset advertising identifiers in Android settings where available.</li>
+              <li>You can manage Google Play Games and Google account settings through Google services.</li>
+              <li>You can contact us for privacy requests, account deletion, or questions about data handling.</li>
+            </ul>
+          </section>
+
+          <section class="section" id="third-party">
+            <h2>11. Third-Party Services</h2>
+            <p>
+              The game may use third-party services. Their privacy practices are
+              governed by their own policies. Examples may include Google Play
+              Games Services, Firebase, Google AdMob or Google Mobile Ads,
+              Google Play Billing, Photon/Fusion networking services, hosting
+              providers, and analytics or crash reporting providers.
+            </p>
+            <div class="badge-row" aria-label="Common service categories">
+              <span class="badge">Authentication</span>
+              <span class="badge">Multiplayer</span>
+              <span class="badge">Crash Reports</span>
+              <span class="badge">Rewards</span>
+              <span class="badge">Ads</span>
+              <span class="badge">Purchases</span>
+            </div>
+          </section>
+
+          <section class="section" id="changes">
+            <h2>12. Changes to This Policy</h2>
+            <p>
+              We may update this Privacy Policy when the game changes, when we
+              add or remove features, when service providers change, or when
+              legal or platform requirements change. The latest version will be
+              posted on this page with an updated effective date.
+            </p>
+          </section>
+
+          <section class="section" id="contact">
+            <h2>13. Contact Us</h2>
+            <p>
+              For privacy questions, support requests, parental requests, or
+              account deletion requests, contact:
+            </p>
+            <div class="contact-card">
+              <h3>Game Nha Lam</h3>
+              <p>
+                Privacy email:
+                <a href="mailto:ringthe60@gmail.com">ringthe60@gmail.com</a>
+              </p>
+              <p>Website: <a href="https://gamenhalam.com">https://gamenhalam.com</a></p>
+            </div>
+          </section>
+        </article>
+      </div>
+
+      <footer class="footer">
+        <p>
+          &copy; 2026 Game Nha Lam. This page is provided as the Privacy Policy
+          for Ban Bi Tuoi Tho.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

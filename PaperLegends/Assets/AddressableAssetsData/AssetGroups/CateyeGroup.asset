@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CateyeGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: CateyeGroup
+  m_GUID: a6128248e64eaf441934a6761cb41813
+  m_SerializeEntries:
+  - m_GUID: 224d7956c8fbd7e40a3d9c6750f7e1b4
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/99000004.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ff791be25b1ca041a4d328d84916472
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/99000006.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e43262fb5d9e774db6b507b9e6a2ff8
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/99000005.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47d2bec86bd782343bf521c06375d3f8
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/99000001.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c16e9f2118d7fe4b947962c5932cdc8
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/99000002.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e647544628921964f8d026f57b54c5b6
+    m_Address: Assets/AddressableAsset/Items/Culi/Cateye/99000003.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7392f04d42c06754693add1add6d5d7d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8261bd11ce858f24aa6aa070952b581b, type: 2}
+    - {fileID: 11400000, guid: 91550f2b0019a0d41bf167c9b0ecf874, type: 2}

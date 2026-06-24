@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4ccd0e77821428c8fd695c59ad91657, type: 3}
+  m_Name: ServerConfig
+  m_EditorClassIdentifier: 
+  baseUrlPhoton: 103.12.77.207
+  baseUrl: https://gamenhalam.com/paper-legends/api
+  webSocketUrl: wss://gamenhalam.com/paper-legends/ws/
+  baseUrlLocal: http://localhost:5001/api
+  baseUrlPhotonCloud: 0.0.0.0
+  catalogUrl: https://gamenhalam.com/paper-legends/addressables/catalog.hash
+  usePinnedHttpsCertificates: 0
+  httpsCertificatePins: []

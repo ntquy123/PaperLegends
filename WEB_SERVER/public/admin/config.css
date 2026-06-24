@@ -1,0 +1,374 @@
+.config-page #item-grid .data-row {
+  min-width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.config-page [data-tab-panel='item'] {
+  overflow: visible;
+}
+
+.config-page [data-tab-panel='item'] .config-layout {
+  display: block;
+}
+
+.config-page [data-tab-panel='item'] .table-card {
+  width: 100%;
+}
+
+.config-page #item-grid {
+  max-height: 78vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+}
+
+.config-page #item-grid::-webkit-scrollbar {
+  width: 10px;
+}
+
+.config-page #item-grid::-webkit-scrollbar-thumb {
+  background: rgba(214, 171, 82, 0.5);
+  border-radius: 999px;
+}
+
+.config-page #item-grid .data-row {
+  padding: 10px 12px;
+  gap: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: none;
+}
+
+.config-page #item-grid .row-main {
+  width: 100%;
+  grid-template-columns: 120px repeat(auto-fit, minmax(100px, 1fr));
+  align-items: start;
+}
+
+.config-page #item-grid .row-text {
+  min-width: 120px;
+  gap: 2px;
+}
+
+.config-page #item-grid .row-label {
+  font-size: 10px;
+}
+
+.config-page #item-grid .row-value {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.config-page #item-grid .code-badge {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.config-page #item-grid .row-actions {
+  width: 100%;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.config-page #item-grid .row-actions button {
+  min-width: 0;
+  padding: 6px 10px;
+}
+
+.config-page .item-header-actions,
+.config-page .item-form-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.config-page .item-form-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 1000;
+}
+
+.config-page .item-form-modal {
+  position: fixed;
+  top: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  width: min(1100px, calc(100vw - 2rem));
+  max-height: calc(100vh - 3rem);
+  margin: 0 auto;
+  border-radius: 24px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+  background: rgba(19, 8, 7, 0.98);
+  border: 1px solid rgba(214, 171, 82, 0.24);
+  overflow: hidden;
+}
+
+.config-page .item-form-modal .card-header {
+  position: sticky;
+  top: 0;
+  z-index: 1002;
+  background: rgba(19, 8, 7, 0.98);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.config-page .item-form-modal form {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 24px 18px;
+}
+
+.config-page .item-form-modal .form-actions {
+  position: sticky;
+  bottom: 0;
+  background: rgba(19, 8, 7, 0.98);
+  padding: 16px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 1002;
+}
+
+.config-page .item-form-modal .form-actions .cta,
+.config-page .item-form-modal .form-actions .chip-button {
+  flex: none;
+}
+
+.config-page #language-grid .data-row,
+.config-page #general-grid .data-row,
+.config-page #achievement-grid .data-row {
+  min-width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.config-page #language-grid .row-main,
+.config-page #general-grid .row-main,
+.config-page #achievement-grid .row-main {
+  width: 100%;
+  grid-template-columns: 140px repeat(auto-fit, minmax(160px, 1fr));
+  align-items: start;
+}
+
+.config-page #language-grid .row-text,
+.config-page #general-grid .row-text,
+.config-page #achievement-grid .row-text {
+  min-width: 140px;
+}
+
+.config-page #language-grid .row-label,
+.config-page #general-grid .row-label,
+.config-page #achievement-grid .row-label {
+  font-size: 11px;
+}
+
+.config-page #item-grid .row-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.config-page #language-grid .row-value,
+.config-page #general-grid .row-value,
+.config-page #achievement-grid .row-value {
+  font-size: 13px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.config-page #item-grid .row-actions {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.config-page #language-grid .row-actions,
+.config-page #general-grid .row-actions,
+.config-page #achievement-grid .row-actions {
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.config-page .item-filter-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.config-page .culi-stat-sliders {
+  border: 1px solid rgba(214, 171, 82, 0.32);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(214, 171, 82, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.config-page .culi-stat-sliders.hidden {
+  display: none;
+}
+
+.config-page .culi-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.config-page .culi-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.config-page .slider-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.config-page .slider-field .stat-vi {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.config-page .slider-input {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.config-page .slider-input input[type='range'] {
+  width: 100%;
+}
+
+.config-page .slider-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.config-page .field-rich {
+  gap: 12px;
+}
+
+.config-page .rich-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(214, 171, 82, 0.3);
+  background: rgba(255, 246, 223, 0.84);
+}
+
+.config-page .rich-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.config-page .rich-button {
+  border: 1px solid rgba(214, 171, 82, 0.42);
+  background: #fff;
+  color: #160807;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.config-page .rich-button:hover {
+  border-color: rgba(47, 191, 143, 0.7);
+  color: #15765c;
+}
+
+.config-page .rich-button:focus {
+  outline: 2px solid rgba(47, 191, 143, 0.35);
+  outline-offset: 2px;
+}
+
+.config-page .rich-button .underline {
+  text-decoration: underline;
+}
+
+.config-page .rich-input {
+  min-height: 140px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px dashed rgba(214, 171, 82, 0.52);
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #160807;
+  white-space: pre-wrap;
+}
+
+.config-page .plain-textarea {
+  min-height: 140px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(214, 171, 82, 0.52);
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #160807;
+  resize: vertical;
+}
+
+.config-page .rich-input:focus {
+  outline: 2px solid rgba(47, 191, 143, 0.35);
+  outline-offset: 2px;
+}
+
+.config-page .rich-input:empty::before {
+  content: attr(data-placeholder);
+  color: #8f7f58;
+}
+
+.config-page .row-value.rich-text {
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.config-page #item-grid .item-image-block {
+  min-width: 120px;
+}
+
+.config-page #item-grid .item-thumb {
+  width: 84px;
+  height: 84px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(214, 171, 82, 0.42);
+  background: rgba(214, 171, 82, 0.04);
+}
+
+.config-page #item-grid .item-thumb-empty {
+  color: var(--muted);
+  font-weight: 500;
+}

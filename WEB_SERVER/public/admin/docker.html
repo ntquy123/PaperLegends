@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Legends - Quản lý Docker</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero docker-hero">
+        <div>
+          <p class="eyebrow">Quản lý Docker</p>
+          <h1>Container phòng game</h1>
+          <p class="subtitle">Theo dõi trạng thái, tài nguyên và log trực tiếp.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="back-dashboard" class="chip-action chip-button" type="button">← Quay lại dashboard</button>
+          <div class="hero-badge">
+            <span class="badge-label">Trạng thái</span>
+            <span id="session-state" class="badge-value offline">Đang kiểm tra...</span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="tab-nav">
+          <button class="tab-button active" data-tab="containers">Container</button>
+          <button class="tab-button" data-tab="rooms">Thông tin phòng</button>
+          <button class="tab-button" data-tab="matchmaking">Người đang tìm trận</button>
+        </div>
+
+        <section class="panel tab-panel active" data-tab-panel="containers">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Docker</p>
+              <h2>Grid container</h2>
+              <p class="subtitle">Lưới 10 dòng mỗi trang, có tìm kiếm, làm mới và xem log.</p>
+            </div>
+            <div class="admin-chip">
+              <div class="chip-icon">🐳</div>
+              <div class="chip-text">
+                <span id="admin-name">Admin</span>
+                <small id="admin-meta">Đang xác thực...</small>
+              </div>
+              <button id="logout" class="chip-action" type="button" title="Đăng xuất">✕</button>
+            </div>
+          </div>
+
+          <div class="docker-grid-toolbar">
+            <div class="docker-grid-meta">
+              <div class="pill neutral" id="docker-count">0 container</div>
+              <button id="refresh-docker" class="chip-action chip-button" type="button">↻ Làm mới</button>
+            </div>
+            <div class="table-toolbar">
+              <label class="field compact">
+                <span>Tìm kiếm</span>
+                <input
+                  id="docker-search"
+                  type="search"
+                  placeholder="Tìm theo tên, ID, image hoặc port"
+                  autocomplete="off"
+                />
+              </label>
+              <div class="pagination-controls">
+                <button id="prev-page" class="chip-action chip-button" type="button">← Trang trước</button>
+                <div class="pagination-info" id="pagination-info">Trang 1/1</div>
+                <button id="next-page" class="chip-action chip-button" type="button">Trang tiếp →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Danh sách</p>
+                <h3>Container đang chạy</h3>
+                <p class="subtitle">Bao gồm trạng thái, cổng, CPU và bộ nhớ.</p>
+              </div>
+            </div>
+            <div class="data-grid" id="docker-grid">
+              <div class="docker-loading">Đang tải dữ liệu...</div>
+            </div>
+          </div>
+
+          <div class="panel-header docker-section-header">
+            <div>
+              <p class="eyebrow">System</p>
+              <h2>Docker system</h2>
+              <p class="subtitle">Redis và các container hệ thống.</p>
+            </div>
+          </div>
+
+          <div class="docker-grid-toolbar">
+            <div class="docker-grid-meta">
+              <div class="pill neutral" id="docker-system-count">0 container</div>
+              <button id="refresh-docker-system" class="chip-action chip-button" type="button">↻ Làm mới</button>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Danh sách</p>
+                <h3>Container system</h3>
+                <p class="subtitle">Tập trung vào Redis và dịch vụ nền.</p>
+              </div>
+            </div>
+            <div class="data-grid" id="docker-system-grid">
+              <div class="docker-loading">Đang tải dữ liệu...</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel tab-panel" data-tab-panel="rooms">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Room</p>
+              <h2>Thông tin phòng</h2>
+              <p class="subtitle">Danh sách phòng từ Room và ServerPortPool.</p>
+            </div>
+          </div>
+
+          <div class="docker-grid-toolbar">
+            <div class="docker-grid-meta">
+              <div class="pill neutral" id="room-count">0 phòng</div>
+              <button id="refresh-rooms" class="chip-action chip-button" type="button">↻ Làm mới</button>
+            </div>
+            <div class="table-toolbar">
+              <label class="field compact">
+                <span>Tìm kiếm</span>
+                <input
+                  id="room-search"
+                  type="search"
+                  placeholder="Tìm theo room, port, user hoặc trạng thái"
+                  autocomplete="off"
+                />
+              </label>
+              <div class="pagination-controls">
+                <button id="room-prev-page" class="chip-action chip-button" type="button">← Trang trước</button>
+                <div class="pagination-info" id="room-pagination-info">Trang 1/1</div>
+                <button id="room-next-page" class="chip-action chip-button" type="button">Trang tiếp →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Danh sách</p>
+                <h3>Room đang hoạt động</h3>
+                <p class="subtitle">Bao gồm thông tin Room và ServerPortPool.</p>
+              </div>
+            </div>
+            <div class="data-grid" id="room-grid">
+              <div class="docker-loading">Đang tải dữ liệu...</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel tab-panel" data-tab-panel="matchmaking">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Matchmaking</p>
+              <h2>Người chơi đang tìm trận</h2>
+              <p class="subtitle">Hiển thị queue tìm trận và các trận đang ghép/tạo server.</p>
+            </div>
+          </div>
+
+          <div class="docker-grid-toolbar">
+            <div class="docker-grid-meta">
+              <div class="pill neutral" id="matchmaking-count">0 người</div>
+              <button id="refresh-matchmaking" class="chip-action chip-button" type="button">↻ Làm mới</button>
+            </div>
+            <div class="table-toolbar">
+              <label class="field compact">
+                <span>Tìm kiếm</span>
+                <input
+                  id="matchmaking-search"
+                  type="search"
+                  placeholder="Tìm theo user, tên, bucket, loại trận hoặc trạng thái"
+                  autocomplete="off"
+                />
+              </label>
+              <div class="pagination-controls">
+                <button id="matchmaking-prev-page" class="chip-action chip-button" type="button">← Trang trước</button>
+                <div class="pagination-info" id="matchmaking-pagination-info">Trang 1/1</div>
+                <button id="matchmaking-next-page" class="chip-action chip-button" type="button">Trang tiếp →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">Danh sách</p>
+                <h3>Queue tìm trận</h3>
+                <p class="subtitle">Icon mắt kính xoay cho biết người chơi đang chờ ghép trận.</p>
+              </div>
+            </div>
+            <div class="data-grid" id="matchmaking-grid">
+              <div class="docker-loading">Đang tải dữ liệu...</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="loading-backdrop" class="backdrop hidden">
+      <div class="spinner"></div>
+      <p id="loading-text">Đang xử lý...</p>
+    </div>
+
+    <div id="log-modal" class="modal-backdrop hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Container log</p>
+            <h3 id="log-title">Đang tải log...</h3>
+          </div>
+          <button id="close-log" class="chip-action" type="button" title="Đóng">✕</button>
+        </div>
+        <div class="modal-body">
+          <pre id="log-content" class="log-content">Đang tải log...</pre>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="module" src="./docker.js"></script>
+  </body>
+</html>

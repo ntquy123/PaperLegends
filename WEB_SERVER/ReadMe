@@ -1,0 +1,199 @@
+# BanCuLi Server
+#fix server đột tử nguyên nhân do full bộ nhớ máy do build nhiều file docker:
+#xóa docker không dùng
+docker system prune -a -f
+sudo systemctl start postgresql@14-main
+Lệnh này dùng để liệt kê các PostgreSQL cluster đang có trên máy.
+pg_lsclusters
+## 1. Tổng quan
+- Backend quản lý phòng chờ, ghép trận và điều phối Dedicated Server theo trận.
+- Hệ thống chạy theo mô hình **Container-per-Match + Warm Pool** để giảm thời gian chờ.
+- Admin UI có sẵn trong `/api` (giao diện quản trị nội bộ).
+
+## 2. Thiết lập môi trường
+### 2.1 Biến môi trường quan trọng
+- `DATABASE_URL` (**required**): Chuỗi kết nối PostgreSQL (tham khảo `.env.example`).
+- `UGS_PROJECT_ID` (**required**): Unity Gaming Services project ID.
+- `FIREBASE_SERVICE_ACCOUNT_KEY` (optional): JSON string cho Firebase Admin SDK.
+- `ACCESS_TOKEN_TTL_SECONDS`: TTL access token (mặc định 900s).
+- `REFRESH_TOKEN_TTL_DAYS`: TTL refresh token (mặc định 14 ngày).
+- `REDIS_URL` (recommended): ví dụ `redis://banculi-redis:6379` khi API chạy trong Docker network.
+- `REDIS_HOST`/`REDIS_PORT`: dùng khi không khai báo `REDIS_URL` (mặc định fallback `127.0.0.1:6379`).
+- `ADMIN_UI_PASSWORD` (**required for admin UI**): Mật khẩu đăng nhập quản trị; phải nhập lại khi xóa người chơi.
+
+> ⚠️ Nếu API chạy trong container, **không dùng localhost/127.0.0.1** cho Redis.
+> Hãy dùng hostname của container Redis (ví dụ `banculi-redis`) và đảm bảo 2 container cùng network.
+run docker build --no-cache -f docker/unity-server/Dockerfile -t paperlegends/unity-dedicated:latest . 
+
+### 2.1.1 Checklist nhanh khi client connect sai room / thấy IP public:27015
+- `DS_PORT_START`/`DS_PORT_END`: dải UDP publish ra host. Nếu không set thì mặc định `27015-27100`.
+- `DS_CONTAINER_PORT`: cổng UDP bên trong DS container (mặc định `27015`).
+- `ROOM_MAX_PLAYERS`: số người tối đa mỗi phòng match (mặc định `4`).
+- `JOIN_SECRET` và `JOIN_TOKEN_SECRET`: nên set giá trị riêng cho production để tránh ticket/join token không đồng bộ giữa backend và DS.
+
+> Lưu ý: nhìn thấy `IP_PUBLIC:27015` trong log Fusion **không hẳn là lỗi**. Đây là host port đã publish từ Docker (`-p <hostPort>:27015/udp`) để client ngoài Internet join được.
+>
+> Nếu lỗi là `ServerFull` / `GameIsFull` thì thường là matchmaking đã cấp room đủ người hoặc client dùng ticket cũ (deadline hết hạn) để join lại phiên đã full, không phải do thiếu biến môi trường mạng cơ bản.
+
+### 2.2 Đồng bộ database khi thay đổi schema
+```bash
+npx prisma generate
+npx prisma db push
+```
+- Khởi động lại ứng dụng sau khi cập nhật.
+
+### 2.3 Reset toàn bộ dữ liệu
+```bash
+npx prisma db push --force-reset
+npx ts-node prisma/seed.ts
+```
+
+### 2.4 Build TypeScript
+```bash
+npx tsc
+```
+
+## 3. Quản lý PM2
+```bash
+pm2 list
+ pm2 start ecosystem.config.js
+ Restart cả 2 con cùng lúc: pm2 restart ecosystem.config.js
+
+Chỉ restart API: pm2 restart BanCuLi-API
+
+Chỉ restart Monitor: pm2 restart BanCuLi-Monitor
+```
+
+## 3.1 Monitor Service (monitor.js) đang tự động kiểm soát gì?
+Monitor là tiến trình chạy nền để giữ **warm pool** luôn sẵn sàng và dọn dẹp container bị mồ côi.
+Nó thực hiện các nhiệm vụ sau theo chu kỳ:
+
+1. **Giữ số lượng idle container tối thiểu**  
+   - Gọi `ensureIdlePool({ reason: 'monitor' })` để:
+     - Tạo thêm container idle khi thiếu.
+     - Không vượt quá ngưỡng cấu hình (min/max).
+   - Có thể override bằng biến môi trường `MONITOR_MIN_IDLE_POOL`.
+
+### Biến môi trường liên quan
+- `MONITOR_INTERVAL_MS`: chu kỳ chạy monitor (mặc định 30s).
+- `MONITOR_MIN_IDLE_POOL`: override số lượng idle tối thiểu khi monitor chạy.
+
+## 4. API nhanh
+### 4.1 Gameplay & vật phẩm
+- `GET /api/items` — Danh sách vật phẩm.
+- `GET /api/players/:id/inventory` — Túi đồ người chơi.
+- `POST /api/players/ball-physics` — Chỉ số vật lý viên bi đang trang bị.
+- `POST /api/player/equip` — Trang bị vật phẩm.
+- `POST /api/effect-player/item-level-up` — Nâng cấp level vật phẩm.
+
+**Body mẫu: `/api/effect-player/item-level-up`**
+```json
+{
+  "playerId": 1,
+  "itemId": 5,
+  "seq": 0,
+  "materials": [
+    { "id": 10, "seq": 0 },
+    { "id": 11, "seq": 1 }
+  ]
+}
+```
+
+**Body mẫu: `/api/players/ball-physics`**
+```json
+{
+  "ids": [1, 2]
+}
+```
+
+**Body mẫu: `/api/player/equip`**
+```json
+{
+  "playerId": 1,
+  "typeGid": 1,
+  "itemId": 5
+}
+```
+
+### 4.2 Lịch sử & thưởng
+- `GET /api/histories?page=1&pageSize=10` — Lịch sử trận đấu (phân trang).
+- `POST /api/draw-reward` — Bốc thăm trúng thưởng.
+- `POST /api/rewards/confirm-ad` — Xác nhận đã xem quảng cáo.
+- `POST /api/rewards/claim` — Nhận quà sau khi xác nhận.
+
+### 4.3 Bạn bè & chat
+- `POST /api/friend-request` — Gửi lời mời kết bạn.
+- `GET /api/messages/conversation/:playerId/:friendId` — Lịch sử trò chuyện.
+
+### 4.4 Chợ
+- `GET /api/market/items?page=1&itemName=X&level=1&priceOrder=asc&levelOrder=desc`
+
+## 5. Firebase Authentication Bridge
+Endpoint `/auth/ugs-to-firebase` dùng để đổi UGS token thành Firebase custom token.
+
+**Test nhanh:**
+```bash
+curl -X POST \
+  http://localhost:3000/auth/ugs-to-firebase \
+  -H 'Content-Type: application/json' \
+  -d '{"ugsToken":"<UNITY_PLAYER_TOKEN>"}'
+```
+
+## 6. Đăng nhập & quản lý token (accountRoutes)
+### 6.1 Đăng nhập
+- `POST /api/check-account`: kiểm tra tài khoản dựa trên `idToken`.
+- `POST /api/social-login`: đăng nhập/đăng ký bằng tài khoản mạng xã hội.
+- `POST /api/social-login/confirm-name`: đặt tên + chọn Companion Ball.
+- `POST /api/auth/login`: luồng đăng nhập thông thường.
+
+### 6.2 Refresh & logout
+- `POST /api/auth/refresh`: nhận cặp token mới.
+- `POST /api/auth/logout`: thu hồi refresh token hiện tại.
+- `POST /api/auth/logout-all`: thu hồi mọi refresh token.
+
+### 6.3 Dùng token
+- Gọi API bảo vệ bằng header:
+  ```http
+  Authorization: Bearer <accessToken>
+  ```
+- Access token hết hạn → dùng `/api/auth/refresh` với refresh token tương ứng.
+
+## 7. Kiến trúc Dedicated Server (Warm Pool)
+### 7.1 Tổng quan
+- Mỗi trận chạy một Dedicated Server riêng (Unity + Photon Fusion).
+- Container được tạo theo nhu cầu và tự hủy sau trận.
+- Backend điều phối hàng chờ, ghép trận, cấp ticket và kiểm soát CCU.
+
+### 7.2 Thành phần
+- **Client (Unity)**: chỉ connect Fusion khi nhận ticket.
+- **Backend**: ghép trận, cấp quyền, quản lý CCU.
+- **Docker Orchestrator**: tạo container `IDLE`/`MATCH`.
+- **Dedicated Server**: chạy 1 trận, callback READY/RESULT.
+
+### 7.3 Luồng chính
+1. Người chơi vào hàng chờ → backend emit `queue:update`.
+2. Đủ người → emit `match:found`.
+3. Assign container IDLE (warm pool) → giảm thời gian chờ.
+4. DS callback READY → backend phát ticket.
+5. Kết thúc trận → DS callback RESULT và tự shutdown.
+
+### 7.4 Warm Pool gợi ý
+```
+MIN_IDLE_DS_PER_TYPE=1
+MAX_IDLE_DS_TOTAL=2
+```
+
+## 8. Ghi chú vận hành
+- Ưu tiên đảm bảo CCU Photon Fusion không vượt giới hạn gói.
+- Hệ thống dễ mở rộng lên Kubernetes/auto-scaling mà không đổi lõi.
+## REDIS SERVER CẤU HÌNH
+#lệnh build docker:
+docker-compose -f docker-compose.redis.yml up -d
+
+##Fix cảnh báo: Memory overcommit (Bắt buộc cho Production)
+Mở file cấu hình hệ thống:
+ /etc/sysctl.conf
+Kéo xuống cuối file và dán dòng này vào:
+vm.overcommit_memory = 1
+Chạy lệnh sau để hệ thống cập nhật ngay:
+sysctl -p

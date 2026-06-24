@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Legends - Quản lý tài khoản người chơi</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./players.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero player-hero">
+        <div>
+          <p class="eyebrow">Quản lý người chơi</p>
+          <h1>Kiểm soát tài khoản &amp; lịch sử</h1>
+          <p class="subtitle">Tìm kiếm theo friendCode, kiểm tra lịch sử và khóa/mở tài khoản tức thì.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="back-dashboard" class="chip-action chip-button" type="button">← Quay lại dashboard</button>
+          <div class="hero-badge">
+            <span class="badge-label">Trạng thái</span>
+            <span id="session-state" class="badge-value offline">Đang kiểm tra...</span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Danh sách</p>
+              <h2>Grid tài khoản người chơi</h2>
+              <p class="subtitle">Hiển thị 10 tài khoản mỗi trang để thao tác nhanh.</p>
+            </div>
+            <div class="admin-chip">
+              <div class="chip-icon">🎮</div>
+              <div class="chip-text">
+                <span id="admin-name">Admin</span>
+                <small id="admin-meta">Đang xác thực...</small>
+              </div>
+              <button id="logout" class="chip-action" type="button" title="Đăng xuất">✕</button>
+            </div>
+          </div>
+
+          <div class="player-layout">
+            <div class="card table-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Tìm kiếm</p>
+                  <h3>Tra cứu theo friendCode</h3>
+                  <p class="subtitle">Nhập friendCode và nhấn tìm để lọc kết quả.</p>
+                </div>
+                <div class="pill warm" id="player-count">0 tài khoản</div>
+              </div>
+
+              <div class="table-toolbar">
+                <label class="field compact">
+                  <span>FriendCode</span>
+                  <input id="player-search" type="search" placeholder="Nhập friendCode" autocomplete="off" />
+                </label>
+                <div class="toolbar-actions">
+                  <button id="search-player" class="cta ghost" type="button">Tìm kiếm</button>
+                  <button id="reset-player" class="chip-action chip-button" type="button">Làm mới</button>
+                </div>
+              </div>
+
+              <div class="pagination-controls">
+                <button id="prev-page" class="chip-action chip-button" type="button">← Trang trước</button>
+                <div class="pagination-info" id="pagination-info">Trang 1/1</div>
+                <button id="next-page" class="chip-action chip-button" type="button">Trang tiếp →</button>
+              </div>
+
+              <div class="data-grid" id="player-grid">
+                <div class="docker-loading">Đang tải dữ liệu...</div>
+              </div>
+            </div>
+
+            <div class="player-column">
+              <div class="card player-detail-card">
+                <div class="card-header">
+                  <div>
+                    <p class="eyebrow">Chi tiết</p>
+                    <h3>Thông tin người chơi</h3>
+                    <p class="subtitle">Chọn 1 người chơi để xem thông tin và thao tác tài khoản.</p>
+                  </div>
+                  <div class="pill neutral" id="player-status-pill">Chưa chọn</div>
+                </div>
+
+                <div class="player-detail-body">
+                  <div id="player-detail-empty" class="player-empty">
+                    Chọn một tài khoản ở danh sách bên trái để hiển thị thông tin.
+                  </div>
+
+                  <div id="player-detail" class="hidden">
+                    <div class="player-summary">
+                      <div>
+                        <p class="row-label">FriendCode</p>
+                        <p class="row-value" id="detail-friendcode">—</p>
+                      </div>
+                      <div>
+                        <p class="row-label">Tên hiển thị</p>
+                        <p class="row-value" id="detail-name">—</p>
+                      </div>
+                      <div>
+                        <p class="row-label">Provider</p>
+                        <p class="row-value" id="detail-provider">—</p>
+                      </div>
+                    </div>
+
+                    <div class="player-metrics">
+                      <div class="metric-card">
+                        <span class="metric-label">Level</span>
+                        <strong id="detail-level">—</strong>
+                      </div>
+                      <div class="metric-card">
+                        <span class="metric-label">Exp</span>
+                        <strong id="detail-exp">—</strong>
+                      </div>
+                      <div class="metric-card">
+                        <span class="metric-label">RingBall</span>
+                        <strong id="detail-ringball">—</strong>
+                      </div>
+                      <div class="metric-card">
+                        <span class="metric-label">Money</span>
+                        <strong id="detail-money">—</strong>
+                      </div>
+                      <div class="metric-card">
+                        <span class="metric-label">Talent</span>
+                        <strong id="detail-talent">—</strong>
+                      </div>
+                    </div>
+
+                    <div class="player-actions">
+                      <button id="view-logs" class="cta" type="button">
+                        <span>📜 Xem log lịch sử</span>
+                      </button>
+                      <button id="toggle-active" class="cta danger" type="button">
+                        <span id="toggle-active-label">Khóa tài khoản</span>
+                      </button>
+                      <button id="delete-player" class="cta danger" type="button">
+                        <span>Xóa người chơi</span>
+                      </button>
+                    </div>
+
+                    <div class="player-extra">
+                      <div>
+                        <p class="row-label">Email</p>
+                        <p class="row-value" id="detail-email">—</p>
+                      </div>
+                      <div>
+                        <p class="row-label">Body</p>
+                        <p class="row-value" id="detail-body">—</p>
+                      </div>
+                      <div>
+                        <p class="row-label">Trạng thái</p>
+                        <p class="row-value" id="detail-active">—</p>
+                      </div>
+                      <div>
+                        <p class="row-label">Ngày tạo tài khoản</p>
+                        <p class="row-value" id="detail-created-at">—</p>
+                      </div>
+                      <div>
+                        <p class="row-label">Đăng nhập gần đây</p>
+                        <p class="row-value" id="detail-last-login-at">—</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card form-card message-card">
+                <div class="card-header">
+                  <div>
+                    <p class="eyebrow">Hệ thống</p>
+                    <h3>Gửi tin nhắn &amp; quà tặng</h3>
+                    <p class="subtitle">Chọn người chơi, đính kèm quà và gửi thông báo.</p>
+                  </div>
+                </div>
+                <div class="card-body message-body">
+                  <div class="message-targets">
+                    <label class="checkbox-field">
+                      <input id="send-all" type="checkbox" />
+                      <span>Gửi toàn server</span>
+                    </label>
+                    <div class="message-meta">
+                      <span>Đã chọn: <strong id="selected-count">0</strong> người chơi</span>
+                      <div id="selected-list" class="selected-list">Chưa chọn người chơi.</div>
+                    </div>
+                    <div class="message-actions">
+                      <button id="use-selected-player" class="chip-action chip-button" type="button">
+                        + Thêm người đang xem
+                      </button>
+                      <button id="clear-selection" class="chip-action chip-button muted" type="button">
+                        Xóa danh sách
+                      </button>
+                    </div>
+                  </div>
+
+                  <label class="field">
+                    <span>Nội dung tin nhắn</span>
+                    <textarea id="message-content" rows="4" placeholder="Nhập nội dung thông báo..."></textarea>
+                  </label>
+
+                  <div class="message-rewards">
+                    <label class="field">
+                      <span>RingBall</span>
+                      <input id="message-ringball" type="number" min="0" value="0" />
+                    </label>
+                    <label class="field">
+                      <span>Money</span>
+                      <input id="message-money" type="number" min="0" value="0" />
+                    </label>
+                  </div>
+
+                  <label class="field">
+                    <span>Item đính kèm</span>
+                    <select id="message-item">
+                      <option value="">Không đính kèm</option>
+                    </select>
+                  </label>
+
+                  <div class="form-actions">
+                    <button id="send-message" class="cta" type="button">
+                      ✉️ Gửi tin nhắn
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="loading-backdrop" class="backdrop hidden">
+      <div class="spinner"></div>
+      <p id="loading-text">Đang xử lý...</p>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="module" src="./players.js"></script>
+  </body>
+</html>

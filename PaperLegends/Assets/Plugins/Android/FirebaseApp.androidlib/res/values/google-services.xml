@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_android_client_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">985676794783</string>
+  <string name="google_storage_bucket" translatable="false">banculifirebase.firebasestorage.app</string>
+  <string name="project_id" translatable="false">banculifirebase</string>
+  <string name="google_api_key" translatable="false">AIzaSyD944d81_IGWYfUbrJkSJ4kX72Zu-9cpcI</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD944d81_IGWYfUbrJkSJ4kX72Zu-9cpcI</string>
+  <string name="google_app_id" translatable="false">1:985676794783:android:884a6775c4d88412520baa</string>
+  <string name="default_android_client_id" translatable="false">985676794783-o6j8qo1hlgahmt90ghbh137og5ro6elp.apps.googleusercontent.com</string>
+  <string name="default_web_client_id" translatable="false">985676794783-7th1m47qu6cbju45tu5ihi0mlb13riic.apps.googleusercontent.com</string>
+</resources>

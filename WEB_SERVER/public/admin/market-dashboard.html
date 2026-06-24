@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Paper Legends - Market Dashboard</title>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@6/dist/echarts.min.js"></script>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:radial-gradient(circle at 15% 10%,rgba(214,171,82,.1),transparent 32%),radial-gradient(circle at 85% 0,rgba(47,191,143,.12),transparent 28%),#130807;color:#fff6df}
+.wrap{padding:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:12px}
+.card{background:rgba(58,18,14,.68);border-radius:12px;padding:16px;border:1px solid rgba(214,171,82,.22);box-shadow:0 8px 18px rgba(0,0,0,.24)}
+.chart{height:260px}
+.item-chart-wrap{position:relative}
+.item-toolbar{position:absolute;top:-38px;right:0;display:flex;gap:6px}
+.item-toolbar button{padding:5px 10px;border-radius:999px;background:rgba(214,171,82,.1);border:1px solid rgba(214,171,82,.28);font-size:12px}
+.item-toolbar button.active{background:linear-gradient(135deg,#d6ab52,#2fbf8f);color:#130807;border-color:rgba(47,191,143,.65)}
+.table{max-height:260px;overflow:auto}
+button{margin-right:6px;padding:6px 12px;border:1px solid rgba(214,171,82,.28);background:rgba(214,171,82,.12);color:#fff6df;border-radius:6px;cursor:pointer}
+button:hover{background:rgba(47,191,143,.18)}
+.muted{opacity:.8;font-size:12px}
+.item-list{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto}
+.item-card{padding:12px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:transform 0.2s}
+.item-card:hover{transform:translateX(4px)}
+.item-card.gainer{background:linear-gradient(135deg,rgba(47,191,143,0.18),rgba(47,191,143,0.05))}
+.item-card.loser{background:linear-gradient(135deg,rgba(214,76,63,0.16),rgba(214,76,63,0.05))}
+.item-info{flex:1}
+.item-name{font-weight:bold;font-size:14px;margin-bottom:4px}
+.item-price{font-size:13px;opacity:0.9}
+.item-change{font-weight:bold;font-size:15px;white-space:nowrap;margin-left:12px}
+.item-change.up{color:#8df2c8}
+.item-change.down{color:#f18f82}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h2>Paper Legends Market Dashboard</h2>
+<div class="grid3">
+<div class="card">
+<h3>Market Activity Overview</h3>
+<div>
+<button onclick="setRange('24h')">24h</button>
+<button onclick="setRange('7d')">7d</button>
+<button onclick="setRange('30d')">30d</button>
+</div>
+<div id="overviewMetrics" class="muted">Loading...</div>
+<div id="overviewChart" class="chart"></div>
+</div>
+<div class="card">
+<h3>Top 10 Item Tăng Giá</h3>
+<div id="gainersList" class="item-list"></div>
+</div>
+<div class="card">
+<h3>Top 10 Item Giảm Giá</h3>
+<div id="losersList" class="item-list"></div>
+</div>
+</div>
+<div class="grid2">
+<div class="card">
+<h3>Item Price Chart <span id="selectedItem" class="muted"></span></h3>
+<div class="item-chart-wrap">
+<div class="item-toolbar">
+<button class="active" data-range="7d" onclick="setRange('7d',true)">7D</button>
+<button data-range="24h" onclick="setRange('24h',true)">1D</button>
+<button data-range="30d" onclick="setRange('30d',true)">1M</button>
+</div>
+<div id="itemChart" class="chart"></div>
+</div>
+</div>
+<div class="card">
+<h3>Recent Market Transactions</h3>
+<div id="events" class="table"></div>
+</div>
+</div>
+</div>
+<script>
+const token=localStorage.getItem('admin_ui_token');
+const ADMIN_API_BASE=window.location.pathname.startsWith('/paper-legends/')?'/paper-legends/api/admin':'/api/admin';
+const adminApiUrl=(u)=>`${ADMIN_API_BASE}/${String(u).replace(/^\/?api\/admin\/?/,'').replace(/^\/+/,'')}`;
+let range='7d';
+let selectedItemId=null;
+let throttleTimer=null;
+const authFetch=(u)=>fetch(adminApiUrl(u),{headers:{Authorization:`Bearer ${token}`}}).then(r=>r.json());
+const fm=(n)=>new Intl.NumberFormat('vi-VN').format(Number(n||0));
+const fp=(n)=>`${Number(n||0).toFixed(2)}%`;
+const overviewChart=echarts.init(document.getElementById('overviewChart'));
+const itemChart=echarts.init(document.getElementById('itemChart'));
+
+function buildCandles(history){
+const closes=history.map(x=>Number(x.newPrice||x.price||0));
+return history.map((x,i)=>{
+const close=closes[i]||0;
+const open=i?closes[i-1]:Number(x.oldPrice||close);
+const high=Math.max(open,close)+(Math.abs(close-open)*0.25);
+const low=Math.min(open,close)-(Math.abs(close-open)*0.25);
+return [open,close,Math.max(high,open,close),Math.max(0,Math.min(low,open,close))];
+});
+}
+
+function movingAvg(values, n){
+return values.map((_,i)=>{
+if(i<n-1) return '-';
+const slice=values.slice(i-n+1,i+1);
+return slice.reduce((a,b)=>a+b,0)/n;
+});
+}
+
+async function load(){
+try{
+const [ov,g,lo,ev]=await Promise.all([
+authFetch(`/api/admin/market/overview?range=${range}`),
+authFetch(`/api/admin/market/top-gainers?range=${range}&limit=10`),
+authFetch(`/api/admin/market/top-losers?range=${range}&limit=10`),
+authFetch('/api/admin/market/recent-events?limit=20')
+]);
+
+document.getElementById('overviewMetrics').innerText=`Buy: ${ov.buyOrders} | Sell: ${ov.sellOrders} | Volume: ${ov.totalVolume} | Ratio: ${ov.buySellRatio}`;
+
+overviewChart.setOption({
+xAxis:{type:'category',data:(ov.timeline||[]).map(x=>new Date(x.time).toLocaleString())},
+yAxis:{type:'value'},
+series:[{type:'line',data:(ov.timeline||[]).map(x=>x.value)}]
+});
+
+const gainers=(g.items||[]);
+document.getElementById('gainersList').innerHTML=gainers.length?gainers.map(item=>`
+<div class="item-card gainer" onclick="selectItem(${item.itemId})">
+<div class="item-info">
+<div class="item-name">${item.itemName}</div>
+<div class="item-price">${fm(item.currentPrice)} đ</div>
+</div>
+<div class="item-change up">+${fp(Math.abs(item.percent))}</div>
+</div>
+`).join(''):'<div class="muted">Chưa có dữ liệu</div>';
+
+const losers=(lo.items||[]);
+document.getElementById('losersList').innerHTML=losers.length?losers.map(item=>`
+<div class="item-card loser" onclick="selectItem(${item.itemId})">
+<div class="item-info">
+<div class="item-name">${item.itemName}</div>
+<div class="item-price">${fm(item.currentPrice)} đ</div>
+</div>
+<div class="item-change down">-${fp(Math.abs(item.percent))}</div>
+</div>
+`).join(''):'<div class="muted">Chưa có dữ liệu</div>';
+
+const events=(ev.events||[]);
+document.getElementById('events').innerHTML=events.length?events.map(e=>`
+<div style='padding:6px;border-bottom:1px solid rgba(214,171,82,.24);cursor:pointer' onclick='selectItem(${e.itemId})'>
+<b>${e.itemName}</b> | ${e.buyerName} ⇄ ${e.sellerName}<br/>
+<span class='muted'>${new Date(e.createdAt).toLocaleString()} · ${fm(e.price)} x ${e.quantity}</span>
+</div>
+`).join(''):'<div class="muted">Chưa có dữ liệu</div>';
+
+if(!selectedItemId&&events[0]) selectItem(events[0].itemId);
+}catch(e){
+document.getElementById('overviewMetrics').innerText='Lỗi tải dữ liệu';
+}
+}
+
+async function selectItem(id){
+selectedItemId=id;
+document.getElementById('selectedItem').innerText=`#${id}`;
+const d=await authFetch(`/api/admin/market/item/${id}/history?range=${range}`);
+const h=d.history||[];
+const labels=h.map(x=>new Date(x.createdAt).toLocaleString());
+const candles=buildCandles(h);
+const closeSeries=h.map(x=>Number(x.newPrice||x.price||0));
+itemChart.setOption({
+backgroundColor:'#160807',
+animation:false,
+grid:{left:16,right:54,top:18,bottom:28,containLabel:true},
+xAxis:{type:'category',data:labels,boundaryGap:true,axisLine:{lineStyle:{color:'#6b4d23'}},axisLabel:{color:'#cbbf95',fontSize:10,hideOverlap:true},splitLine:{show:false}},
+yAxis:{type:'value',position:'right',scale:true,axisLine:{show:false},axisLabel:{color:'#cbbf95'},splitLine:{lineStyle:{color:'rgba(214,171,82,.18)'}}},
+series:[
+{type:'candlestick',data:candles,itemStyle:{color:'#2fbf8f',color0:'#d64c3f',borderColor:'#2fbf8f',borderColor0:'#d64c3f'}},
+{type:'line',data:movingAvg(closeSeries,5),smooth:true,showSymbol:false,lineStyle:{width:1.5,color:'#d6ab52'}},
+{type:'line',data:movingAvg(closeSeries,10),smooth:true,showSymbol:false,lineStyle:{width:1.5,color:'#8df2c8'}}
+],
+tooltip:{trigger:'axis'}
+});
+}
+
+function setRange(r,fromItem=false){
+range=r;
+if(fromItem){document.querySelectorAll('.item-toolbar button').forEach(b=>b.classList.toggle('active',b.dataset.range===r));}
+load();
+if(selectedItemId)selectItem(selectedItemId)
+}
+
+window.setRange=setRange;
+window.selectItem=selectItem;
+
+const socket=io(window.location.origin,{path:'/socket.io',transports:['websocket']});
+socket.on('market:update',()=>{
+if(throttleTimer)return;
+throttleTimer=setTimeout(()=>{
+throttleTimer=null;
+load();
+if(selectedItemId)selectItem(selectedItemId)
+},1500);
+});
+
+load();
+</script>
+</body>
+</html>

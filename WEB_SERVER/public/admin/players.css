@@ -1,0 +1,43 @@
+.page {
+  max-width: 1680px;
+}
+
+.player-layout {
+  grid-template-columns: minmax(860px, 2fr) minmax(360px, 0.8fr);
+  gap: 22px;
+}
+
+@media (max-width: 1420px) {
+  .player-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .data-grid {
+    overflow-x: auto;
+  }
+
+  .data-row {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .row-main,
+  .player-row-main {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .row-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.delete-player-confirm {
+  display: grid;
+  gap: 16px;
+}
+
+.delete-player-warning {
+  color: var(--danger);
+  font-weight: 600;
+}

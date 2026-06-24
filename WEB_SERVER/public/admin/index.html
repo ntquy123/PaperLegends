@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper Legends - Quản lý server</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Giao diện quản lý</p>
+          <h1>Paper Legends Server Control</h1>
+          <p class="subtitle">Phong cách MOBA thời đại Hùng Vương · Nhanh · Gọn · Trực quan</p>
+        </div>
+        <div class="hero-badge">
+          <span class="badge-label">Trạng thái</span>
+          <span id="session-state" class="badge-value offline">Chưa đăng nhập</span>
+        </div>
+      </header>
+
+      <main>
+        <section id="login-card" class="panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Bước 1</p>
+              <h2>Đăng nhập quản trị</h2>
+              <p class="subtitle">Sử dụng friendCode có ProviderType = System để vào bảng điều khiển.</p>
+            </div>
+            <div class="watermark">Đông Sơn</div>
+          </div>
+          <form id="login-form" class="form">
+            <label class="field">
+              <span>FriendCode</span>
+              <input id="friendCode" name="friendCode" type="text" autocomplete="off" placeholder="Nhập friendCode hệ thống" required />
+            </label>
+            <label class="field">
+              <span>Mật khẩu quản trị</span>
+              <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="Nhập mật khẩu quản trị" required />
+            </label>
+            <button class="cta" type="submit">
+              <span>Đăng nhập</span>
+              <span class="sparkle">✦</span>
+            </button>
+          </form>
+          <p id="login-hint" class="hint">Sử dụng friendCode hệ thống và mật khẩu quản trị đã cấu hình.</p>
+        </section>
+
+        <section id="dashboard" class="panel hidden">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Bảng điều khiển</p>
+              <h2>Điều hành server tức thì</h2>
+              <p class="subtitle">Bật phòng chờ, tắt server an toàn, xem kết quả ngay.</p>
+            </div>
+            <div class="admin-chip">
+              <div class="chip-icon">PL</div>
+              <div class="chip-text">
+                <span id="admin-name">Admin</span>
+                <small id="admin-friendcode">FriendCode</small>
+              </div>
+              <button id="logout" class="chip-action" type="button" title="Đăng xuất">✕</button>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="card gradient">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Tác vụ nhanh</p>
+                  <h3>Bật / tắt server</h3>
+                </div>
+                <div class="pill warm">Ổn định</div>
+              </div>
+              <div class="actions">
+                <button id="start-btn" class="cta ghost" type="button">
+                  <div class="icon">⚡</div>
+                  <div>
+                    <div>Bật warm pool server</div>
+                    <small>Gọi API /admin/start</small>
+                  </div>
+                </button>
+                <button id="shutdown-btn" class="cta danger" type="button">
+                  <div class="icon">🌙</div>
+                  <div>
+                    <div>Tắt warm pool server</div>
+                    <small>Gọi API /admin/shutdown</small>
+                  </div>
+                </button>
+                <button id="start-redis-btn" class="cta" type="button">
+                  <div class="icon">🧠</div>
+                  <div>
+                    <div>Bật Redis server</div>
+                    <small>Gọi API /admin/redis/start</small>
+                  </div>
+                </button>
+                <button id="stop-redis-btn" class="cta ghost" type="button">
+                  <div class="icon">🧊</div>
+                  <div>
+                    <div>Tắt Redis server</div>
+                    <small>Gọi API /admin/redis/stop</small>
+                  </div>
+                </button>
+                <button id="start-monitor-btn" class="cta" type="button">
+                  <div class="icon">📡</div>
+                  <div>
+                    <div>Bật monitor server</div>
+                    <small>Gọi API /admin/monitor/start (PM2: paper-legends-monitor)</small>
+                  </div>
+                </button>
+                <button id="stop-monitor-btn" class="cta ghost" type="button">
+                  <div class="icon">🛰️</div>
+                  <div>
+                    <div>Tắt monitor server</div>
+                    <small>Gọi API /admin/monitor/stop (PM2: paper-legends-monitor)</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Server test</p>
+                  <h3>Bật / tắt phòng Rank thử nghiệm</h3>
+                  <p class="subtitle">Tạo 1 container IDLE để kiểm thử nhanh chế độ Rank.</p>
+                </div>
+                <div class="pill neutral">Chỉ 1 phòng</div>
+              </div>
+              <div class="actions">
+                <label class="field">
+                  <span>Loại phòng thử nghiệm</span>
+                  <select id="test-room-type" name="test-room-type">
+                    <option value="">Đang tải loại phòng...</option>
+                  </select>
+                </label>
+                <button id="start-test-btn" class="cta" type="button">
+                  <div class="icon">🧪</div>
+                  <div>
+                    <div>Bật server test</div>
+                    <small>Giữ sẵn 1 container IDLE cho kiểm thử</small>
+                  </div>
+                </button>
+                <button id="shutdown-test-btn" class="cta ghost" type="button">
+                  <div class="icon">🧹</div>
+                  <div>
+                    <div>Tắt server test</div>
+                    <small>Dừng container test và dọn warm pool</small>
+                  </div>
+                </button>
+              </div>
+              <p class="hint">
+                Dùng khi cần kiểm thử nhanh chế độ Rank. Sẽ báo lỗi nếu phòng test đang bận.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Kết quả</p>
+                  <h3>Phản hồi trực tiếp</h3>
+                </div>
+                <div class="pill neutral" id="result-status">Đang chờ</div>
+              </div>
+              <div class="result">
+                <div id="result-message" class="result-message">Chưa có thao tác.</div>
+                <pre id="result-detail" class="result-detail"></pre>
+              </div>
+            </div>
+
+            <div class="card docker-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Docker</p>
+                  <h3>Quản lý container</h3>
+                  <p class="subtitle">Theo dõi trạng thái, tài nguyên và log phòng game.</p>
+                </div>
+                <div class="pill warm">Mới</div>
+              </div>
+
+              <div class="config-card__body">
+                <p>
+                  Tách riêng trang quản lý Docker với bảng dạng lưới, phân trang và xem log chi tiết từng
+                  container.
+                </p>
+                <div class="config-actions">
+                  <button id="open-docker-management" class="cta" type="button">
+                    <span class="icon">🐳</span>
+                    <span>Mở trang Docker</span>
+                  </button>
+                  <small class="subtitle">Yêu cầu đăng nhập quản trị.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card docker-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">API</p>
+                  <h3>Log server API</h3>
+                  <p class="subtitle">Theo dõi log runtime của API server.</p>
+                </div>
+                <div class="pill warm">Mới</div>
+              </div>
+
+              <div class="config-card__body">
+                <p>
+                  Xem log theo thời gian thực để bắt lỗi token, request và backend nhanh hơn.
+                </p>
+                <div class="config-actions">
+                  <button id="open-server-logs" class="cta" type="button">
+                    <span class="icon">🧾</span>
+                    <span>Mở log API</span>
+                  </button>
+                  <small class="subtitle">Yêu cầu đăng nhập quản trị.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card config-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Cấu hình</p>
+                  <h3>Quản lý ngôn ngữ hệ thống</h3>
+                  <p class="subtitle">Xem, thêm, chỉnh sửa hoặc xóa config ngôn ngữ.</p>
+                </div>
+                <div class="pill warm">Mới</div>
+              </div>
+              <div class="config-card__body">
+                <p>
+                  Truy cập trang cấu hình để kiểm soát bảng <strong>SysMasLanguage</strong> với giao diện
+                  dạng lưới hiện đại.
+                </p>
+                <div class="config-actions">
+                  <button id="open-language-config" class="cta" type="button">
+                    <span class="icon">🛠️</span>
+                    <span>Mở trang cấu hình</span>
+                  </button>
+                  <small class="subtitle">Yêu cầu đăng nhập quản trị.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card config-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Giới thiệu</p>
+                  <h3>ReadMe server</h3>
+                  <p class="subtitle">Xem nhanh tài liệu vận hành và API ngay trong admin UI.</p>
+                </div>
+                <div class="pill neutral">Mới</div>
+              </div>
+              <div class="config-card__body">
+                <p>
+                  Hiển thị nội dung ReadMe trực tiếp từ server để team vận hành nắm nhanh thông tin.
+                </p>
+                <div class="config-actions">
+                  <button id="open-readme" class="cta" type="button">
+                    <span class="icon">📘</span>
+                    <span>Mở ReadMe</span>
+                  </button>
+                  <small class="subtitle">Yêu cầu đăng nhập quản trị.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card player-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Người chơi</p>
+                  <h3>Quản lý tài khoản người chơi</h3>
+                  <p class="subtitle">Tìm kiếm friendCode, xem log và khóa/mở tài khoản nhanh chóng.</p>
+                </div>
+                <div class="pill warm">Mới</div>
+              </div>
+              <div class="config-card__body">
+                <p>
+                  Hỗ trợ kiểm tra lịch sử trận đấu, trừ tiền và giao dịch item của từng người chơi trong
+                  một màn hình riêng.
+                </p>
+                <div class="config-actions">
+                  <button id="open-player-management" class="cta" type="button">
+                    <span class="icon">🧭</span>
+                    <span>Mở quản lý tài khoản</span>
+                  </button>
+                  <small class="subtitle">Yêu cầu đăng nhập quản trị.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="card player-card">
+              <div class="card-header">
+                <div>
+                  <p class="eyebrow">Market</p>
+                  <h3>Market Dashboard</h3>
+                  <p class="subtitle">Theo dõi realtime thị trường mua/bán item.</p>
+                </div>
+                <div class="pill warm">Realtime</div>
+              </div>
+              <div class="config-card__body">
+                <p>
+                  Bao gồm overview, top tăng/giảm giá, biểu đồ giá item và giao dịch gần nhất.
+                </p>
+                <div class="config-actions">
+                  <button id="open-market-dashboard" class="cta" type="button">
+                    <span class="icon">📈</span>
+                    <span>Mở Market Dashboard</span>
+                  </button>
+                  <small class="subtitle">Yêu cầu đăng nhập quản trị.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="loading-backdrop" class="backdrop hidden">
+      <div class="spinner"></div>
+      <p id="loading-text">Đang xử lý...</p>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

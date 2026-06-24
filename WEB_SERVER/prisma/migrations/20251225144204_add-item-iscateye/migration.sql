@@ -1,0 +1,1 @@
+ALTER TABLE "Item" ADD COLUMN     "isCateye" BOOLEAN NOT NULL DEFAULT true;

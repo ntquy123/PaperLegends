@@ -1,0 +1,1181 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d97d4117f9045b6b421d16283fd3d1b, type: 3}
+  m_Name: 12000001_SceneLogicConfig
+  m_EditorClassIdentifier: 
+  sceneName: 12000001
+  _physicsAssets:
+    groundMaterial: {fileID: 13400000, guid: d25117ba0b6b9434bab9f40e3c58db65, type: 2}
+    rockMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    groundTerrain: {fileID: 15600000, guid: 96d6fd5c192982b4d9dced976b4455e3, type: 2}
+  transformEntries:
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/1
+    position: {x: 446.23, y: -0.1095, z: 9.27}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/2
+    position: {x: 454.46, y: -0.1095, z: -1.69}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/3
+    position: {x: 463.87, y: -0.1095, z: 7.54}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/4
+    position: {x: 454.2, y: -0.1095, z: 19.1}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/5
+    position: {x: 459.6, y: -0.1095, z: 17.7}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/6
+    position: {x: 449, y: -0.1095, z: 17.7}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/7
+    position: {x: 446.1, y: -0.1095, z: 13.2}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/8
+    position: {x: 450, y: -0.1095, z: 5.1}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/9
+    position: {x: 455.3, y: -0.1095, z: 5.3}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: paper_legend_spawn
+    hierarchyPath: GamePhase1/ListLocationSpawnHero/10
+    position: {x: 457.2, y: -0.1095, z: 1}
+    rotation: {x: 0, y: 180, z: 0}
+    localScale: {x: 0.01, y: 0.01, z: 0.01}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass
+    position: {x: 450.7892, y: -0.04, z: -0.5145}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 4.472251, y: 0.19168, z: 1.7029159}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (2)
+    position: {x: 445.9148, y: -0.04, z: 8.3379}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 2.4619741, y: 0.19168, z: 1.3679188}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (3)
+    position: {x: 446.3074, y: -0.04, z: 9.6403}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 1.07162, y: 0.19168, z: 1.3212441}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (4)
+    position: {x: 450.6308, y: -0.04, z: 9.5964}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 0.37835768, y: 0.19168, z: 0.3179999}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (5)
+    position: {x: 452.8138, y: -0.04, z: 10.7076}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 0.264699, y: 0.19168, z: 0.47315204}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (8)
+    position: {x: 453.5227, y: -0.04, z: 14.182}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 1.4505441, y: 0.19168, z: 0.5891825}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (6)
+    position: {x: 456.4542, y: -0.04, z: 12.4138}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 0.8131818, y: 0.19168, z: 5.73631}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (7)
+    position: {x: 452.562, y: -0.04, z: 14.83}
+    rotation: {x: -0, y: 90, z: -0}
+    localScale: {x: 0.8131818, y: 0.19168, z: 8.295091}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (1)
+    position: {x: 454.83, y: -0.04, z: -0.8561}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 4.472251, y: 0.19168, z: 1.019706}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/bottom
+    position: {x: 456, y: 0, z: -3.38}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 20, y: 20, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/left
+    position: {x: 444.3, y: 0.2, z: 4.3}
+    rotation: {x: -0, y: 63.002785, z: -0}
+    localScale: {x: 20, y: 20, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/right
+    position: {x: 464.03, y: 0.13031, z: 2.81}
+    rotation: {x: -0, y: 112.291, z: -0}
+    localScale: {x: 20, y: 20, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/right (1)
+    position: {x: 463.7, y: 0.13031, z: 15.2}
+    rotation: {x: -0, y: 57.31552, z: -0}
+    localScale: {x: 20, y: 20, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/top
+    position: {x: 455.53, y: 0, z: 22.67}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 20, y: 20, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/top (1)
+    position: {x: 446.15, y: 0, z: 18.22}
+    rotation: {x: -0.0000016171015, y: 298.71997, z: -0.0000012308077}
+    localScale: {x: 20, y: 20, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Water
+    hierarchyPath: GamePhase1/Land/Terrain
+    position: {x: 419.4, y: -3.6, z: -20.3}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 0.5, y: 0.5, z: 0.5}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2
+    position: {x: 451.21, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (9)
+    position: {x: 451.79, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (17)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (13)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (18)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (1)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (10)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (19)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (14)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (20)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (4)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (11)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (21)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (15)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (22)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (3)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (25)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (12)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (23)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (16)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (24)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (5)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (6)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (26)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (7)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (8)
+    position: {x: 452.5527, y: -0.1, z: 7.410348}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (2)
+    position: {x: 452.5527, y: -0.1, z: 9.44}
+    rotation: {x: 54.179806, y: 143.57524, z: 0.79378045}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_4
+    position: {x: 446.25, y: -0.1, z: 7.410348}
+    rotation: {x: -0, y: 105.468216, z: -0}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_4 (1)
+    position: {x: 452.5527, y: -0.1, z: 1.51}
+    rotation: {x: -0, y: 105.468216, z: -0}
+    localScale: {x: 0.1, y: 0.1, z: 0.1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_4 (2)
+    position: {x: 450.29, y: -0.1221, z: 9.68}
+    rotation: {x: -0, y: 105.468216, z: -0}
+    localScale: {x: 0.02, y: 0.02, z: 0.02}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_5
+    position: {x: 452.5527, y: -0.1257, z: 6.43}
+    rotation: {x: -0, y: 105.468216, z: -0}
+    localScale: {x: 0.02, y: 0.02, z: 0.02}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_5 (1)
+    position: {x: 447.87, y: -0.123, z: 7.438}
+    rotation: {x: -0, y: 105.468216, z: -0}
+    localScale: {x: 0.02, y: 0.02, z: 0.02}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_5 (2)
+    position: {x: 452.5527, y: -0.123, z: 10.62}
+    rotation: {x: -0, y: 105.468216, z: -0}
+    localScale: {x: 0.02, y: 0.02, z: 0.02}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: Swamp
+    hierarchyPath: GamePhase1/Water16x16
+    position: {x: 447.22778, y: -0.63, z: 10}
+    rotation: {x: -0, y: 0, z: 0}
+    localScale: {x: 1, y: 1, z: 1}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: House
+    hierarchyPath: hut
+    position: {x: 444.24, y: 0.53, z: 9.09}
+    rotation: {x: -0, y: 90, z: 0}
+    localScale: {x: 100, y: 100, z: 100}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: House
+    hierarchyPath: hut (2)
+    position: {x: 454.4, y: 0.53, z: 21}
+    rotation: {x: -0, y: 90, z: 0}
+    localScale: {x: 100, y: 100, z: 100}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: House
+    hierarchyPath: hut (3)
+    position: {x: 456.83, y: 0.53, z: -2.16}
+    rotation: {x: -0, y: 90, z: 0}
+    localScale: {x: 100, y: 100, z: 100}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  - tag: House
+    hierarchyPath: hut (1)
+    position: {x: 465, y: 0.53, z: 9.09}
+    rotation: {x: -0, y: 90, z: 0}
+    localScale: {x: 100, y: 100, z: 100}
+    applyPosition: 1
+    applyRotation: 1
+    applyScale: 1
+  colliderEntries:
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 4.472251, y: 0.19168, z: 1.7029159}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (2)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 2.4619741, y: 0.19168, z: 1.3679188}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (3)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 1.07162, y: 0.19168, z: 1.3212441}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (4)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.37835768, y: 0.19168, z: 0.3179999}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (5)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.264699, y: 0.19168, z: 0.47315204}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (8)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 1.4505441, y: 0.19168, z: 0.5891825}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (6)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.8131818, y: 0.19168, z: 5.73631}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (7)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.8131818, y: 0.19168, z: 8.295091}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Grass
+    hierarchyPath: GamePhase1/GrassGroup/Grass (1)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 4.472251, y: 0.19168, z: 1.019706}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/bottom
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 20, y: 20, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/left
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 20, y: 20, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/right
+    shape: 0
+    center: {x: -0.000030517578, y: 0.000000014901161, z: -0.000000014901161}
+    size: {x: 1, y: 1.0000001, z: 1}
+    transformScale: {x: 20, y: 20, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/right (1)
+    shape: 0
+    center: {x: -0.000030517578, y: 0.000000014901161, z: -0.000000014901161}
+    size: {x: 1, y: 1.0000001, z: 1}
+    transformScale: {x: 20, y: 20, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/top
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 20, y: 20, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Wall
+    hierarchyPath: GamePhase1/Land/Wall/top (1)
+    shape: 0
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 20, y: 20, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: Water
+    hierarchyPath: GamePhase1/Land/Terrain
+    shape: 2
+    center: {x: 0, y: 0, z: 0}
+    size: {x: 50, y: 50, z: 50}
+    transformScale: {x: 0.5, y: 0.5, z: 0.5}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: d25117ba0b6b9434bab9f40e3c58db65, type: 2}
+    terrainData: {fileID: 15600000, guid: 96d6fd5c192982b4d9dced976b4455e3, type: 2}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2
+    shape: 1
+    center: {x: 0.0020226154, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (9)
+    shape: 1
+    center: {x: 0.0020226154, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (17)
+    shape: 1
+    center: {x: 0.0020226154, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (13)
+    shape: 1
+    center: {x: 0.0020226154, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (18)
+    shape: 1
+    center: {x: 0.0020226154, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (1)
+    shape: 1
+    center: {x: 0.002053133, y: 0.031602688, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (10)
+    shape: 1
+    center: {x: 0.002053133, y: 0.031602688, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (19)
+    shape: 1
+    center: {x: 0.002053133, y: 0.031602688, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (14)
+    shape: 1
+    center: {x: 0.002053133, y: 0.031602688, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (20)
+    shape: 1
+    center: {x: 0.002053133, y: 0.031602688, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (4)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025406176}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (11)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025406176}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (21)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025406176}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (15)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025406176}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (22)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025406176}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (3)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (25)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (12)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (23)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (16)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (24)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (5)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (6)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (26)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (7)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (8)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025390917}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_2 (2)
+    shape: 1
+    center: {x: 0.002053133, y: 0.03158743, z: 0.025375659}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 0.100221336
+    height: 0.15398106
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_4
+    shape: 1
+    center: {x: 0.04772987, y: 0.7517209, z: -0.08057455}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 2.3555543
+    height: 3.3061473
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_4 (1)
+    shape: 1
+    center: {x: 0.04772987, y: 0.7517207, z: -0.08057455}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.1, y: 0.1, z: 0.1}
+    radius: 2.3555543
+    height: 3.3061473
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_4 (2)
+    shape: 1
+    center: {x: 0.04772987, y: 0.7517208, z: -0.080585994}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.02, y: 0.02, z: 0.02}
+    radius: 2.3555543
+    height: 3.3061473
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_5
+    shape: 1
+    center: {x: 0.03459348, y: 0.3054103, z: 0.059183925}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.02, y: 0.02, z: 0.02}
+    radius: 1.23275
+    height: 2.220559
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_5 (1)
+    shape: 1
+    center: {x: 0.03459348, y: 0.30541018, z: 0.059183925}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.02, y: 0.02, z: 0.02}
+    radius: 1.23275
+    height: 2.220559
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Rock
+    hierarchyPath: GamePhase1/Stone/stone_5 (2)
+    shape: 1
+    center: {x: 0.03459348, y: 0.30541018, z: 0.059191555}
+    size: {x: 1, y: 1, z: 1}
+    transformScale: {x: 0.02, y: 0.02, z: 0.02}
+    radius: 1.23275
+    height: 2.220559
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 13400000, guid: 66e54e3a8c83f3042ac06d6290c52f77, type: 2}
+    terrainData: {fileID: 0}
+  - tag: Swamp
+    hierarchyPath: GamePhase1/Water16x16
+    shape: 0
+    center: {x: 0, y: -1.7, z: 0}
+    size: {x: 32, y: 2, z: 32}
+    transformScale: {x: 1, y: 1, z: 1}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 1
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: House
+    hierarchyPath: hut
+    shape: 0
+    center: {x: 0.000010168183, y: -0.0000059120357, z: 0.00002055057}
+    size: {x: 0.019901512, y: 0.015668403, z: 0.01958332}
+    transformScale: {x: 100, y: 100, z: 100}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: House
+    hierarchyPath: hut (2)
+    shape: 0
+    center: {x: 0.000010168183, y: -0.0000059120357, z: 0.00002055057}
+    size: {x: 0.019901512, y: 0.015668403, z: 0.01958332}
+    transformScale: {x: 100, y: 100, z: 100}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: House
+    hierarchyPath: hut (3)
+    shape: 0
+    center: {x: 0.000010168183, y: -0.0000059120357, z: 0.00002055057}
+    size: {x: 0.019901512, y: 0.015668403, z: 0.01958332}
+    transformScale: {x: 100, y: 100, z: 100}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}
+  - tag: House
+    hierarchyPath: hut (1)
+    shape: 0
+    center: {x: 0.000010168183, y: -0.0000059120357, z: 0.00002055057}
+    size: {x: 0.019901512, y: 0.015668403, z: 0.01958332}
+    transformScale: {x: 100, y: 100, z: 100}
+    radius: 0.5
+    height: 2
+    capsuleDirection: 1
+    isTrigger: 0
+    physicMaterial: {fileID: 0}
+    terrainData: {fileID: 0}

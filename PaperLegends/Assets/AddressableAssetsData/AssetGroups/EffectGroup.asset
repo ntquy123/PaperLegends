@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: EffectGroup
+  m_EditorClassIdentifier: 
+  m_GroupName: EffectGroup
+  m_GUID: 20aba981098e160459c6ade5641a24d5
+  m_SerializeEntries:
+  - m_GUID: 0e4ff051af3266d4881c9e7e043577ea
+    m_Address: Assets/AddressableAsset/Items/Culi/EffectBall/vip3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18534de6e281822408a392719b569a84
+    m_Address: Assets/AddressableAsset/Skills/11000011.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 257ab52bac758e34495756d94384eb7e
+    m_Address: Assets/AddressableAsset/Skills/11000007.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2aa418ef20bbdcd4d95c6c3a01b45d15
+    m_Address: Assets/AddressableAsset/Items/Culi/EffectBall/vip2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b56af0439102264f9500b9fcce6f86d
+    m_Address: Assets/AddressableAsset/Skills/11000010.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41806d40f115ddd4387d58b1eee06a78
+    m_Address: Assets/AddressableAsset/Skills/Ball/11400005.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d5c8c32182df03488f53803523d698e
+    m_Address: Assets/AddressableAsset/Skills/11000013.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51b2b8d322b7a924c8e7462383db0657
+    m_Address: Assets/AddressableAsset/Skills/11000006.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 552f840effb4c5348b0831bd2d293a84
+    m_Address: Assets/AddressableAsset/Skills/Ball/11400004.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57c2d63bc5148694c9ac7e19ba9f9920
+    m_Address: Assets/AddressableAsset/Skills/11000008.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e41456d2c26d844bb49c24aaf95a693
+    m_Address: Assets/AddressableAsset/Skills/11000002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fbdeeb1b08d2dc4f8fe9426573b90fa
+    m_Address: Assets/AddressableAsset/Skills/11000009.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 681fbf828d8c7ad42ad5c591124ed068
+    m_Address: Assets/AddressableAsset/Skills/hindenEfffect.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75c10c9debf81d34b91a45edb2f824f8
+    m_Address: Assets/AddressableAsset/Skills/11000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ac4d21e11d470247aff3e0e7922f3f1
+    m_Address: Assets/AddressableAsset/Items/Culi/EffectBall/vip1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93c036c6ec0df604dbe5c692a8d7706a
+    m_Address: Assets/AddressableAsset/Skills/Ball/11400006.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 989f537b0a09d9449819609376301e3f
+    m_Address: Assets/AddressableAsset/Skills/11000005.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d15fab03bf96544abb4815cc6cc703b
+    m_Address: Assets/AddressableAsset/Skills/11000014.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3223f6e3f8d143459cd720a27aaf368
+    m_Address: Assets/AddressableAsset/Skills/Ball/11400003.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2a2c9fb8b6ca384189b865840512d64
+    m_Address: Assets/AddressableAsset/Skills/11000012.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6be3ef134c23c04eba477314e6a068e
+    m_Address: Assets/AddressableAsset/Skills/Ball/11400002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d79e6a096cac5e44b8532951b27d8c25
+    m_Address: Assets/AddressableAsset/Skills/11000003.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dcbc861fb838a0749833301dc5239d4d
+    m_Address: Assets/AddressableAsset/Skills/Ball/11400001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e382081402948934f8e04bffeff9dc94
+    m_Address: Assets/AddressableAsset/Skills/11000004.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7392f04d42c06754693add1add6d5d7d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b11d3a14b2da2ee419daa9088b21dd8d, type: 2}
+    - {fileID: 11400000, guid: 00e3f7f6eff94ab4d8a4f4df038d8893, type: 2}
