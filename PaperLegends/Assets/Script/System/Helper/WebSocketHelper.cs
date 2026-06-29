@@ -1547,6 +1547,7 @@ public class WebSocketHelper : MonoBehaviour
         public string matchId;
         public int playerId;
         public int characterModelId;
+        public string selectedModelIds;
         public int selectedCount;
         public int lockedCount;
         public int totalCount;
@@ -1569,6 +1570,7 @@ public class WebSocketHelper : MonoBehaviour
         public string matchId;
         public int playerId;
         public int characterModelId;
+        public string selectedModelIds;
         public string reason;
     }
 

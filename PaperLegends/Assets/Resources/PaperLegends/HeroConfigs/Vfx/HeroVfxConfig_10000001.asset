@@ -18,3 +18,4 @@ MonoBehaviour:
   moveFx: {fileID: 0}
   hitFx: {fileID: 0}
   dieFx: {fileID: 0}
+  edgeBounceLandingFx: {fileID: 3156866507962234106, guid: 26474f7b41b04c84595f3e656b12029d, type: 3}

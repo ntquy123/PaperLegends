@@ -825,6 +825,7 @@ export const handlePaperLegendCharacterSelect: MessageHandler = async (ws, _play
         matchId,
         playerId,
         characterModelId,
+        selectedModelIds: typeof (result as any).selectedModelIds === 'string' ? (result as any).selectedModelIds : '',
         reason: result.reason,
       })
     );

@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 735ff5f21266887409cafe887e1b21db, type: 3}
-  m_Name: SkillConfig_11400022_Tieng_Noi_Dau_Tien
+  m_Name: SkillConfig_11400022_Shove_Stun
   m_EditorClassIdentifier: 
   heroId: 10000002
   skillId: 11400022
   slot: 2
-  skillName: Tieng Noi Dau Tien
-  description: 'Thanh Giong shouts: Xin vua ren ngua sat! Nearby enemies are knocked
-    away.'
+  skillName: Shove Stun
+  description: After casting, if an enemy is nearby within 3 seconds, swipe on them
+    to shove away and stun for 1-1.8 seconds.
   icon: {fileID: 0}
   cooldown: 0
   castSound: {fileID: 0}

@@ -67,7 +67,8 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
         bool canUpgrade,
         Action<int> onSkillClicked,
         Action<int> onUpgradeClicked,
-        bool isPassive = false)
+        bool isPassive = false,
+        float cooldownRemainingSeconds = 0f)
     {
         ResolveReferences();
         BindButtons();
@@ -79,13 +80,18 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
         if (skillNameText != null)
             skillNameText.text = string.IsNullOrWhiteSpace(skillName) ? $"Skill {_slot}" : skillName;
 
+        cooldownRemainingSeconds = Mathf.Max(0f, cooldownRemainingSeconds);
         if (levelText != null)
-            levelText.text = $"{Mathf.Max(0, level)}/{Mathf.Max(1, maxLevel)}";
+        {
+            levelText.text = cooldownRemainingSeconds > 0.01f && !isPassive
+                ? $"{Mathf.CeilToInt(cooldownRemainingSeconds)}s"
+                : $"{Mathf.Max(0, level)}/{Mathf.Max(1, maxLevel)}";
+        }
 
         bool skillInteractable = canUse && !isPassive;
 
         if (unavailableOverlay != null)
-            unavailableOverlay.SetActive(!canUse && !isPassive);
+            unavailableOverlay.SetActive(!canUse && (!isPassive || level <= 0));
 
         if (skillButton != null)
             skillButton.interactable = skillInteractable;

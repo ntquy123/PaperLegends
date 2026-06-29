@@ -86,6 +86,15 @@ const DS_PORT_RANGE_START = Number(process.env.DS_PORT_START ?? process.env.ROOM
 const DS_PORT_RANGE_END = Number(process.env.DS_PORT_END ?? process.env.ROOM_PORT_END) || 27299;
 const DS_CONTAINER_PORT = Number(process.env.DS_CONTAINER_PORT) || 27015;
 
+function getFirstConfiguredEnv(...names: string[]) {
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+    if (value) return value;
+  }
+
+  return "";
+}
+
 let portAllocationLock: Promise<void> = Promise.resolve();
 
 async function withPortAllocationLock<T>(fn: () => Promise<T>): Promise<T> {
@@ -331,6 +340,14 @@ export class DockerOrchestrator {
   // Port HTTP nội bộ DS (IDLE nhận assign). DS phải listen port này trong container.
   private static DS_INTERNAL_HTTP_PORT = Number(process.env.DS_INTERNAL_HTTP_PORT) || 8080;
 
+  private static FUSION_PUBLIC_IP = getFirstConfiguredEnv(
+    "FUSION_PUBLIC_IP",
+    "GAME_SERVER_PUBLIC_IP",
+    "SERVER_PUBLIC_IP",
+    "PUBLIC_IP",
+    "HOST_IP",
+  );
+
   // Linux: nếu BACKEND_URL dùng host.docker.internal thì cần map host
   private static ADD_HOST_LINUX = process.env.DOCKER_ADD_HOST || ""; // ví dụ "host.docker.internal:172.17.0.1"
 
@@ -356,6 +373,7 @@ export class DockerOrchestrator {
       `DS_ID=${name}`,
       `SERVER_PORT=${DS_CONTAINER_PORT}`,
       `HOST_PORT=${hostPort}`,
+      ...(this.FUSION_PUBLIC_IP ? [`FUSION_PUBLIC_IP=${this.FUSION_PUBLIC_IP}`] : []),
       ...(process.env.JOIN_SECRET ? [`JOIN_SECRET=${process.env.JOIN_SECRET}`] : []),
       ...(process.env.TOKEN_ID ? [`TOKEN_ID=${process.env.TOKEN_ID}`] : []),
     ];

@@ -75,6 +75,11 @@
             "AssetGuid": "2fd6322820ef0704da78b87f6a5401f1",
             "AssetPath": "Assets/Prefab/Server/QuickMatchClientPrefab.prefab",
             "AssetName": "QuickMatchClientPrefab"
+        },
+        {
+            "AssetGuid": "15128887bd447954089f22127e16fcc1",
+            "AssetPath": "Assets/MyFusionGame_Shared/Prefab/NetWorkObject/EffectSkill/PaperArrowNetwork.prefab",
+            "AssetName": "PaperArrowNetwork"
         }
     ]
 }

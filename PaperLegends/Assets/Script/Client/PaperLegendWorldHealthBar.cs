@@ -16,7 +16,7 @@ public class PaperLegendWorldHealthBar : MonoBehaviour
     [SerializeField] private Vector2 canvasSize = new Vector2(170f, 42f);
     [SerializeField] private int sortingOrder = 300;
     [SerializeField] private bool hideWhenEliminated = true;
-    [SerializeField] private bool showName = false;
+    [SerializeField] private bool showName = true;
 
     [Header("References")]
     [SerializeField] private Canvas worldCanvas;
@@ -40,6 +40,7 @@ public class PaperLegendWorldHealthBar : MonoBehaviour
     public void Bind(PaperLegendCharacterNetworkHandler character)
     {
         target = character;
+        showName = true;
         EnsureUi();
         RefreshImmediate();
     }
@@ -280,9 +281,45 @@ public class PaperLegendWorldHealthBar : MonoBehaviour
             if (showName)
             {
                 nameText.color = textColor;
-                nameText.text = target.PlayerId > 0 ? $"P{target.PlayerId}" : "BOT";
+                nameText.text = ResolveLocalizedHeroName();
             }
         }
+    }
+
+    private string ResolveLocalizedHeroName()
+    {
+        if (target == null)
+            return string.Empty;
+
+        int heroId = target.CharacterModelId;
+        var selectionClient = PaperLegendCharacterSelectionClient.Instance;
+        if (selectionClient != null &&
+            selectionClient.HeroDataByModelId.TryGetValue(heroId, out PaperLegendHeroData heroData) &&
+            heroData != null &&
+            !string.IsNullOrWhiteSpace(heroData.name))
+        {
+            return LocalizationManager.Instance != null
+                ? LocalizationManager.Instance.GetText(heroData.name)
+                : heroData.name;
+        }
+
+        HeroConfig heroConfig = heroId > 0 ? HeroConfigCatalog.ResolveHero(heroId) : null;
+
+        string nameKey = null;
+        if (heroConfig != null)
+        {
+            if (!string.IsNullOrWhiteSpace(heroConfig.nameKey))
+                nameKey = heroConfig.nameKey;
+            else if (!string.IsNullOrWhiteSpace(heroConfig.heroName))
+                nameKey = heroConfig.heroName;
+        }
+
+        if (string.IsNullOrWhiteSpace(nameKey))
+            nameKey = heroId > 0 ? $"hero_{heroId}_name" : "paper_legend_hero_unknown";
+
+        return LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetText(nameKey)
+            : nameKey;
     }
 
     private Camera ResolveCamera()

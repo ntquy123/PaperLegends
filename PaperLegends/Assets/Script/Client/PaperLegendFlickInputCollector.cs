@@ -32,6 +32,9 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
     [SerializeField] private Color targetedSkillIndicatorColor = new Color(0.45f, 0.78f, 1f, 0.95f);
     [SerializeField, Min(0.001f)] private float targetedSkillIndicatorHeightOffset = 0.04f;
 
+    [Header("Hero 10000002 Skill 3")]
+    [SerializeField, Min(0.1f)] private float shoveStunNearbyRadius = 2.8f;
+
     private bool _isTracking;
     private int _flickSequence;
     private Vector2 _startScreenPosition;
@@ -42,6 +45,8 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
     private float _fallbackFullPowerTime = -1f;
     private bool _usingPowerBar;
     private PaperLegendCharacterNetworkHandler _target;
+    private PaperLegendCharacterNetworkHandler _shoveStunVictim;
+    private bool _isShoveStunSwipe;
     private PaperLegendPlayerInputData _pendingInput;
     private bool _hasPendingInput;
     private float _nextRejectedLogTime;
@@ -369,6 +374,15 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
 
         if (!handler.HasInputAuthority)
         {
+            if (TryFindLocalShoveStunCaster(out PaperLegendCharacterNetworkHandler shoveCaster)
+                && handler.IsAlive
+                && !shoveCaster.IsSameFaction(handler)
+                && IsWithinShoveStunRange(shoveCaster, handler))
+            {
+                BeginShoveStunTracking(shoveCaster, handler, screenPosition, hit.point, hit.normal);
+                return;
+            }
+
             if (TryFindLocalDirectionalSkillTarget(out var directionalSkillTarget))
             {
                 BeginTrackingForTarget(
@@ -393,6 +407,30 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
         BeginTrackingForTarget(handler, screenPosition, hit.point, hit.normal, "paper character hit");
     }
 
+    private void BeginShoveStunTracking(
+        PaperLegendCharacterNetworkHandler caster,
+        PaperLegendCharacterNetworkHandler victim,
+        Vector2 screenPosition,
+        Vector3 contactWorldPosition,
+        Vector3 contactSurfaceNormal)
+    {
+        if (caster == null || victim == null)
+            return;
+
+        _isTracking = true;
+        _isShoveStunSwipe = true;
+        _target = caster;
+        _shoveStunVictim = victim;
+        _startScreenPosition = screenPosition;
+        _currentScreenPosition = screenPosition;
+        _contactWorldPosition = contactWorldPosition;
+        _contactSurfaceNormal = contactSurfaceNormal;
+        _startTime = Time.unscaledTime;
+        _fallbackFullPowerTime = -1f;
+        StartChargeUi();
+        LogDebug($"Started shove stun swipe for caster={caster.PlayerId} -> victim={victim.PlayerId}, contact={_contactWorldPosition}.");
+    }
+
     private void BeginTrackingForTarget(
         PaperLegendCharacterNetworkHandler handler,
         Vector2 screenPosition,
@@ -404,6 +442,8 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
             return;
 
         _isTracking = true;
+        _isShoveStunSwipe = false;
+        _shoveStunVictim = null;
         _target = handler;
         _startScreenPosition = screenPosition;
         _currentScreenPosition = screenPosition;
@@ -422,7 +462,21 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
 
         _currentScreenPosition = screenPosition;
 
-        if (_target == null || !_target.HasInputAuthority || !_target.CanAcceptLocalFlick)
+        if (_target == null || !_target.HasInputAuthority)
+        {
+            CancelTracking();
+            return;
+        }
+
+        if (_isShoveStunSwipe)
+        {
+            if (!_target.Hero10000002ShoveStunArmed || _shoveStunVictim == null || !_shoveStunVictim.IsAlive || _target.IsSameFaction(_shoveStunVictim))
+            {
+                CancelTracking();
+                return;
+            }
+        }
+        else if (!_target.CanAcceptLocalFlick)
         {
             CancelTracking();
             return;
@@ -439,7 +493,7 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
 
         _currentScreenPosition = screenPosition;
 
-        if (!canceled && _target != null && _target.HasInputAuthority && _target.CanAcceptLocalFlick)
+        if (!canceled && _target != null && _target.HasInputAuthority && (_isShoveStunSwipe || _target.CanAcceptLocalFlick))
             QueueFlickInput();
         else
             ResetChargeUi();
@@ -452,6 +506,11 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
     {
         float force01 = Mathf.Max(minimumForce01, ResolveChargeForce01());
 
+        bool carrySkillRequest = _hasPendingInput && _pendingInput.SkillRequested;
+        int carriedSkillSlot = carrySkillRequest ? _pendingInput.SkillSlot : 0;
+        bool carrySkillTarget = _hasPendingInput && _pendingInput.SkillTargetWorldPositionSet;
+        Vector3 carriedSkillTarget = carrySkillTarget ? _pendingInput.SkillTargetWorldPosition : default;
+
         _flickSequence++;
         _pendingInput = new PaperLegendPlayerInputData
         {
@@ -460,7 +519,12 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
             ContactWorldPosition = _contactWorldPosition,
             ContactSurfaceNormal = _contactSurfaceNormal,
             AimWorldDirection = ResolveScreenDragWorldDirection(),
-            Force01 = force01
+            Force01 = force01,
+            FlickTargetPlayerId = _isShoveStunSwipe && _shoveStunVictim != null ? _shoveStunVictim.PlayerId : 0,
+            SkillRequested = carrySkillRequest,
+            SkillSlot = carriedSkillSlot,
+            SkillTargetWorldPositionSet = carrySkillTarget,
+            SkillTargetWorldPosition = carriedSkillTarget
         };
 
         _hasPendingInput = true;
@@ -655,6 +719,31 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
         return false;
     }
 
+    private static bool TryFindLocalShoveStunCaster(out PaperLegendCharacterNetworkHandler handler)
+    {
+        handler = null;
+
+        if (!TryFindLocalInputAuthorityCharacter(out PaperLegendCharacterNetworkHandler candidate))
+            return false;
+
+        if (!candidate.Hero10000002ShoveStunArmed)
+            return false;
+
+        handler = candidate;
+        return true;
+    }
+
+    private bool IsWithinShoveStunRange(PaperLegendCharacterNetworkHandler caster, PaperLegendCharacterNetworkHandler target)
+    {
+        if (caster == null || target == null)
+            return false;
+
+        Vector3 offset = target.transform.position - caster.transform.position;
+        offset.y = 0f;
+        float radius = Mathf.Max(0.1f, shoveStunNearbyRadius);
+        return offset.sqrMagnitude <= radius * radius;
+    }
+
     private static bool TryFindLocalDirectionalSkillTarget(out PaperLegendCharacterNetworkHandler handler)
     {
         handler = null;
@@ -662,7 +751,7 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
         if (!TryFindLocalInputAuthorityCharacter(out PaperLegendCharacterNetworkHandler candidate))
             return false;
 
-        if (candidate.Hero10000003WavePushArmed && candidate.CanAcceptLocalFlick)
+        if ((candidate.Hero10000003WaterBurstArmed || candidate.Hero10000003WavePushArmed || candidate.Hero10000001PaperArrowArmed || (candidate.Hero10000002ForwardSlideArmed && candidate.Hero10000002ForwardSlideRemaining > 0)) && candidate.CanAcceptLocalFlick)
         {
             handler = candidate;
             return true;
@@ -823,6 +912,8 @@ public class PaperLegendFlickInputCollector : MonoBehaviour
     {
         ResetChargeUi();
         _isTracking = false;
+        _isShoveStunSwipe = false;
+        _shoveStunVictim = null;
         _target = null;
     }
 

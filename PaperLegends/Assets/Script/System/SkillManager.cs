@@ -72,6 +72,10 @@ public class SkillManager : MonoBehaviour
     private int _lastPaperLegendSkillUiSlot2 = -1;
     private int _lastPaperLegendSkillUiSlot3 = -1;
     private int _lastPaperLegendSkillUiSlot4 = -1;
+    private int _lastPaperLegendSkillUiCooldown1 = -1;
+    private int _lastPaperLegendSkillUiCooldown2 = -1;
+    private int _lastPaperLegendSkillUiCooldown3 = -1;
+    private int _lastPaperLegendSkillUiCooldown4 = -1;
 
     private class SkillBaseStats
     {
@@ -115,6 +119,10 @@ public class SkillManager : MonoBehaviour
         int slot2 = handler.Skill2Level;
         int slot3 = handler.Skill3Level;
         int slot4 = handler.Skill4Level;
+        int cooldown1 = ResolvePaperLegendCooldownUiSeconds(handler, 1);
+        int cooldown2 = ResolvePaperLegendCooldownUiSeconds(handler, 2);
+        int cooldown3 = ResolvePaperLegendCooldownUiSeconds(handler, 3);
+        int cooldown4 = ResolvePaperLegendCooldownUiSeconds(handler, 4);
 
         if (_lastPaperLegendSkillUiModelId == modelId &&
             _lastPaperLegendSkillUiLevel == level &&
@@ -122,7 +130,11 @@ public class SkillManager : MonoBehaviour
             _lastPaperLegendSkillUiSlot1 == slot1 &&
             _lastPaperLegendSkillUiSlot2 == slot2 &&
             _lastPaperLegendSkillUiSlot3 == slot3 &&
-            _lastPaperLegendSkillUiSlot4 == slot4)
+            _lastPaperLegendSkillUiSlot4 == slot4 &&
+            _lastPaperLegendSkillUiCooldown1 == cooldown1 &&
+            _lastPaperLegendSkillUiCooldown2 == cooldown2 &&
+            _lastPaperLegendSkillUiCooldown3 == cooldown3 &&
+            _lastPaperLegendSkillUiCooldown4 == cooldown4)
         {
             return;
         }
@@ -134,8 +146,21 @@ public class SkillManager : MonoBehaviour
         _lastPaperLegendSkillUiSlot2 = slot2;
         _lastPaperLegendSkillUiSlot3 = slot3;
         _lastPaperLegendSkillUiSlot4 = slot4;
+        _lastPaperLegendSkillUiCooldown1 = cooldown1;
+        _lastPaperLegendSkillUiCooldown2 = cooldown2;
+        _lastPaperLegendSkillUiCooldown3 = cooldown3;
+        _lastPaperLegendSkillUiCooldown4 = cooldown4;
 
         ShowPaperLegendSkillList();
+    }
+
+    private static int ResolvePaperLegendCooldownUiSeconds(PaperLegendCharacterNetworkHandler handler, int slot)
+    {
+        if (handler == null)
+            return 0;
+
+        float cooldownRemaining = handler.GetSkillCooldownRemaining(slot);
+        return cooldownRemaining > 0.01f ? Mathf.CeilToInt(cooldownRemaining) : 0;
     }
 
     private void ResetPaperLegendSkillUiSignature()
@@ -147,6 +172,10 @@ public class SkillManager : MonoBehaviour
         _lastPaperLegendSkillUiSlot2 = -1;
         _lastPaperLegendSkillUiSlot3 = -1;
         _lastPaperLegendSkillUiSlot4 = -1;
+        _lastPaperLegendSkillUiCooldown1 = -1;
+        _lastPaperLegendSkillUiCooldown2 = -1;
+        _lastPaperLegendSkillUiCooldown3 = -1;
+        _lastPaperLegendSkillUiCooldown4 = -1;
     }
 
     public void ClearSkillsUsedThisTurn(int playerId)
@@ -1013,6 +1042,7 @@ public class SkillManager : MonoBehaviour
             bool canUse = handler.CanUseSkill(slot);
             bool canUpgrade = handler.CanUpgradeSkill(slot);
             bool isPassive = skill != null && skill.isPassive;
+            float cooldownRemaining = handler.GetSkillCooldownRemaining(slot);
 
             GameObject item = itemRect.gameObject;
             item.SetActive(true);
@@ -1031,7 +1061,9 @@ public class SkillManager : MonoBehaviour
             }
 
             SetSkillImage(skillImage, skillId);
-            UpdateChargeLabel(item.transform, $"{level}/{maxSkillLevel}");
+            UpdateChargeLabel(item.transform, cooldownRemaining > 0.01f && !isPassive
+                ? $"{Mathf.CeilToInt(cooldownRemaining)}s"
+                : $"{level}/{maxSkillLevel}");
             ConfigurePaperLegendUpgradeButton(item.transform, slot, canUpgrade);
 
             if (skillButton != null)
@@ -1042,7 +1074,7 @@ public class SkillManager : MonoBehaviour
                 skillButton.onClick.AddListener(() => OnClickPaperLegendSkill(capturedSlot));
             }
 
-            if (!canUse && !isPassive)
+            if (!canUse && (!isPassive || level <= 0))
                 ShowUnavailableSkill(notUseOverlay, skillImage, skillButton);
         }
     }
@@ -1083,7 +1115,8 @@ public class SkillManager : MonoBehaviour
             int maxSkillLevel = ResolvePaperLegendSkillMaxLevel(handler, slot);
             bool canUse = handler.CanUseSkill(slot);
             bool canUpgrade = handler.CanUpgradeSkill(slot);
-            string skillName = skill != null ? skill.name : null;
+            float cooldownRemaining = handler.GetSkillCooldownRemaining(slot);
+            string skillName = skill != null ? ResolvePaperLegendLocalizedText(skill.name) : null;
 
             view.gameObject.SetActive(true);
             view.transform.SetSiblingIndex(index);
@@ -1097,10 +1130,21 @@ public class SkillManager : MonoBehaviour
                 canUpgrade,
                 OnClickPaperLegendSkill,
                 OnClickPaperLegendUpgradeSkill,
-                skill != null && skill.isPassive);
+                skill != null && skill.isPassive,
+                cooldownRemaining);
         }
 
         return true;
+    }
+
+    private static string ResolvePaperLegendLocalizedText(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            return string.Empty;
+
+        return LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetText(key)
+            : key;
     }
 
     private void EnsurePaperLegendSkillSlotViewCount(int count)
@@ -1264,14 +1308,20 @@ public class SkillManager : MonoBehaviour
                 slot = 1,
                 code = ((int)PaperLegendHeroSkillId.Hero10000001DistanceLandingDamage).ToString(),
                 name = "Distance Landing Damage",
-                description = "The farther the paper hero travels before landing on a target, the higher the damage. Max x4."
+                description = "Passive. The farther the paper hero travels before landing on a target, the higher the damage. Max x4.",
+                isPassive = true
             },
             new PaperLegendHeroSkillData
             {
                 slot = 2,
-                code = ((int)PaperLegendHeroSkillId.Hero10000001ReservedSkill2).ToString(),
-                name = "Reserved Skill 2",
-                description = "Placeholder for hero 10000001 skill 2."
+                code = ((int)PaperLegendHeroSkillId.Hero10000001PaperArrow).ToString(),
+                name = "Paper Arrow",
+                description = "After casting, the next swipe shoots a paper arrow forward. When it stops, it slows enemies in the area by 30% and deals light damage.",
+                damage = 10f,
+                damageLevel1 = 10f,
+                damageLevel2 = 13f,
+                damageLevel3 = 16f,
+                damageLevel4 = 19f
             },
             new PaperLegendHeroSkillData
             {
@@ -1283,9 +1333,9 @@ public class SkillManager : MonoBehaviour
             new PaperLegendHeroSkillData
             {
                 slot = 4,
-                code = ((int)PaperLegendHeroSkillId.Hero10000001ReservedSkill4).ToString(),
-                name = "Reserved Skill 4",
-                description = "Placeholder for hero 10000001 skill 4."
+                code = ((int)PaperLegendHeroSkillId.Hero10000001EdgeBounceRebound).ToString(),
+                name = "Lat Mep Nay Lai",
+                description = "Next flick: each landing that does not consume all rebounds bounces again in the travel direction, even when pinning an enemy. Level 1-3 grants 1-3 extra bounces."
             }
         };
     }
@@ -1314,11 +1364,11 @@ public class SkillManager : MonoBehaviour
             case 1:
                 return (int)PaperLegendHeroSkillId.Hero10000001DistanceLandingDamage;
             case 2:
-                return (int)PaperLegendHeroSkillId.Hero10000001ReservedSkill2;
+                return (int)PaperLegendHeroSkillId.Hero10000001PaperArrow;
             case 3:
                 return (int)PaperLegendHeroSkillId.Hero10000001FlickForceBoost;
             case 4:
-                return (int)PaperLegendHeroSkillId.Hero10000001ReservedSkill4;
+                return (int)PaperLegendHeroSkillId.Hero10000001EdgeBounceRebound;
             default:
                 return 0;
         }
@@ -2061,9 +2111,7 @@ public class SkillManager : MonoBehaviour
         targetImage.enabled = false;
 
         string primaryPath = GetSkillIconPath(effectId);
-        string fallbackPath = IsBallSkillId(effectId)
-            ? $"{AddressablePaths.Root}/Skills/{effectId}.png"
-            : $"{AddressablePaths.Root}/Skills/Ball/{effectId}.png";
+        string fallbackPath = GetLegacySkillIconPath(effectId);
 
         StartCoroutine(LoadSkillImageWithFallback(targetImage, primaryPath, fallbackPath));
     }
@@ -2091,6 +2139,14 @@ public class SkillManager : MonoBehaviour
     }
 
     private static string GetSkillIconPath(int skillId)
+    {
+        if (!IsBallSkillId(skillId))
+            return PaperLegendHeroAddressables.BuildSkillIconAddress(skillId);
+
+        return GetLegacySkillIconPath(skillId);
+    }
+
+    private static string GetLegacySkillIconPath(int skillId)
     {
         string skillFolder = IsBallSkillId(skillId) ? "Skills/Ball" : "Skills";
         return $"{AddressablePaths.Root}/{skillFolder}/{skillId}.png";

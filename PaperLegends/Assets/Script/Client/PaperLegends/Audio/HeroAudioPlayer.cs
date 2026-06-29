@@ -78,6 +78,19 @@ public sealed class HeroAudioPlayer : MonoBehaviour
         PlayOneShot(audioConfig != null ? audioConfig.die : null);
     }
 
+    public static HeroAudioPlayer EnsureFor(PaperLegendCharacterNetworkHandler character)
+    {
+        if (character == null)
+            return null;
+
+        HeroAudioPlayer player = FindForCharacter(character);
+        if (player == null)
+            player = character.gameObject.AddComponent<HeroAudioPlayer>();
+
+        player.EnsureHeroConfig(character);
+        return player;
+    }
+
     public static void PlaySkillForCharacter(PaperLegendCharacterNetworkHandler character, int skillId, int slot)
     {
         HeroAudioPlayer player = FindForCharacter(character);

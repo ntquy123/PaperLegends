@@ -1561,11 +1561,38 @@ public class UIControllerOnline : MonoBehaviour
         var playerObject = NetworkObjectManager.Instance != null
             ? NetworkObjectManager.Instance.GetPlayerObject(playerId)
             : null;
-        if (playerObject == null)
-            return false;
+        if (playerObject != null)
+        {
+            handler = playerObject.GetComponent<PaperLegendCharacterNetworkHandler>();
+            if (handler != null)
+                return true;
+        }
 
-        handler = playerObject.GetComponent<PaperLegendCharacterNetworkHandler>();
-        return handler != null;
+        var paperHandlers = FindObjectsOfType<PaperLegendCharacterNetworkHandler>(true);
+        for (int i = 0; i < paperHandlers.Length; i++)
+        {
+            var candidate = paperHandlers[i];
+            if (candidate == null)
+                continue;
+
+            if (candidate.PlayerId == playerId)
+            {
+                handler = candidate;
+                return true;
+            }
+        }
+
+        for (int i = 0; i < paperHandlers.Length; i++)
+        {
+            var candidate = paperHandlers[i];
+            if (candidate != null && candidate.HasInputAuthority)
+            {
+                handler = candidate;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private HeroInfoModel BuildPaperLegendHeroInfoModel(
@@ -1728,13 +1755,13 @@ public class UIControllerOnline : MonoBehaviour
         if (paperLegendKillText != null)
         {
             paperLegendKillText.gameObject.SetActive(true);
-            paperLegendKillText.text = $"Kill: {handler.KillCount}";
+            paperLegendKillText.text = $"{handler.KillCount}";
         }
 
         if (paperLegendDeathText != null)
         {
             paperLegendDeathText.gameObject.SetActive(true);
-            paperLegendDeathText.text = $"Die: {handler.DeathCount}";
+            paperLegendDeathText.text = $"{handler.DeathCount}";
         }
     }
 

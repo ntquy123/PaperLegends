@@ -15,17 +15,23 @@ MonoBehaviour:
   m_GroupName: ItemGroup
   m_GUID: 8c4cac34cb2ece844ba5eceb2498769a
   m_SerializeEntries:
+  - m_GUID: 07200075139b6b64d83dfb7e650e5c7a
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000001.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0b9a2049432cac64bb18e44011fcc0cf
     m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000006.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1768195bdc8079e4181ca46eaaeb586a
-    m_Address: Assets/AddressableAsset/PaperLegends/HeroPortraits/thanhgiongembe.png
+  - m_GUID: 0eeeba68a654a87459c8f55791263531
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000002.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - ItemLabel
+    - ModelLabel
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 211903722070c004493d8f4e9a774a26
     m_Address: Assets/AddressableAsset/Items/ImageItem/98000002.png
@@ -62,6 +68,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d7b3ac5b8e2f194f828ac9e6fba4796
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000003.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5041b73bc19622447afd086a02fb4395
     m_Address: Assets/AddressableAsset/Items/ImageItem/99000008.png
@@ -111,8 +123,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 821fc7e2784dd4e45b215a82fd60198b
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000001 2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 85fa1ca807cb6784eb5153030100291d
     m_Address: Assets/AddressableAsset/Items/ImageItem/99000010.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 862e772a8e7c99941ac4eef9714c1ebe
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPortraits/10000002.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
@@ -152,6 +176,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a48127c11fe23f6488616c812680de72
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000005.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a7f577a9f6a997b4b8260f6a84b90ae5
     m_Address: Assets/AddressableAsset/Items/ImageItem/99000003.png
@@ -201,11 +231,23 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3c56de0843fe884dba298550dd50631
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000004.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d49c2f9ad967f6e4ca80cc05155b48d8
     m_Address: Assets/AddressableAsset/Items/ImageItem/cancel.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbfe3471771d6444f82dd112b8d45d4e
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPrefabs/10000006.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModelLabel
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dc7b8d2f39e803a4a89fa9e75546ea3b
     m_Address: Assets/AddressableAsset/Items/ImageItem/9.png

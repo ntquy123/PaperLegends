@@ -4,6 +4,7 @@ using UnityEngine;
 public sealed class PaperLegendHero10000001SkillSet : IPaperLegendHeroSkillSet
 {
     public const int HeroId = 10000001;
+    public const int Skill4MaxLevel = 3;
 
     public int HeroModelId => HeroId;
 
@@ -14,12 +15,24 @@ public sealed class PaperLegendHero10000001SkillSet : IPaperLegendHeroSkillSet
 
     public bool CanUseSkill(PaperLegendCharacterNetworkHandler character, int slot, int skillLevel)
     {
-        return character != null && skillLevel > 0 && slot >= 1 && slot <= PaperLegendHeroSkillRegistry.MaxSkillSlots;
+        if (character == null || skillLevel <= 0 || slot < 1 || slot > PaperLegendHeroSkillRegistry.MaxSkillSlots)
+            return false;
+
+        if (slot == 1)
+            return false;
+
+        return true;
     }
 
     public bool CanUpgradeSkill(PaperLegendCharacterNetworkHandler character, int slot, int currentSkillLevel)
     {
-        return character != null && slot >= 1 && slot <= PaperLegendHeroSkillRegistry.MaxSkillSlots;
+        if (character == null || slot < 1 || slot > PaperLegendHeroSkillRegistry.MaxSkillSlots)
+            return false;
+
+        if (slot == 4)
+            return currentSkillLevel < Skill4MaxLevel;
+
+        return true;
     }
 
     public bool TryUseSkill(PaperLegendCharacterNetworkHandler character, int slot, int skillLevel)
@@ -30,12 +43,11 @@ public sealed class PaperLegendHero10000001SkillSet : IPaperLegendHeroSkillSet
         switch (Mathf.Clamp(slot, 1, PaperLegendHeroSkillRegistry.MaxSkillSlots))
         {
             case 1:
-                character.ServerArmHero10000001DistanceDamage();
-                Debug.Log($"[PaperLegends][Skill] player={character.PlayerId} armed hero 10000001 skill 1: distance landing damage level={skillLevel}.");
-                return true;
+                return false;
 
             case 2:
-                Debug.Log($"[PaperLegends][Skill] player={character.PlayerId} used hero 10000001 skill 2 placeholder level={skillLevel}.");
+                character.ServerArmHero10000001PaperArrow();
+                Debug.Log($"[PaperLegends][Skill] player={character.PlayerId} armed hero 10000001 skill 2: paper arrow level={skillLevel}.");
                 return true;
 
             case 3:
@@ -44,7 +56,8 @@ public sealed class PaperLegendHero10000001SkillSet : IPaperLegendHeroSkillSet
                 return true;
 
             case 4:
-                Debug.Log($"[PaperLegends][Skill] player={character.PlayerId} used hero 10000001 skill 4 placeholder level={skillLevel}.");
+                character.ServerArmHero10000001EdgeBounce();
+                Debug.Log($"[PaperLegends][Skill] player={character.PlayerId} armed hero 10000001 skill 4: edge bounce rebound level={skillLevel}, maxRebounds={Mathf.Clamp(skillLevel, 1, Skill4MaxLevel)}.");
                 return true;
         }
 
@@ -73,15 +86,21 @@ public sealed class PaperLegendHero10000001SkillSet : IPaperLegendHeroSkillSet
                 slot = 1,
                 code = ((int)PaperLegendHeroSkillId.Hero10000001DistanceLandingDamage).ToString(),
                 name = "Distance Landing Damage",
-                description = "The farther the paper hero travels before landing on a target, the higher the damage. Max x4.",
+                description = "Passive. The farther the paper hero travels before landing on a target, the higher the damage. Max x4.",
+                isPassive = true,
                 isActive = true
             },
             new PaperLegendHeroSkillData
             {
                 slot = 2,
-                code = ((int)PaperLegendHeroSkillId.Hero10000001ReservedSkill2).ToString(),
-                name = "Reserved Skill 2",
-                description = "Placeholder for hero 10000001 skill 2.",
+                code = ((int)PaperLegendHeroSkillId.Hero10000001PaperArrow).ToString(),
+                name = "Paper Arrow",
+                description = "After casting, the next swipe shoots a paper arrow forward. When it stops, it slows enemies in the area by 30% and deals light damage.",
+                damage = 10f,
+                damageLevel1 = 10f,
+                damageLevel2 = 13f,
+                damageLevel3 = 16f,
+                damageLevel4 = 19f,
                 isActive = true
             },
             new PaperLegendHeroSkillData
@@ -95,9 +114,9 @@ public sealed class PaperLegendHero10000001SkillSet : IPaperLegendHeroSkillSet
             new PaperLegendHeroSkillData
             {
                 slot = 4,
-                code = ((int)PaperLegendHeroSkillId.Hero10000001ReservedSkill4).ToString(),
-                name = "Reserved Skill 4",
-                description = "Placeholder for hero 10000001 skill 4.",
+                code = ((int)PaperLegendHeroSkillId.Hero10000001EdgeBounceRebound).ToString(),
+                name = "Lat Mep Nay Lai",
+                description = "Next flick: each landing that does not consume all rebounds bounces again in the travel direction, even when pinning an enemy. Level 1-3 grants 1-3 extra bounces.",
                 isActive = true
             }
         };

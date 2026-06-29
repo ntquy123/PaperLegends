@@ -3,6 +3,7 @@ import {
   joinQueue,
   cancelQueue,
   forceStartQueue,
+  resyncQueue,
   matchReady,
   matchStarted,
   matchResult,
@@ -18,6 +19,7 @@ const router = express.Router();
 router.post("/queue/join", joinQueue);
 router.post("/queue/cancel", cancelQueue);
 router.post("/queue/force-start", forceStartQueue);
+router.post("/queue/resync", resyncQueue);
 router.post("/match/early-exit", matchEarlyExit);
 
 // Dedicated server callbacks

@@ -69,5 +69,12 @@
     "UseSerializableDictionary": true,
     "NullChecksForNetworkedProperties": true,
     "CheckRpcAttributeUsage": false,
-    "CheckNetworkedPropertiesBeingEmpty": false
+    "CheckNetworkedPropertiesBeingEmpty": false,
+    "Prefabs": [
+        {
+            "AssetGuid": "15128887bd447954089f22127e16fcc1",
+            "AssetPath": "Assets/MyFusionGame_Shared/Prefab/NetWorkObject/EffectSkill/PaperArrowNetwork.prefab",
+            "AssetName": "PaperArrowNetwork"
+        }
+    ]
 }

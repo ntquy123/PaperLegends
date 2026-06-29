@@ -208,6 +208,16 @@ MonoBehaviour:
   distanceLandingBaseDamageScale: 1
   flickBoostHorizontalMultiplierPerLevel: 0.28
   flickBoostUpwardMultiplierPerLevel: 0.12
+  edgeBounceHorizontalImpulse: 2.2
+  edgeBounceUpwardImpulse: 1.1
+  edgeBounceVfxRadius: 0.65
+  paperArrowProjectilePrefab: {fileID: 6151195512541387585, guid: 15128887bd447954089f22127e16fcc1, type: 3}
+  paperArrowSpawnForwardOffset: 0.45
+  paperArrowSpawnHeightOffset: 0.12
+  paperArrowBaseImpactDamage: 10
+  paperArrowImpactDamagePerLevel: 3
+  paperArrowSlowPercent: 0.3
+  paperArrowSlowDurationSeconds: 2.5
   wavePushLength: 5.5
   wavePushHalfWidth: 1.15
   wavePushOriginForwardOffset: 0.35

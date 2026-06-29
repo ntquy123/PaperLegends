@@ -321,3 +321,14 @@ Khi đổi môi trường, ưu tiên sửa asset config trong Unity Inspector th
 ## Trạng thái hiện tại
 
 Project đang ở giai đoạn clone/chuyển đổi. Nhiều tên cũ, asset cũ và logic cũ vẫn có thể còn tồn tại trong source. README này là tài liệu định hướng mới cho Paper Legends để các lần sửa tiếp theo bám đúng mục tiêu sản phẩm.
+
+
+
+bạn biết full kỹ thuật trong photo fusion 2 khi truyền data giữ server và client chứ ?
+để mình nói nhé:
+gồm:
+1. tạo biến trên 1 object netwwork dùng chung => lúc này toàn bộ client trong phòng join cùng nhau sẽ đều nhìn thấy biến này và giá trị nó . tuy nhiên vì giới hạn nên không thể lấy được data lớn.
+2. Dùng kỹ thuật bắn RPC: bắn 1 tín hiệu lên server từ client xử lý. không ổn định ddo mạng và đôi khi bị trễ lag mất tín hiệu ít khuyên xài
+3. [Networked, OnChangedRender(nameof(OnHeldPositionChanged))]  1 kỹ thuật khai báo biến khi mà nó đổi thì hàm được gắn sẽ gọi toàn bộ client
+4. Kỹ thuật khai báo 1 hàm để gọi cho cả client và server:
+khi muốn gọi 1 hàm mà muốn cả 2 đều sử dụng thì phía client bọc thêm #if UNITY_SERVER

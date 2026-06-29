@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 735ff5f21266887409cafe887e1b21db, type: 3}
-  m_Name: SkillConfig_11400031_Song_Day
+  m_Name: SkillConfig_11400031_Water_Burst
   m_EditorClassIdentifier: 
   heroId: 10000003
   skillId: 11400031
   slot: 1
-  skillName: Song Day
-  description: After casting, the next flick direction releases a wave that pushes paper heroes hit by the wave.
+  skillName: Water Burst
+  description: After casting, swipe a direction to erupt 3 water bursts in a line. Bursts deal 100%, 120%, then 150% damage.
   iconRef: {fileID: 0}
-  cooldown: 8
+  cooldown: 7
   castSound: {fileID: 0}
   castVfx: {fileID: 0}
-  damage: 0
+  castVfxPrefab: {fileID: 0}
+  castVfxLifetimeSeconds: 2.5
+  damage: 10
   isPassive: 0

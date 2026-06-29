@@ -430,6 +430,7 @@ public sealed class PaperLegendGameServerInitializer : MonoBehaviour
             if (TryGetHeroStats(heroStatsByModelId, characterModelId, out PaperLegendHeroData heroStats))
             {
                 handler.ConfigureCombatStats(heroStats.hp, heroStats.attack, heroStats.speed);
+                handler.ConfigureHeroSkillStats(heroStats);
                 handler.ConfigurePaperPhysicsStats(heroStats.weight, heroStats.bounce, heroStats.friction, heroStats.flickForce);
             }
 

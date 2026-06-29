@@ -466,6 +466,11 @@ public class ServerLauncher : MonoBehaviour
             _runner.ProvideInput = false;
 
             var sceneManager = runnerGO.AddComponent<NetworkSceneManagerDefault>();
+            NetAddress? customPublicAddress = null;
+            if (TryResolveCustomPublicAddress(PublicPort, out var resolvedPublicAddress))
+            {
+                customPublicAddress = resolvedPublicAddress;
+            }
 
             var startArgs = new StartGameArgs
             {
@@ -483,9 +488,10 @@ public class ServerLauncher : MonoBehaviour
 
                 // Bind UDP
                 Address = NetAddress.CreateFromIpPort("0.0.0.0", port),
+                CustomPublicAddress = customPublicAddress,
             };
 
-            Debug.Log($"Starting Fusion Server: Session={payload.sessionName}, Players={fusionPlayerCapacity}, Port={port}, PublicPort={PublicPort}, DisableNATPunchthrough={startArgs.DisableNATPunchthrough}, Attempt={startAttempt}/{maxStartAttempts}");
+            Debug.Log($"Starting Fusion Server: Session={payload.sessionName}, Players={fusionPlayerCapacity}, Port={port}, PublicPort={PublicPort}, CustomPublicAddress={(customPublicAddress.HasValue ? customPublicAddress.Value.ToString() : "<auto>")}, DisableNATPunchthrough={startArgs.DisableNATPunchthrough}, Attempt={startAttempt}/{maxStartAttempts}");
 
             var startTask = _runner.StartGame(startArgs);
             float startElapsed = 0f;
@@ -1463,6 +1469,51 @@ public class ServerLauncher : MonoBehaviour
             error = ex.ToString();
             return false;
         }
+    }
+
+    private bool TryResolveCustomPublicAddress(ushort publicPort, out NetAddress publicAddress)
+    {
+        publicAddress = default;
+
+        string publicIp = GetFirstEnv(
+            "FUSION_PUBLIC_IP",
+            "GAME_SERVER_PUBLIC_IP",
+            "SERVER_PUBLIC_IP",
+            "PUBLIC_IP",
+            "HOST_IP");
+
+        if (string.IsNullOrWhiteSpace(publicIp))
+        {
+            if (publicPort != ServerPort)
+            {
+                Debug.LogWarning($"FUSION_PUBLIC_IP is not configured. Docker mapped ports such as host {publicPort} -> container {ServerPort} may not be advertised correctly to Photon Fusion clients.");
+            }
+
+            return false;
+        }
+
+        if (!IPAddress.TryParse(publicIp, out _))
+        {
+            Debug.LogWarning($"FUSION_PUBLIC_IP='{publicIp}' is not a valid IP address. CustomPublicAddress will not be set.");
+            return false;
+        }
+
+        publicAddress = NetAddress.CreateFromIpPort(publicIp, publicPort);
+        return true;
+    }
+
+    private string GetFirstEnv(params string[] keys)
+    {
+        foreach (string key in keys)
+        {
+            string value = Environment.GetEnvironmentVariable(key);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value.Trim();
+            }
+        }
+
+        return string.Empty;
     }
 
     private string GetEnv(string key, string defaultValue)

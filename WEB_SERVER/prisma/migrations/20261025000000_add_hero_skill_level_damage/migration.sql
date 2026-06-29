@@ -1,0 +1,63 @@
+ALTER TABLE "HeroSkill"
+ADD COLUMN IF NOT EXISTS "damageLevel1" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN IF NOT EXISTS "damageLevel2" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN IF NOT EXISTS "damageLevel3" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN IF NOT EXISTS "damageLevel4" DOUBLE PRECISION NOT NULL DEFAULT 0;
+
+UPDATE "HeroSkill"
+SET
+  "damageLevel1" = CASE WHEN "damageLevel1" > 0 THEN "damageLevel1" ELSE "damage" END,
+  "damageLevel2" = CASE WHEN "damageLevel2" > 0 THEN "damageLevel2" ELSE "damage" END,
+  "damageLevel3" = CASE WHEN "damageLevel3" > 0 THEN "damageLevel3" ELSE "damage" END,
+  "damageLevel4" = CASE WHEN "damageLevel4" > 0 THEN "damageLevel4" ELSE "damage" END
+WHERE "damage" > 0;
+
+UPDATE "HeroSkill"
+SET
+  "damage" = 10,
+  "damageLevel1" = 10,
+  "damageLevel2" = 13,
+  "damageLevel3" = 16,
+  "damageLevel4" = 19
+WHERE "code" = '11400002';
+
+UPDATE "HeroSkill"
+SET
+  "damage" = 10,
+  "damageLevel1" = 10,
+  "damageLevel2" = 13,
+  "damageLevel3" = 16,
+  "damageLevel4" = 19
+WHERE "code" = '11400031';
+
+UPDATE "HeroSkill"
+SET "cooldown" = CASE "code"
+  WHEN '11400001' THEN 0
+  WHEN '11400002' THEN 6
+  WHEN '11400003' THEN 5
+  WHEN '11400004' THEN 10
+  WHEN '11400021' THEN 7
+  WHEN '11400022' THEN 8
+  WHEN '11400023' THEN 0
+  WHEN '11400024' THEN 60
+  WHEN '11400031' THEN 7
+  WHEN '11400032' THEN 8
+  WHEN '11400033' THEN 0
+  WHEN '11400034' THEN 0
+  WHEN '11400041' THEN 0
+  WHEN '11400042' THEN 0
+  WHEN '11400043' THEN 0
+  WHEN '11400044' THEN 0
+  WHEN '11400051' THEN 0
+  WHEN '11400052' THEN 0
+  WHEN '11400053' THEN 0
+  WHEN '11400054' THEN 18
+  ELSE "cooldown"
+END
+WHERE "code" IN (
+  '11400001', '11400002', '11400003', '11400004',
+  '11400021', '11400022', '11400023', '11400024',
+  '11400031', '11400032', '11400033', '11400034',
+  '11400041', '11400042', '11400043', '11400044',
+  '11400051', '11400052', '11400053', '11400054'
+);

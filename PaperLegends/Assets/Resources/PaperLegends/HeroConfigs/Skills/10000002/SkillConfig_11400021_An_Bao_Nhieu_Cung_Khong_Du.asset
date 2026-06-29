@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 735ff5f21266887409cafe887e1b21db, type: 3}
-  m_Name: SkillConfig_11400021_An_Bao_Nhieu_Cung_Khong_Du
+  m_Name: SkillConfig_11400021_Forward_Slide
   m_EditorClassIdentifier: 
   heroId: 10000002
   skillId: 11400021
   slot: 1
-  skillName: An Bao Nhieu Cung Khong Du
-  description: Passive. While Thanh Giong is level 1-9, experience gained is increased
-    by 25%.
+  skillName: Forward Slide
+  description: After casting, the next 3 swipes on your hero slide forward instead
+    of a paper flick. Direction and power follow swipe direction and speed.
   icon: {fileID: 0}
   cooldown: 0
   castSound: {fileID: 0}
   castVfx: {fileID: 0}
   damage: 0
-  isPassive: 1
+  isPassive: 0

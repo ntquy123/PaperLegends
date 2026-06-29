@@ -492,6 +492,10 @@ model HeroSkill {
   cooldown    Float     @default(0)
   manaCost    Int       @default(0)
   damage      Float     @default(0)
+  damageLevel1 Float    @default(0)
+  damageLevel2 Float    @default(0)
+  damageLevel3 Float    @default(0)
+  damageLevel4 Float    @default(0)
   range       Float     @default(0)
   duration    Float     @default(0)
 

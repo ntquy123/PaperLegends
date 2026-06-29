@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 735ff5f21266887409cafe887e1b21db, type: 3}
-  m_Name: SkillConfig_11400024_Ngua_Sat
+  m_Name: SkillConfig_11400024_Last_Stand
   m_EditorClassIdentifier: 
   heroId: 10000002
   skillId: 11400024
-  slot: 2
-  skillName: Ngua Sat
-  description: Reserved Phu Dong Thien Vuong skill slot 2.
+  slot: 4
+  skillName: Last Stand
+  description: Become invincible for 5 seconds. Health cannot drop below 1. Cooldown
+    starts after invincibility ends (60s at level 1 down to 30s at level 4). Also
+    auto-triggers when health would reach 1.
   icon: {fileID: 0}
-  cooldown: 0
+  cooldown: 60
   castSound: {fileID: 0}
   castVfx: {fileID: 0}
   damage: 0

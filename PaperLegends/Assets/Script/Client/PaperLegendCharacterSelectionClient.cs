@@ -26,6 +26,7 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
     private readonly Dictionary<int, string> playerNamesById = new Dictionary<int, string>();
     private readonly HashSet<int> botPlayerIds = new HashSet<int>();
     private readonly HashSet<int> lockedPlayerIds = new HashSet<int>();
+    private readonly HashSet<int> selectedModelIds = new HashSet<int>();
     private Coroutine countdownRoutine;
     private Coroutine heroCatalogRoutine;
     private float countdownRemainingSeconds;
@@ -37,6 +38,7 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
     public IReadOnlyDictionary<int, PaperLegendHeroData> HeroDataByModelId => heroDataByModelId;
     public IReadOnlyDictionary<int, int> SelectionsByPlayerId => selectionsByPlayerId;
     public IReadOnlyDictionary<int, string> PlayerNamesById => playerNamesById;
+    public IReadOnlyCollection<int> SelectedModelIds => selectedModelIds;
     public bool IsSelectionActive { get; private set; }
 
     public event Action<IReadOnlyList<int>, IReadOnlyList<int>, float> SelectionStarted;
@@ -100,6 +102,7 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
         playerNamesById.Clear();
         botPlayerIds.Clear();
         lockedPlayerIds.Clear();
+        selectedModelIds.Clear();
 
         ParseCsvInts(playerIdsCsv, activePlayerIds);
         ParseCsvInts(selectableModelIdsCsv, selectableModelIds);
@@ -115,13 +118,22 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
         SelectionStarted?.Invoke(activePlayerIds, selectableModelIds, countdownRemainingSeconds);
     }
 
-    public void ApplySelectionUpdate(int playerId, int modelId, int selectedCount, int lockedCount, int totalCount, float remainingSeconds, bool isLocked)
+    public void ApplySelectionUpdate(int playerId, int modelId, int selectedCount, int lockedCount, int totalCount, float remainingSeconds, bool isLocked, string selectedModelIdsCsv = null)
     {
         if (playerId != 0 && modelId > 0)
             selectionsByPlayerId[playerId] = modelId;
 
         if (playerId != 0 && isLocked)
             lockedPlayerIds.Add(playerId);
+
+        if (!string.IsNullOrWhiteSpace(selectedModelIdsCsv))
+        {
+            ParseCsvInts(selectedModelIdsCsv, selectedModelIds);
+        }
+        else
+        {
+            RebuildSelectedModelIdsFromSelections();
+        }
 
         countdownRemainingSeconds = Mathf.Max(0f, remainingSeconds);
         UpdateLabels(lockedCount, totalCount, countdownRemainingSeconds);
@@ -131,6 +143,7 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
     public void CompleteSelection(string selectionsCsv)
     {
         ParseSelectionCsv(selectionsCsv, selectionsByPlayerId);
+        RebuildSelectedModelIdsFromSelections();
         foreach (int playerId in activePlayerIds)
             lockedPlayerIds.Add(playerId);
 
@@ -145,8 +158,11 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
         SelectionCompleted?.Invoke(selectionsByPlayerId);
     }
 
-    public void RejectSelection(int modelId, string reason)
+    public void RejectSelection(int modelId, string reason, string selectedModelIdsCsv = null)
     {
+        if (!string.IsNullOrWhiteSpace(selectedModelIdsCsv))
+            ParseCsvInts(selectedModelIdsCsv, selectedModelIds);
+
         SelectionRejected?.Invoke(modelId, reason);
     }
 
@@ -386,7 +402,8 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
             message.lockedCount,
             message.totalCount,
             message.remainingSeconds,
-            message.isLocked);
+            message.isLocked,
+            message.selectedModelIds);
     }
 
     private void HandleSocketSelectionComplete(WebSocketHelper.PaperLegendCharacterSelectionCompleteMessage message)
@@ -402,7 +419,17 @@ public sealed class PaperLegendCharacterSelectionClient : MonoBehaviour
         if (message == null)
             return;
 
-        RejectSelection(message.characterModelId, message.reason);
+        RejectSelection(message.characterModelId, message.reason, message.selectedModelIds);
+    }
+
+    private void RebuildSelectedModelIdsFromSelections()
+    {
+        selectedModelIds.Clear();
+        foreach (int modelId in selectionsByPlayerId.Values)
+        {
+            if (modelId > 0)
+                selectedModelIds.Add(modelId);
+        }
     }
 
     private static void ParseCsvInts(string csv, List<int> results)

@@ -68,6 +68,7 @@ public sealed class PaperLegendCharacterClientVisualSpawner : MonoBehaviour
     private bool _attemptedEliminationVfxLoad;
     private bool _lastAliveVisible = true;
     private bool _eliminationVisualPlaying;
+    private int _lastLifeStateRevision = int.MinValue;
     private readonly List<MaterialColorSnapshot> _materialColorSnapshots = new List<MaterialColorSnapshot>();
 
     public int ActiveModelId => _activeModelId;
@@ -116,7 +117,8 @@ public sealed class PaperLegendCharacterClientVisualSpawner : MonoBehaviour
         if (spawnAutomatically)
             TryStartSpawnForCurrentModel();
 
-        ApplyAliveVisibility();
+        bool forceVisibilityUpdate = ConsumeLifeStateRevisionChange();
+        ApplyAliveVisibility(forceVisibilityUpdate);
     }
 
     private void OnDisable()
@@ -344,11 +346,24 @@ public sealed class PaperLegendCharacterClientVisualSpawner : MonoBehaviour
         }
     }
 
-    private void ApplyAliveVisibility()
+    private bool ConsumeLifeStateRevisionChange()
+    {
+        if (_character == null)
+            return false;
+
+        int revision = _character.LifeStateRevision;
+        if (_lastLifeStateRevision == revision)
+            return false;
+
+        _lastLifeStateRevision = revision;
+        return true;
+    }
+
+    private void ApplyAliveVisibility(bool forceUpdate = false)
     {
         bool aliveVisible = _character == null || _character.IsAlive;
         bool visualNeedsUpdate = _spawnedVisual != null && _spawnedVisual.activeSelf != aliveVisible;
-        if (_lastAliveVisible == aliveVisible && !visualNeedsUpdate)
+        if (!forceUpdate && _lastAliveVisible == aliveVisible && !visualNeedsUpdate)
             return;
 
         _lastAliveVisible = aliveVisible;
@@ -356,12 +371,7 @@ public sealed class PaperLegendCharacterClientVisualSpawner : MonoBehaviour
         if (aliveVisible)
         {
             StopEliminationVisual(restoreColors: true);
-
-            if (_spawnedVisual != null)
-                _spawnedVisual.SetActive(true);
-
-            if (_spawnedVisual == null)
-                SetNetworkRenderersVisible(true);
+            ForceShowAliveVisual();
 
             Debug.Log($"[PaperLegends][Visual] Showing character visual for player={(_character != null ? _character.PlayerId : 0)}.");
             return;
@@ -369,6 +379,27 @@ public sealed class PaperLegendCharacterClientVisualSpawner : MonoBehaviour
 
         if (!_eliminationVisualPlaying)
             StartEliminationVisual();
+    }
+
+    private void ForceShowAliveVisual()
+    {
+        if (_spawnedVisual != null)
+        {
+            if (!_spawnedVisual.activeSelf)
+                _spawnedVisual.SetActive(true);
+
+            Renderer[] visualRenderers = _spawnedVisual.GetComponentsInChildren<Renderer>(true);
+            for (int i = 0; i < visualRenderers.Length; i++)
+            {
+                if (visualRenderers[i] != null)
+                    visualRenderers[i].enabled = true;
+            }
+
+            SetNetworkRenderersVisible(false);
+            return;
+        }
+
+        SetNetworkRenderersVisible(true);
     }
 
     private void StartEliminationVisual()

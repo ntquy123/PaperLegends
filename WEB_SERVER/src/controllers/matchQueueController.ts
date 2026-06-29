@@ -17,6 +17,11 @@ type QueueCancelBody = {
   userId?: number;
 };
 
+type QueueResyncBody = {
+  userId?: number;
+  matchId?: string;
+};
+
 type MatchReadyBody = {
   matchId?: string;
   sessionName?: string;
@@ -181,6 +186,38 @@ export const forceStartQueue: RequestHandler = async (req, res) => {
 };
 
 // Dedicated Server callback: báo session đã sẵn sàng
+export const resyncQueue: RequestHandler = async (req, res) => {
+  const body = req.body as QueueResyncBody;
+  const rawUserId = body.userId ?? Number(req.query.userId);
+  const userId = Number(rawUserId);
+  const matchId = typeof body.matchId === "string"
+    ? body.matchId.trim()
+    : typeof req.query.matchId === "string"
+      ? req.query.matchId.trim()
+      : "";
+
+  if (!Number.isFinite(userId) || userId <= 0) {
+    res.status(400).json({ error: "userId is required" });
+    return;
+  }
+
+  const io = getIO(req);
+  if (!io) {
+    res.status(503).json({ error: "Socket.IO instance not available" });
+    return;
+  }
+
+  const result = await Matchmaker.instance.syncPendingMatchForUser({
+    userId,
+    matchId: matchId || undefined,
+    io,
+    signJoinToken,
+    playerJoinDeadlineMs: PLAYER_JOIN_DEADLINE_MS,
+  });
+
+  res.json(result);
+};
+
 export const matchReady: RequestHandler = async (req, res) => {
   const body = req.body as MatchReadyBody;
   const { matchId, sessionName, region, dsId } = body;
@@ -251,7 +288,7 @@ export const matchReady: RequestHandler = async (req, res) => {
       return;
     }
 
-    const ok = Matchmaker.instance.onServerReady({
+    const ok = await Matchmaker.instance.onServerReady({
       matchId,
       sessionName,
       region,
@@ -293,7 +330,7 @@ export const matchReady: RequestHandler = async (req, res) => {
     });
   }
 
-  const ok = Matchmaker.instance.onServerReady({
+  const ok = await Matchmaker.instance.onServerReady({
     matchId,
     sessionName,
     region,

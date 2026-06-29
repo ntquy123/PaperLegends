@@ -8,7 +8,7 @@ public static class PaperLegendHeroSkillRegistry
     private static readonly IPaperLegendHeroSkillSet[] SkillSets =
     {
         new PaperLegendHero10000001SkillSet(),
-        new PaperLegendHero10000002ThanhGiongSkillSet(),
+        new PaperLegendHero10000002SkillSet(),
         new PaperLegendHero10000003SonTinhSkillSet(),
         new PaperLegendHero10000004SonTinhSkillSet(),
         new PaperLegendHero10000005ThanSamSkillSet()
@@ -162,6 +162,10 @@ public static class PaperLegendHeroSkillRegistry
             cooldown = source.cooldown,
             manaCost = source.manaCost,
             damage = source.damage,
+            damageLevel1 = source.damageLevel1,
+            damageLevel2 = source.damageLevel2,
+            damageLevel3 = source.damageLevel3,
+            damageLevel4 = source.damageLevel4,
             range = source.range,
             duration = source.duration,
             config = source.config,

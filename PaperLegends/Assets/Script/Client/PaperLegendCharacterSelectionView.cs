@@ -303,9 +303,9 @@ public sealed class PaperLegendCharacterSelectionView : MonoBehaviour
             return;
 
         int modelId = hero.ResolveModelIdInt();
-        SetText(previewNameText, hero.name);
-        SetText(previewRoleText, hero.role);
-        SetText(previewDescriptionText, hero.description);
+        SetText(previewNameText, ResolveLocalizedText(hero.name));
+        SetText(previewRoleText, ResolveLocalizedRole(hero.role));
+        SetText(previewDescriptionText, ResolveLocalizedText(hero.description));
 
         Sprite cachedIcon = ResolveCachedIcon(modelId, FallbackHeroIcon);
         SetImageSprite(selectedSlotIconImage, cachedIcon);
@@ -375,6 +375,15 @@ public sealed class PaperLegendCharacterSelectionView : MonoBehaviour
     private void RebuildUnavailableModelIds()
     {
         unavailableModelIds.Clear();
+
+        if (selectionClient != null && selectionClient.SelectedModelIds != null)
+        {
+            foreach (int modelId in selectionClient.SelectedModelIds)
+            {
+                if (modelId > 0)
+                    unavailableModelIds.Add(modelId);
+            }
+        }
 
         foreach (int modelId in selectedModelByPlayerId.Values)
         {
@@ -513,5 +522,23 @@ public sealed class PaperLegendCharacterSelectionView : MonoBehaviour
     {
         if (text != null)
             text.text = value ?? string.Empty;
+    }
+
+    private static string ResolveLocalizedRole(string role)
+    {
+        if (string.IsNullOrWhiteSpace(role))
+            return string.Empty;
+
+        return ResolveLocalizedText($"hero_role_{role.ToLowerInvariant()}");
+    }
+
+    private static string ResolveLocalizedText(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            return string.Empty;
+
+        return LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetText(key)
+            : key;
     }
 }

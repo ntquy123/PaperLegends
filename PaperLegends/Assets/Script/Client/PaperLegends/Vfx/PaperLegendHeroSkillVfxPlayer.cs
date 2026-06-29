@@ -30,6 +30,19 @@ public sealed class PaperLegendHeroSkillVfxPlayer : MonoBehaviour
     private readonly Dictionary<string, GameObject> vfxPrefabCache = new Dictionary<string, GameObject>();
     private readonly List<AsyncOperationHandle<GameObject>> vfxPrefabHandles = new List<AsyncOperationHandle<GameObject>>();
 
+    public static PaperLegendHeroSkillVfxPlayer EnsureFor(PaperLegendCharacterNetworkHandler character)
+    {
+        if (character == null)
+            return null;
+
+        PaperLegendHeroSkillVfxPlayer player = FindForCharacter(character);
+        if (player == null)
+            player = character.gameObject.AddComponent<PaperLegendHeroSkillVfxPlayer>();
+
+        player.EnsureHeroConfig(character);
+        return player;
+    }
+
     public static void PlaySkillVfx(PaperLegendCharacterNetworkHandler character, int skillId, Vector3 worldPosition, float radius)
     {
         PlaySkillVfx(character, skillId, worldPosition, radius, Vector3.zero);
@@ -84,6 +97,21 @@ public sealed class PaperLegendHeroSkillVfxPlayer : MonoBehaviour
     private bool TryPlayConfiguredVfx(int skillId, Vector3 worldPosition, Vector3 direction)
     {
         SkillConfig skill = heroConfig != null ? heroConfig.GetSkillById(skillId) : null;
+        if (skill != null && skill.castVfxPrefab != null)
+        {
+            float prefabLifetime = skill.castVfxLifetimeSeconds > 0f ? skill.castVfxLifetimeSeconds : fallbackLifetimeSeconds;
+            InstantiateAndDestroy(skill.castVfxPrefab, worldPosition, Vector3.zero, prefabLifetime, direction);
+            return true;
+        }
+
+        if (skillId == (int)PaperLegendHeroSkillId.Hero10000001EdgeBounceRebound
+            && vfxConfig != null
+            && vfxConfig.edgeBounceLandingFx != null)
+        {
+            InstantiateAndDestroy(vfxConfig.edgeBounceLandingFx, worldPosition, Vector3.zero, fallbackLifetimeSeconds, direction);
+            return true;
+        }
+
         if (skill != null && TryPlayAddressableVfx(skill.castVfx, worldPosition, Vector3.zero, fallbackLifetimeSeconds, direction))
         {
             return true;

@@ -31,10 +31,10 @@ public sealed class PaperLegendHeroSelectCardView : MonoBehaviour
         }
 
         if (nameText != null)
-            nameText.text = hero != null ? hero.name : string.Empty;
+            nameText.text = hero != null ? ResolveLocalizedText(hero.name) : string.Empty;
 
         if (roleText != null)
-            roleText.text = hero != null ? hero.role : string.Empty;
+            roleText.text = hero != null ? ResolveLocalizedRole(hero.role) : string.Empty;
 
         SetSelected(isSelected);
         SetUnavailable(isUnavailable);
@@ -60,5 +60,23 @@ public sealed class PaperLegendHeroSelectCardView : MonoBehaviour
 
         if (button != null)
             button.interactable = !unavailable && modelId > 0;
+    }
+
+    private static string ResolveLocalizedRole(string role)
+    {
+        if (string.IsNullOrWhiteSpace(role))
+            return string.Empty;
+
+        return ResolveLocalizedText($"hero_role_{role.ToLowerInvariant()}");
+    }
+
+    private static string ResolveLocalizedText(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+            return string.Empty;
+
+        return LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetText(key)
+            : key;
     }
 }

@@ -62,6 +62,10 @@ public class PaperLegendHeroSkillData
     public float cooldown;
     public int manaCost;
     public float damage;
+    public float damageLevel1;
+    public float damageLevel2;
+    public float damageLevel3;
+    public float damageLevel4;
     public float range;
     public float duration;
     public JToken config;
@@ -80,5 +84,28 @@ public class PaperLegendHeroSkillData
             return value;
 
         return 0;
+    }
+
+    public float ResolveDamageForLevel(int skillLevel)
+    {
+        int level = skillLevel < 1 ? 1 : skillLevel > 4 ? 4 : skillLevel;
+        float levelDamage;
+        switch (level)
+        {
+            case 1:
+                levelDamage = damageLevel1;
+                break;
+            case 2:
+                levelDamage = damageLevel2;
+                break;
+            case 3:
+                levelDamage = damageLevel3;
+                break;
+            default:
+                levelDamage = damageLevel4;
+                break;
+        }
+
+        return levelDamage > 0f ? levelDamage : damage;
     }
 }

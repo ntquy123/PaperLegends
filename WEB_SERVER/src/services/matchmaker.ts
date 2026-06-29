@@ -128,6 +128,25 @@ type MatchSnapshotEntry = {
   hostPort: number | null;
 };
 
+type PersistedMatchSnapshot = {
+  matchId: string;
+  sessionName: string;
+  region: string;
+  bet: number;
+  typeMatchGid: number;
+  players: number[];
+  createdAt: number;
+  state: MatchState;
+  maxPlayers: number;
+  playerJoinDeadlineMs: number;
+  characterSelectionsCsv?: string;
+  botCharacterModelIdsCsv?: string;
+  dsContainerName?: string | null;
+  dsHostPort?: number | null;
+  dsContainerIp?: string | null;
+  updatedAt: number;
+};
+
 function makeMatchId() {
   return "m_" + crypto.randomBytes(8).toString("hex");
 }
@@ -228,6 +247,171 @@ export class Matchmaker {
 
   private readyCleanupSuccessCount = 0;
   private readyCleanupFailureCount = 0;
+
+  private persistedMatchTtlSeconds() {
+    return Math.max(600, Number(process.env.MATCH_RESYNC_TTL_SECONDS || 600));
+  }
+
+  private persistedMatchKey(matchId: string) {
+    return `mm:match:${matchId}`;
+  }
+
+  private persistedUserMatchKey(userId: number) {
+    return `mm:user-match:${userId}`;
+  }
+
+  private buildPersistedMatchSnapshot(match: MatchRecord): PersistedMatchSnapshot {
+    return {
+      matchId: match.matchId,
+      sessionName: match.sessionName,
+      region: match.region,
+      bet: match.bet,
+      typeMatchGid: match.typeMatchGid,
+      players: [...match.players],
+      createdAt: match.createdAt,
+      state: match.state,
+      maxPlayers: match.maxPlayers,
+      playerJoinDeadlineMs: match.playerJoinDeadlineMs,
+      characterSelectionsCsv: match.characterSelectionsCsv,
+      botCharacterModelIdsCsv: match.botCharacterModelIdsCsv,
+      dsContainerName: match.dsContainerName,
+      dsHostPort: match.dsHostPort,
+      dsContainerIp: match.dsContainerIp,
+      updatedAt: Date.now(),
+    };
+  }
+
+  private async persistMatchSnapshot(match: MatchRecord) {
+    if (!this.isPaperLegendMatch(match)) {
+      return;
+    }
+
+    try {
+      const redis = await getRedisClient();
+      const snapshot = this.buildPersistedMatchSnapshot(match);
+      const ttl = this.persistedMatchTtlSeconds();
+      await redis.set(this.persistedMatchKey(match.matchId), JSON.stringify(snapshot), { EX: ttl });
+
+      for (const userId of match.players) {
+        if (!Number.isFinite(userId) || userId <= 0) {
+          continue;
+        }
+
+        await redis.set(this.persistedUserMatchKey(userId), match.matchId, { EX: ttl });
+      }
+    } catch (error) {
+      console.warn("Unable to persist Paper Legends match snapshot", {
+        matchId: match.matchId,
+        state: match.state,
+        error: String(error),
+      });
+    }
+  }
+
+  private async readPersistedMatchByMatchId(matchId: string) {
+    if (!matchId) {
+      return null;
+    }
+
+    try {
+      const redis = await getRedisClient();
+      const raw = await redis.get(this.persistedMatchKey(matchId));
+      if (!raw) {
+        return null;
+      }
+
+      return JSON.parse(String(raw)) as PersistedMatchSnapshot;
+    } catch (error) {
+      console.warn("Unable to read persisted Paper Legends match snapshot", {
+        matchId,
+        error: String(error),
+      });
+      return null;
+    }
+  }
+
+  private async readPersistedMatchForUser(userId: number) {
+    if (!Number.isFinite(userId) || userId <= 0) {
+      return null;
+    }
+
+    try {
+      const redis = await getRedisClient();
+      const matchId = await redis.get(this.persistedUserMatchKey(userId));
+      if (!matchId) {
+        return null;
+      }
+
+      const snapshot = await this.readPersistedMatchByMatchId(String(matchId));
+      if (!snapshot || !snapshot.players.includes(userId)) {
+        return null;
+      }
+
+      return snapshot;
+    } catch (error) {
+      console.warn("Unable to read persisted Paper Legends user match pointer", {
+        userId,
+        error: String(error),
+      });
+      return null;
+    }
+  }
+
+  private async clearPersistedMatchSnapshot(match: MatchRecord) {
+    if (!this.isPaperLegendMatch(match)) {
+      return;
+    }
+
+    try {
+      const redis = await getRedisClient();
+      const keys = [
+        this.persistedMatchKey(match.matchId),
+        ...match.players
+          .filter((userId) => Number.isFinite(userId) && userId > 0)
+          .map((userId) => this.persistedUserMatchKey(userId)),
+      ];
+
+      if (keys.length > 0) {
+        await redis.del(keys);
+      }
+    } catch (error) {
+      console.warn("Unable to clear persisted Paper Legends match snapshot", {
+        matchId: match.matchId,
+        error: String(error),
+      });
+    }
+  }
+
+  private rehydrateMatchFromSnapshot(
+    snapshot: PersistedMatchSnapshot,
+    signJoinToken: (payload: object) => string,
+    playerJoinDeadlineMs: number,
+  ): MatchRecord {
+    return {
+      matchId: snapshot.matchId,
+      sessionName: snapshot.sessionName,
+      region: snapshot.region,
+      bet: snapshot.bet,
+      typeMatchGid: snapshot.typeMatchGid,
+      players: [...snapshot.players],
+      createdAt: snapshot.createdAt,
+      state: snapshot.state,
+      maxPlayers: snapshot.maxPlayers,
+      ackedPlayers: new Set<number>(snapshot.players),
+      ackTimeoutMs: 0,
+      ackRetryCount: 0,
+      signJoinToken,
+      playerJoinDeadlineMs: snapshot.playerJoinDeadlineMs || playerJoinDeadlineMs,
+      earlyExitedPlayerIds: new Set<number>(),
+      earlyExitRoomIds: new Map<number, number>(),
+      dsContainerName: snapshot.dsContainerName ?? null,
+      dsHostPort: snapshot.dsHostPort ?? null,
+      dsContainerIp: snapshot.dsContainerIp ?? null,
+      characterSelectionsCsv: snapshot.characterSelectionsCsv,
+      botCharacterModelIdsCsv: snapshot.botCharacterModelIdsCsv,
+      serverReadyTimeoutMs: 0,
+    };
+  }
 
   /**
    * Sau khi 1 match consume phòng (assign idle hoặc spawn on-demand), luôn
@@ -358,14 +542,19 @@ export class Matchmaker {
   }
 
   private findPendingMatchesForPlayer(userId: number) {
-    return Array.from(this.matches.values()).filter(
-      (match) =>
-        match.players.includes(userId) &&
-        match.state !== "IN_PROGRESS" &&
-        match.state !== "FINISHED" &&
-        match.state !== "FAILED" &&
-        match.state !== "CANCELLED",
-    );
+    return this.findActiveMatchesForPlayer(userId).filter((match) => match.state !== "IN_PROGRESS");
+  }
+
+  private findActiveMatchesForPlayer(userId: number) {
+    return Array.from(this.matches.values())
+      .filter(
+        (match) =>
+          match.players.includes(userId) &&
+          match.state !== "FINISHED" &&
+          match.state !== "FAILED" &&
+          match.state !== "CANCELLED",
+      )
+      .sort((a, b) => b.createdAt - a.createdAt);
   }
 
   onPlayerDisconnected(userId: number, io: any) {
@@ -569,7 +758,7 @@ export class Matchmaker {
     return { status: "OK", message: "Trận đấu đang được tạo với bot." };
   }
 
-  onServerReady(args: {
+  async onServerReady(args: {
     matchId: string;
     sessionName: string;
     region: string;
@@ -579,8 +768,21 @@ export class Matchmaker {
     hostPort?: number | null;
     containerIp?: string | null;
   }) {
-    const m = this.matches.get(args.matchId);
-    if (!m) return false;
+    let m = this.matches.get(args.matchId);
+    if (!m) {
+      const snapshot = await this.readPersistedMatchByMatchId(args.matchId);
+      if (!snapshot) {
+        return false;
+      }
+
+      m = this.rehydrateMatchFromSnapshot(snapshot, args.signJoinToken, args.playerJoinDeadlineMs);
+      this.matches.set(m.matchId, m);
+      console.warn("Rehydrated Paper Legends match from Redis during READY callback", {
+        matchId: m.matchId,
+        players: m.players,
+        previousState: snapshot.state,
+      });
+    }
 
     if (m.state === "FAILED" || m.state === "CANCELLED" || m.state === "FINISHED") return false;
 
@@ -623,6 +825,7 @@ export class Matchmaker {
     }, args.playerJoinDeadlineMs);
 
     this.matches.set(m.matchId, m);
+    await this.persistMatchSnapshot(m);
     return true;
   }
 
@@ -715,6 +918,7 @@ export class Matchmaker {
     }
 
     this.matches.set(m.matchId, m);
+    void this.persistMatchSnapshot(m);
     return { status: "OK", matchId: m.matchId };
   }
 
@@ -1171,17 +1375,14 @@ export class Matchmaker {
   }
 
   notifyPendingMatchForUser(userId: number, io: any) {
-    const pendingMatches = Array.from(this.matches.values()).filter((match) =>
-      match.players.includes(userId) &&
-      match.state !== "FINISHED" &&
-      match.state !== "FAILED" &&
-      match.state !== "CANCELLED"
-    );
+    const pendingMatches = this.findActiveMatchesForPlayer(userId);
 
     if (pendingMatches.length === 0) {
-      return;
+      console.info("No active matchmaking state to resync for user", { userId });
+      return { status: "NO_MATCH", emittedCount: 0 };
     }
 
+    let emittedCount = 0;
     for (const match of pendingMatches) {
       if (match.state === "MATCH_PROPOSED") {
         if (match.ackedPlayers.has(userId)) {
@@ -1200,11 +1401,13 @@ export class Matchmaker {
           userId,
           ackRetryCount: match.ackRetryCount,
         });
+        emittedCount += 1;
         continue;
       }
 
       if (match.state === "CHARACTER_SELECTING") {
         this.emitPaperLegendCharacterSelectionResync(match, userId, io);
+        emittedCount += 1;
         continue;
       }
 
@@ -1220,13 +1423,159 @@ export class Matchmaker {
           userId,
           state: match.state,
         });
+        emittedCount += 1;
         continue;
       }
 
       if (match.state === "READY" || match.state === "IN_PROGRESS") {
         this.emitMatchReadyTicketForUser(match, userId, io, "REGISTER_RESYNC");
+        emittedCount += 1;
       }
     }
+
+    return { status: "OK", emittedCount };
+  }
+
+  async syncPendingMatchForUser(args: {
+    userId: number;
+    matchId?: string;
+    io: any;
+    signJoinToken: (payload: object) => string;
+    playerJoinDeadlineMs: number;
+  }) {
+    const notifyResult = this.notifyPendingMatchForUser(args.userId, args.io);
+    const requestedMatchId = typeof args.matchId === "string" ? args.matchId.trim() : "";
+    const activeMatches = this.findActiveMatchesForPlayer(args.userId);
+    let match = requestedMatchId
+      ? activeMatches.find((candidate) => candidate.matchId === requestedMatchId)
+      : activeMatches[0];
+
+    if (!match && requestedMatchId && activeMatches.length > 0) {
+      match = activeMatches[0];
+      console.warn("HTTP matchmaking resync replaced stale requested matchId with active player match", {
+        userId: args.userId,
+        requestedMatchId,
+        activeMatchId: match.matchId,
+        activeState: match.state,
+      });
+    }
+
+    if (!match) {
+      const snapshot = requestedMatchId
+        ? (await this.readPersistedMatchByMatchId(requestedMatchId)) ?? (await this.readPersistedMatchForUser(args.userId))
+        : await this.readPersistedMatchForUser(args.userId);
+      if (snapshot) {
+        const belongsToPlayer = snapshot.players.includes(args.userId);
+        if (!belongsToPlayer) {
+          console.warn("HTTP matchmaking resync ignored Redis snapshot for different player", {
+            userId: args.userId,
+            requestedMatchId,
+            snapshotPlayers: snapshot.players,
+          });
+          return {
+            status: "NO_MATCH",
+            emittedCount: notifyResult.emittedCount ?? 0,
+          };
+        }
+
+        const response: any = {
+          status: "OK",
+          emittedCount: notifyResult.emittedCount ?? 0,
+          matchId: snapshot.matchId,
+          state: snapshot.state,
+          sessionName: snapshot.sessionName,
+          region: snapshot.region,
+          hostPort: snapshot.dsHostPort ?? 0,
+          characterSelections: snapshot.characterSelectionsCsv ?? "",
+          recoveredFrom: "REDIS",
+        };
+
+        if (snapshot.state === "MATCH_CONFIRMED" || snapshot.state === "SERVER_CREATING") {
+          response.matchLoadingStage = "SERVER_CREATING";
+        } else if (snapshot.state === "READY" || snapshot.state === "IN_PROGRESS") {
+          response.matchLoadingStage = "MATCH_READY";
+          if (snapshot.sessionName && snapshot.region) {
+            const deadlineMs = Date.now() + args.playerJoinDeadlineMs;
+            response.ticket = {
+              type: "match:ticket",
+              matchId: snapshot.matchId,
+              sessionName: snapshot.sessionName,
+              region: snapshot.region,
+              joinToken: args.signJoinToken({
+                matchId: snapshot.matchId,
+                userId: args.userId,
+                sessionName: snapshot.sessionName,
+                region: snapshot.region,
+                exp: deadlineMs,
+              }),
+              deadlineMs,
+              hostPort: snapshot.dsHostPort ?? 0,
+              reason: "HTTP_RESYNC_REDIS",
+            };
+          }
+        }
+
+        console.info("HTTP matchmaking resync recovered from Redis", {
+          userId: args.userId,
+          matchId: snapshot.matchId,
+          state: snapshot.state,
+          hasTicket: !!response.ticket,
+        });
+
+        return response;
+      }
+
+      return {
+        status: "NO_MATCH",
+        emittedCount: notifyResult.emittedCount ?? 0,
+      };
+    }
+
+    const response: any = {
+      status: "OK",
+      emittedCount: notifyResult.emittedCount ?? 0,
+      matchId: match.matchId,
+      state: match.state,
+      sessionName: match.sessionName,
+      region: match.region,
+      hostPort: match.dsHostPort ?? 0,
+      characterSelections: match.characterSelectionsCsv ?? "",
+    };
+
+    if (match.state === "MATCH_CONFIRMED" || match.state === "SERVER_CREATING") {
+      response.matchLoadingStage = "SERVER_CREATING";
+    } else if (match.state === "READY" || match.state === "IN_PROGRESS") {
+      response.matchLoadingStage = "MATCH_READY";
+      if (match.sessionName && match.region) {
+        const deadlineMs = Date.now() + args.playerJoinDeadlineMs;
+        response.ticket = {
+          type: "match:ticket",
+          matchId: match.matchId,
+          sessionName: match.sessionName,
+          region: match.region,
+          joinToken: args.signJoinToken({
+            matchId: match.matchId,
+            userId: args.userId,
+            sessionName: match.sessionName,
+            region: match.region,
+            exp: deadlineMs,
+          }),
+          deadlineMs,
+          hostPort: match.dsHostPort ?? 0,
+          reason: "HTTP_RESYNC",
+        };
+      }
+    }
+
+    console.info("HTTP matchmaking resync response prepared", {
+      userId: args.userId,
+      matchId: match.matchId,
+      state: match.state,
+      emittedCount: response.emittedCount,
+      hasTicket: !!response.ticket,
+    });
+
+    return response;
   }
 
   private emitPaperLegendCharacterSelectionResync(match: MatchRecord, userId: number, io: any) {
@@ -1248,6 +1597,7 @@ export class Matchmaker {
       matchId: match.matchId,
       playerId: userId,
       characterModelId: selectedHeroId,
+      selectedModelIds: this.buildSelectedPaperLegendModelIdsCsv(selection),
       selectedCount: selection.selectionsByPlayerId.size,
       lockedCount: selection.lockedPlayerIds.size,
       totalCount: selection.participantIds.length,
@@ -1438,19 +1788,31 @@ export class Matchmaker {
     }
 
     if (selection.lockedPlayerIds.has(args.playerId)) {
-      return { status: "REJECTED", reason: "CHARACTER_ALREADY_LOCKED" };
+      return {
+        status: "REJECTED",
+        reason: "CHARACTER_ALREADY_LOCKED",
+        selectedModelIds: this.buildSelectedPaperLegendModelIdsCsv(selection),
+      };
     }
 
     if (!selection.selectableModelIds.includes(args.characterModelId)) {
       this.emitPaperLegendSelectionRejected(match, args.io, args.playerId, args.characterModelId, "CHARACTER_NOT_SELECTABLE");
-      return { status: "REJECTED", reason: "CHARACTER_NOT_SELECTABLE" };
+      return {
+        status: "REJECTED",
+        reason: "CHARACTER_NOT_SELECTABLE",
+        selectedModelIds: this.buildSelectedPaperLegendModelIdsCsv(selection),
+      };
     }
 
     const existingOwner = Array.from(selection.selectionsByPlayerId.entries())
       .find(([playerId, modelId]) => playerId !== args.playerId && modelId === args.characterModelId);
     if (existingOwner) {
       this.emitPaperLegendSelectionRejected(match, args.io, args.playerId, args.characterModelId, "CHARACTER_ALREADY_SELECTED");
-      return { status: "REJECTED", reason: "CHARACTER_ALREADY_SELECTED" };
+      return {
+        status: "REJECTED",
+        reason: "CHARACTER_ALREADY_SELECTED",
+        selectedModelIds: this.buildSelectedPaperLegendModelIdsCsv(selection),
+      };
     }
 
     selection.selectionsByPlayerId.set(args.playerId, args.characterModelId);
@@ -1579,6 +1941,7 @@ export class Matchmaker {
     match.characterSelectionsCsv = selectionsCsv;
     match.botCharacterModelIdsCsv = botCharacterModelIdsCsv;
     this.matches.set(match.matchId, match);
+    await this.persistMatchSnapshot(match);
     await this.beginServerCreation(match, io);
   }
 
@@ -1592,6 +1955,7 @@ export class Matchmaker {
       matchId: match.matchId,
       playerId,
       characterModelId,
+      selectedModelIds: this.buildSelectedPaperLegendModelIdsCsv(selection),
       selectedCount: selection.selectionsByPlayerId.size,
       lockedCount: selection.lockedPlayerIds.size,
       totalCount: selection.participantIds.length,
@@ -1612,8 +1976,17 @@ export class Matchmaker {
       matchId: match.matchId,
       playerId,
       characterModelId,
+      selectedModelIds: match.characterSelection
+        ? this.buildSelectedPaperLegendModelIdsCsv(match.characterSelection)
+        : "",
       reason,
     });
+  }
+
+  private buildSelectedPaperLegendModelIdsCsv(selection: CharacterSelectionState) {
+    return Array.from(new Set(selection.selectionsByPlayerId.values()))
+      .filter((modelId) => modelId > 0)
+      .join(",");
   }
 
   private pickAvailablePaperLegendModel(selection: CharacterSelectionState) {
@@ -1729,6 +2102,7 @@ export class Matchmaker {
     try {
       match.state = "SERVER_CREATING";
       this.matches.set(match.matchId, match);
+      await this.persistMatchSnapshot(match);
 
       for (const uid of match.players) {
         io.to(userRoom(uid)).emit("match:loading", { matchId: match.matchId, stage: "SERVER_CREATING" });
@@ -1742,6 +2116,7 @@ export class Matchmaker {
       });
 
       const startResult = await this.startDedicatedServerForMatch(match);
+      await this.persistMatchSnapshot(match);
       const currentAfterStart = this.matches.get(match.matchId);
       if (!currentAfterStart ||
           currentAfterStart.state === "FAILED" ||
@@ -1755,7 +2130,7 @@ export class Matchmaker {
       }
 
       if (startResult.kind === "READY_NOW") {
-        const ready = this.onServerReady({
+        const ready = await this.onServerReady({
           matchId: match.matchId,
           sessionName: startResult.sessionName,
           region: startResult.region,
@@ -2094,6 +2469,7 @@ export class Matchmaker {
       this.removeUserFromQueue(uid);
     }
 
+    void this.clearPersistedMatchSnapshot(match);
     this.matches.delete(match.matchId);
     void this.clearReadyIdempotencyKeys(match.matchId);
   }

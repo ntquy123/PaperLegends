@@ -411,6 +411,13 @@ public class APIManager : MonoBehaviour
         return tcs.Task;
     }
 
+    public Task<QueueResyncResponse> ResyncMatchQueueAsync(int userId, string matchId = null)
+    {
+        var tcs = new TaskCompletionSource<QueueResyncResponse>();
+        StartCoroutine(ResyncMatchQueueCoroutine(userId, matchId, response => tcs.TrySetResult(response)));
+        return tcs.Task;
+    }
+
     private IEnumerator ForceStartMatchCoroutine(int userId, int bet, int typeMatchGid, string region, int maxPlayers, Action<ForceStartResponse> onComplete)
     {
         var payload = new ForceStartRequest
@@ -446,6 +453,42 @@ public class APIManager : MonoBehaviour
         catch (Exception ex)
         {
             ShowError("âŒ Error parsing force-start response: " + ex.Message, request.responseCode, request.downloadHandler != null ? request.downloadHandler.text : null);
+            onComplete?.Invoke(null);
+        }
+    }
+
+    private IEnumerator ResyncMatchQueueCoroutine(int userId, string matchId, Action<QueueResyncResponse> onComplete)
+    {
+        var payload = new QueueResyncRequest
+        {
+            userId = userId,
+            matchId = string.IsNullOrWhiteSpace(matchId) ? null : matchId
+        };
+
+        string json = JsonUtility.ToJson(payload);
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+        UnityWebRequest request = new UnityWebRequest(ApiConfig.BaseUrl + "/queue/resync", "POST");
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return SendConfiguredWebRequest(request, request.url);
+
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            ShowError("Queue resync failed: " + request.error, request.responseCode, request.downloadHandler != null ? request.downloadHandler.text : null);
+            onComplete?.Invoke(null);
+            yield break;
+        }
+
+        try
+        {
+            var response = JsonUtility.FromJson<QueueResyncResponse>(request.downloadHandler.text);
+            onComplete?.Invoke(response);
+        }
+        catch (Exception ex)
+        {
+            ShowError("Error parsing queue resync response: " + ex.Message, request.responseCode, request.downloadHandler != null ? request.downloadHandler.text : null);
             onComplete?.Invoke(null);
         }
     }
@@ -4269,9 +4312,44 @@ public class APIManager : MonoBehaviour
     }
 
     [Serializable]
+    private class QueueResyncRequest
+    {
+        public int userId;
+        public string matchId;
+    }
+
+    [Serializable]
     public class QueueCancelResponse
     {
         public string status;
+    }
+
+    [Serializable]
+    public class QueueResyncTicket
+    {
+        public string type;
+        public string matchId;
+        public string sessionName;
+        public string region;
+        public string joinToken;
+        public long deadlineMs;
+        public int hostPort;
+        public string reason;
+    }
+
+    [Serializable]
+    public class QueueResyncResponse
+    {
+        public string status;
+        public int emittedCount;
+        public string matchId;
+        public string state;
+        public string sessionName;
+        public string region;
+        public int hostPort;
+        public string matchLoadingStage;
+        public string characterSelections;
+        public QueueResyncTicket ticket;
     }
 
     [Serializable]

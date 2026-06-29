@@ -124,9 +124,16 @@ public class QuickMatchClient : MonoBehaviour
     private Coroutine cancelMatchQueueRoutine;
     private Coroutine keepNetworkRoutine;
     private Coroutine preloadAvatarsRoutine;
+    private Coroutine queueResyncRoutine;
+    private float paperLegendTicketWaitElapsed;
+    private float nextQueueResyncAt;
+    private bool queueResyncInFlight;
     private int quickMatchRequestVersion;
     private const int CancelMatchQueueRetryCount = 6;
     private const float CancelMatchQueueRetryDelaySeconds = 0.75f;
+    private const float QueueTicketResyncInitialDelaySeconds = 1.5f;
+    private const float QueueTicketResyncIntervalSeconds = 3f;
+    private const float PaperLegendTicketWaitTimeoutSeconds = 180f;
     private const float QuickMatchReadyPromptSeconds = 20f;
     private readonly Dictionary<string, (float target, string text)> matchLoadingStageSteps = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -156,6 +163,14 @@ public class QuickMatchClient : MonoBehaviour
         }
 
         return $"matchId={ticket.matchId}, session={ticket.sessionName}, region={ticket.region}, hostPort={ticket.hostPort}, deadlineMs={ticket.deadlineMs}";
+    }
+
+    private static bool HasUsableQueueResyncTicket(APIManager.QueueResyncTicket ticket)
+    {
+        return ticket != null
+               && !string.IsNullOrWhiteSpace(ticket.matchId)
+               && !string.IsNullOrWhiteSpace(ticket.sessionName)
+               && !string.IsNullOrWhiteSpace(ticket.region);
     }
 
     // Lớp phụ trợ quản lý phần tử UI đại diện từng người chơi trong popup ready
@@ -554,6 +569,7 @@ public class QuickMatchClient : MonoBehaviour
         awaitingMatchConfirmation = false;
         matchConfirmed = false;
         ResetMatchLoadingState();
+        ResetQueueTicketResyncState();
 
         int userId = GameManagerNetWork.Instance?.loginUserModel?.UserId ?? 0;
         if (userId <= 0)
@@ -636,6 +652,24 @@ public class QuickMatchClient : MonoBehaviour
             if (usePaperLegendQuickMatch &&
                 (paperLegendSelectionActive || matchConfirmed || matchLoadingStarted || queueLoadingPending))
             {
+                if (!paperLegendSelectionActive && pendingMatchTicket == null && (queueLoadingPending || matchLoadingStarted || matchConfirmed))
+                {
+                    paperLegendTicketWaitElapsed += Time.deltaTime;
+
+                    if (paperLegendTicketWaitElapsed >= nextQueueResyncAt)
+                    {
+                        RequestQueueTicketResync(userId);
+                        nextQueueResyncAt = paperLegendTicketWaitElapsed + QueueTicketResyncIntervalSeconds;
+                    }
+
+                    if (paperLegendTicketWaitElapsed >= PaperLegendTicketWaitTimeoutSeconds)
+                    {
+                        Debug.LogWarning($"[QuickMatch][PaperLegends] Timed out waiting for match ticket after character selection ({PaperLegendTicketWaitTimeoutSeconds}s).");
+                        errorMessage = "Không nhận được ticket từ server. Vui lòng tìm trận lại.";
+                        break;
+                    }
+                }
+
                 yield return null;
                 continue;
             }
@@ -1493,6 +1527,75 @@ public class QuickMatchClient : MonoBehaviour
     }
 
     // Khôi phục thời gian chờ ready về giá trị mặc định
+    private void ResetQueueTicketResyncState()
+    {
+        paperLegendTicketWaitElapsed = 0f;
+        nextQueueResyncAt = QueueTicketResyncInitialDelaySeconds;
+        queueResyncInFlight = false;
+
+        if (queueResyncRoutine != null)
+        {
+            StopCoroutine(queueResyncRoutine);
+            queueResyncRoutine = null;
+        }
+    }
+
+    private void RequestQueueTicketResync(int userId)
+    {
+        if (queueResyncInFlight || APIManager.Instance == null || userId <= 0)
+            return;
+
+        queueResyncInFlight = true;
+        queueResyncRoutine = StartCoroutine(QueueTicketResyncRoutine(userId, quickMatchRequestVersion));
+    }
+
+    private IEnumerator QueueTicketResyncRoutine(int userId, int requestVersion)
+    {
+        APIManager.QueueResyncResponse response = null;
+        string matchId = ResolvePaperLegendSelectionMatchId();
+        var task = APIManager.Instance.ResyncMatchQueueAsync(userId, matchId);
+        yield return StartCoroutine(APIManager.Instance.RunTask(task, result => response = result));
+
+        queueResyncInFlight = false;
+        queueResyncRoutine = null;
+
+        if (requestVersion != quickMatchRequestVersion || response == null)
+            yield break;
+
+        bool hasUsableTicket = HasUsableQueueResyncTicket(response.ticket);
+        Debug.Log($"[QuickMatch][PaperLegends] Queue resync response: requestedMatchId={matchId}, status={response.status}, matchId={response.matchId}, state={response.state}, stage={response.matchLoadingStage}, hasTicket={hasUsableTicket}");
+
+        if (hasUsableTicket)
+        {
+            HandleMatchTicketReceived(ConvertQueueResyncTicket(response.ticket));
+            yield break;
+        }
+
+        if (!string.IsNullOrWhiteSpace(response.matchLoadingStage))
+        {
+            HandleMatchLoadingReceived(new WebSocketHelper.MatchLoadingMessage
+            {
+                type = "match:loading",
+                matchId = response.matchId,
+                stage = response.matchLoadingStage
+            });
+        }
+    }
+
+    private static WebSocketHelper.MatchTicketMessage ConvertQueueResyncTicket(APIManager.QueueResyncTicket ticket)
+    {
+        return new WebSocketHelper.MatchTicketMessage
+        {
+            type = string.IsNullOrWhiteSpace(ticket.type) ? "match:ticket" : ticket.type,
+            matchId = ticket.matchId,
+            sessionName = ticket.sessionName,
+            region = ticket.region,
+            joinToken = ticket.joinToken,
+            deadlineMs = ticket.deadlineMs,
+            hostPort = ticket.hostPort
+        };
+    }
+
     private void ResetQuickMatchReadyTimeout()
     {
         quickMatchReadyTimeout = ClampReadyTimeout(quickMatchReadyDefaultTimeout);
@@ -1704,6 +1807,7 @@ public class QuickMatchClient : MonoBehaviour
         matchLoadingCompleted = false;
         matchLoadingProgress = 0f;
         deferredMatchLoadingStage = null;
+        ResetQueueTicketResyncState();
 
         if (hideLoading && LoadingManager.Instance != null)
         {
@@ -2116,11 +2220,11 @@ public class QuickMatchClient : MonoBehaviour
         if (pendingMatchTicket != null && !string.IsNullOrWhiteSpace(pendingMatchTicket.matchId))
             return pendingMatchTicket.matchId;
 
-        if (!string.IsNullOrWhiteSpace(activeResultMatchId))
-            return activeResultMatchId;
-
         if (!string.IsNullOrWhiteSpace(pendingMatchProposalId))
             return pendingMatchProposalId;
+
+        if (!string.IsNullOrWhiteSpace(activeResultMatchId))
+            return activeResultMatchId;
 
         return GameManagerNetWork.Instance != null ? GameManagerNetWork.Instance.currentQuickMatchResultId : string.Empty;
     }
@@ -2170,6 +2274,7 @@ public class QuickMatchClient : MonoBehaviour
         quickMatchReadyConfirmedCount = 0;
         ResetQuickMatchReadyTimeout();
         pendingMatchProposalId = message.matchId;
+        ClearActiveResultMatch();
         awaitingMatchConfirmation = true;
         matchConfirmed = false;
 
@@ -2238,6 +2343,7 @@ public class QuickMatchClient : MonoBehaviour
         awaitingMatchConfirmation = false;
         matchConfirmed = true;
         pendingMatchProposalId = message.matchId;
+        ClearActiveResultMatch();
 
         if (findMatchPanel != null)
             findMatchPanel.SetActive(false);
@@ -2256,6 +2362,9 @@ public class QuickMatchClient : MonoBehaviour
 
         paperLegendSelectionActive = false;
         queueLoadingPending = true;
+        paperLegendTicketWaitElapsed = 0f;
+        nextQueueResyncAt = QueueTicketResyncInitialDelaySeconds;
+        pendingMatchProposalId = message.matchId;
 
         if (!matchLoadingStarted)
             BeginMatchLoadingSequence();
@@ -2308,6 +2417,7 @@ public class QuickMatchClient : MonoBehaviour
 
         pendingMatchTicket = message;
         paperLegendSelectionActive = false;
+        queueLoadingPending = false;
         queueWaitingForTicket = false;
         queueJoinRequested = false;
         awaitingMatchConfirmation = false;

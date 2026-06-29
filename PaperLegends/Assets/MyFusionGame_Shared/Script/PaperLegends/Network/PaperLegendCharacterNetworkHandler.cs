@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fusion.Addons.Physics;
 using Fusion;
 using UnityEngine;
 
@@ -8,6 +9,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 {
+    private const int SkillDamageSlotCount = 4;
+    private const int SkillDamageLevelCount = 4;
+
     [Header("Identity")]
     [SerializeField] private int fallbackPlayerId;
     [SerializeField] private PaperLegendTeam fallbackTeam = PaperLegendTeam.None;
@@ -62,6 +66,10 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     [SerializeField] private bool autoRespawn = true;
     [SerializeField, Min(0f)] private float respawnDelaySeconds = 5f;
 
+    [Header("Fall Safety")]
+    [SerializeField, Min(0.1f)] private float freeFallRespawnSeconds = 7f;
+    [SerializeField] private float freeFallRespawnMinY = -12f;
+
     [Header("Progression")]
     [SerializeField, Min(1)] private int maxLevel = 25;
     [SerializeField, Min(1)] private int baseExperienceToNextLevel = 100;
@@ -74,8 +82,48 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     [SerializeField, Min(0f)] private float distanceLandingBaseDamageScale = 1f;
     [SerializeField, Min(1f)] private float flickBoostHorizontalMultiplierPerLevel = 0.28f;
     [SerializeField, Min(0f)] private float flickBoostUpwardMultiplierPerLevel = 0.12f;
+    [SerializeField, Min(0f)] private float edgeBounceHorizontalImpulse = 2.2f;
+    [SerializeField, Min(0f)] private float edgeBounceUpwardImpulse = 1.1f;
+    [SerializeField, Min(0.05f)] private float edgeBounceIntervalSeconds = 0.55f;
+    [SerializeField, Min(0.1f)] private float edgeBounceVfxRadius = 0.65f;
+    [SerializeField] private NetworkObject paperArrowProjectilePrefab;
+    [SerializeField, Min(0f)] private float paperArrowSpawnForwardOffset = 0.45f;
+    [SerializeField, Min(0f)] private float paperArrowSpawnHeightOffset = 0.12f;
+    [SerializeField, Min(0f)] private float paperArrowBaseImpactDamage = 10f;
+    [SerializeField, Min(0f)] private float paperArrowImpactDamagePerLevel = 3f;
+    [SerializeField, Range(0f, 1f)] private float paperArrowSlowPercent = 0.3f;
+    [SerializeField, Min(0f)] private float paperArrowSlowDurationSeconds = 2.5f;
+
+    [Header("Hero 10000002 Skills")]
+    [SerializeField, Min(1)] private int forwardSlideSwipesPerCast = 3;
+    [SerializeField, Min(0f)] private float forwardSlideMinHorizontalImpulse = 2.2f;
+    [SerializeField, Min(0.01f)] private float forwardSlideMaxHorizontalImpulse = 7.8f;
+    [SerializeField, Min(0f)] private float forwardSlideMinUpwardImpulse = 0.04f;
+    [SerializeField, Min(0f)] private float forwardSlideMaxUpwardImpulse = 0.28f;
+    [SerializeField, Min(1f)] private float forwardSlideHorizontalMultiplierPerLevel = 0.14f;
+    [SerializeField, Min(0.1f)] private float forwardSlideVfxRadius = 0.55f;
+    [SerializeField, Min(0.1f)] private float shoveStunWindowSeconds = 3f;
+    [SerializeField, Min(0.1f)] private float shoveStunNearbyRadius = 2.8f;
+    [SerializeField, Min(0f)] private float shoveStunMinHorizontalImpulse = 5.5f;
+    [SerializeField, Min(0.01f)] private float shoveStunMaxHorizontalImpulse = 10.5f;
+    [SerializeField, Min(0f)] private float shoveStunMinUpwardImpulse = 0.45f;
+    [SerializeField, Min(0f)] private float shoveStunMaxUpwardImpulse = 1.15f;
+    [SerializeField, Min(0f)] private float shoveStunMinDurationSeconds = 1f;
+    [SerializeField, Min(0f)] private float shoveStunMaxDurationSeconds = 1.8f;
+    [SerializeField, Min(0.1f)] private float shoveStunVfxRadius = 0.65f;
+    [SerializeField, Min(0.1f)] private float lastStandDurationSeconds = 5f;
+    [SerializeField, Min(0.1f)] private float lastStandAuraVfxRadius = 1.25f;
+    [SerializeField, Min(0f)] private float lastStandMinimumHealth = 1f;
+
+    [Header("Status Effects")]
+    [SerializeField, Min(0f)] private float stunVelocityDampingPerSecond = 6f;
+    [SerializeField, Min(0f)] private float stunFreezeVelocityThreshold = 0.35f;
 
     [Header("Hero 10000003 Skills")]
+    [SerializeField, Min(0.1f)] private float waterBurstRadius = 1.05f;
+    [SerializeField, Min(0.1f)] private float waterBurstStepDistance = 2.5f;
+    [SerializeField, Min(0.05f)] private float waterBurstIntervalSeconds = 0.3f;
+    [SerializeField, Min(0f)] private float waterBurstFallbackDamage = 10f;
     [SerializeField, Min(0.1f)] private float wavePushLength = 5.5f;
     [SerializeField, Min(0.1f)] private float wavePushHalfWidth = 1.15f;
     [SerializeField, Min(0f)] private float wavePushOriginForwardOffset = 0.35f;
@@ -110,6 +158,7 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     [Networked] public int LastProcessedFlickSequence { get; private set; }
     [Networked] public int KillCount { get; private set; }
     [Networked] public int DeathCount { get; private set; }
+    [Networked] public int LifeStateRevision { get; private set; }
     [Networked] public int Level { get; private set; }
     [Networked] public int CurrentExperience { get; private set; }
     [Networked] public int ExperienceToNextLevel { get; private set; }
@@ -124,14 +173,95 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     [Networked] public int Skill2Level { get; private set; }
     [Networked] public int Skill3Level { get; private set; }
     [Networked] public int Skill4Level { get; private set; }
+    [Networked] public float Skill1CooldownRemaining { get; private set; }
+    [Networked] public float Skill2CooldownRemaining { get; private set; }
+    [Networked] public float Skill3CooldownRemaining { get; private set; }
+    [Networked] public float Skill4CooldownRemaining { get; private set; }
     [Networked] public NetworkBool Hero10000001DistanceDamageArmed { get; private set; }
     [Networked] public NetworkBool Hero10000001FlickBoostArmed { get; private set; }
+    [Networked] public NetworkBool Hero10000001EdgeBounceArmed { get; private set; }
+    [Networked, OnChangedRender(nameof(OnHero10000001EdgeBounceLandingVfxChanged))]
+    private int Hero10000001EdgeBounceLandingVfxTick { get; set; }
+    [Networked] private Vector3 Hero10000001EdgeBounceLandingVfxPosition { get; set; }
+    [Networked] private Vector3 Hero10000001EdgeBounceLandingVfxDirection { get; set; }
+    [Networked] public NetworkBool Hero10000001PaperArrowArmed { get; private set; }
+    [Networked] public NetworkBool Hero10000002ForwardSlideArmed { get; private set; }
+    [Networked] public int Hero10000002ForwardSlideRemaining { get; private set; }
+    [Networked] public NetworkBool Hero10000002ShoveStunArmed { get; private set; }
+    [Networked] public NetworkBool Hero10000003WaterBurstArmed { get; private set; }
+    [Networked, OnChangedRender(nameof(OnHero10000003WaterBurstVfxChanged))]
+    private int Hero10000003WaterBurstVfxTick { get; set; }
+    [Networked] private Vector3 Hero10000003WaterBurstVfxStartPosition { get; set; }
+    [Networked] private Vector3 Hero10000003WaterBurstVfxDirection { get; set; }
     [Networked] public NetworkBool Hero10000003WavePushArmed { get; private set; }
+    [Networked] public float MoveSlowMultiplier { get; private set; }
+    [Networked] private TickTimer MoveSlowTimer { get; set; }
+    [Networked] public NetworkBool StatusIsStunned { get; private set; }
+    [Networked] private TickTimer StatusStunTimer { get; set; }
+    [Networked] public NetworkBool StatusIsInvincibleAtOneHealth { get; private set; }
+    [Networked] private TickTimer StatusInvincibleAtOneHealthTimer { get; set; }
 
     public bool IsAlive => State != PaperLegendCharacterState.Eliminated
         && State != PaperLegendCharacterState.Respawning;
 
     public bool CanAcceptLocalFlick => CanAcceptLocalFlickInput(out _);
+
+    public bool IsStunned => StatusIsStunned;
+
+    public bool IsInvincibleAtOneHealth => StatusIsInvincibleAtOneHealth;
+
+    public PaperLegendCharacterStatusController StatusController
+    {
+        get
+        {
+            if (_statusController == null)
+                _statusController = new PaperLegendCharacterStatusController(this);
+            return _statusController;
+        }
+    }
+
+    internal float StatusStunVelocityDampingPerSecond => stunVelocityDampingPerSecond;
+
+    internal float StatusStunFreezeVelocityThreshold => stunFreezeVelocityThreshold;
+
+    internal Rigidbody StatusRigidbody
+    {
+        get
+        {
+            CacheComponents();
+            return _rigidbody;
+        }
+    }
+
+    internal void InternalSetStunState(bool active, TickTimer timer)
+    {
+        if (!HasStateAuthority)
+            return;
+
+        StatusIsStunned = active;
+        StatusStunTimer = timer;
+    }
+
+    internal bool InternalIsStunTimerExpired()
+    {
+        return StatusStunTimer.Expired(Runner);
+    }
+
+    internal void InternalSetInvincibleAtOneHealthState(bool active, TickTimer timer)
+    {
+        if (!HasStateAuthority)
+            return;
+
+        StatusIsInvincibleAtOneHealth = active;
+        StatusInvincibleAtOneHealthTimer = timer;
+    }
+
+    internal bool InternalIsInvincibilityAtOneHealthTimerExpired()
+    {
+        return StatusInvincibleAtOneHealthTimer.Expired(Runner);
+    }
+
+    internal float StatusInvincibilityMinimumHealth => Mathf.Max(0.1f, lastStandMinimumHealth);
 
     public int ResolvedVisualModelId => VisualModelVariantId > 0 ? VisualModelVariantId : CharacterModelId;
 
@@ -146,6 +276,7 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     private float _respawnCountdown;
     private bool _wasGrounded = true;
     private bool _hadAirbornePhase;
+    private float _freeFallSeconds;
 #if !UNITY_SERVER
     private bool _lastProxyColliderAlive = true;
 #endif
@@ -155,17 +286,42 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     private bool _hasLastEliminationPosition;
     private Vector3 _lastEliminationPosition;
     private int _activeDistanceDamageLevel;
+    private bool _hero10000001EdgeBounceActive;
+    private int _remainingHero10000001EdgeBounces;
+    private Vector3 _hero10000001EdgeBounceDirection;
+    private float _hero10000001EdgeBounceTimerSeconds;
+#if !UNITY_SERVER
+    private int _lastRenderedHero10000001EdgeBounceLandingVfxTick;
+#endif
     private int _hero10000003WavePushLevel;
     private float _hero10000003WavePushRemainingSeconds;
+    private int _hero10000003WaterBurstLevel;
+    private float _hero10000003WaterBurstInputRemainingSeconds;
+    private bool _hero10000003WaterBurstActive;
+    private int _hero10000003WaterBurstNextBurstIndex;
+    private float _hero10000003WaterBurstTimerSeconds;
+    private float _hero10000003WaterBurstBaseDamage;
+    private Vector3 _hero10000003WaterBurstStartPosition;
+    private Vector3 _hero10000003WaterBurstDirection;
+#if !UNITY_SERVER
+    private int _lastRenderedHero10000003WaterBurstVfxTick;
+#endif
+    private int _hero10000002ShoveStunLevel;
+    private float _hero10000002ShoveStunRemainingSeconds;
+    private int _hero10000001PaperArrowLevel;
+    private PaperLegendCharacterStatusController _statusController;
     private bool _hasPendingSkillTargetPosition;
     private Vector3 _pendingSkillTargetWorldPosition;
     private float _baseFlickForceMultiplier = 1f;
+    private readonly float[,] _configuredSkillDamageBySlotAndLevel = new float[SkillDamageSlotCount, SkillDamageLevelCount];
+    private readonly float[] _configuredSkillCooldownSeconds = new float[PaperLegendHeroSkillRegistry.MaxSkillSlots];
     private PhysicsMaterial _runtimePaperPhysicsMaterial;
     private readonly HashSet<PaperLegendCharacterNetworkHandler> _pinnedDamageVictims = new HashSet<PaperLegendCharacterNetworkHandler>();
 
     public override void Spawned()
     {
         CacheComponents();
+        _statusController = new PaperLegendCharacterStatusController(this);
         _spawnPosition = transform.position;
         _spawnRotation = SanitizeRotation(transform.rotation);
         _baseLocalScale = SanitizeScale(transform.localScale);
@@ -195,6 +351,10 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
 #if !UNITY_SERVER
         PaperLegendCharacterClientVisualSpawner.EnsureFor(this);
+        PaperLegendHeroSkillVfxPlayer.EnsureFor(this);
+        HeroAudioPlayer.EnsureFor(this);
+        PaperLegendCharacterStatusIndicator.EnsureFor(this);
+        PaperLegendCharacterInvincibilityAura.EnsureFor(this);
 
         if (HasInputAuthority)
             StartCoroutine(SetupLocalPaperLegendClientViewRoutine());
@@ -218,7 +378,14 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         if (_flickCooldownRemaining > 0f)
             _flickCooldownRemaining -= Runner.DeltaTime;
 
+        TickSkillCooldowns();
+        TickHero10000001EdgeBounceTimer();
+        TickHero10000003WaterBurstTimers();
         TickHero10000003WavePushTimer();
+        TickHero10000002ShoveStunTimer();
+        TickMoveSlowDebuff();
+        _statusController?.ServerTick(ResolveNetworkDeltaTime());
+        _statusController?.ServerTickInvincibilityAtOneHealth();
         UpdateGroundedState();
         ApplyStackDamageToPinnedVictims();
 
@@ -289,6 +456,31 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         AttackSpeed = Mathf.Max(0.1f, speed > 0f ? speed : defaultAttackSpeed);
     }
 
+    public void ConfigureHeroSkillStats(PaperLegendHeroData heroData)
+    {
+        if (!HasStateAuthority)
+            return;
+
+        ClearConfiguredSkillDamageLevels();
+        ClearConfiguredSkillCooldowns();
+
+        if (heroData?.skills == null)
+            return;
+
+        for (int i = 0; i < heroData.skills.Count; i++)
+        {
+            PaperLegendHeroSkillData skill = heroData.skills[i];
+            if (skill == null || skill.slot < 1 || skill.slot > SkillDamageSlotCount)
+                continue;
+
+            int slotIndex = skill.slot - 1;
+            for (int level = 1; level <= SkillDamageLevelCount; level++)
+                _configuredSkillDamageBySlotAndLevel[slotIndex, level - 1] = Mathf.Max(0f, skill.ResolveDamageForLevel(level));
+
+            _configuredSkillCooldownSeconds[slotIndex] = Mathf.Max(0f, skill.cooldown);
+        }
+    }
+
     public void ConfigurePaperPhysicsStats(float weight, float bounce, float friction, float flickForce)
     {
         if (!HasStateAuthority)
@@ -343,6 +535,104 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     {
         if (HasStateAuthority)
             Hero10000001FlickBoostArmed = true;
+    }
+
+    public void ServerArmHero10000001EdgeBounce()
+    {
+        if (HasStateAuthority)
+            Hero10000001EdgeBounceArmed = true;
+    }
+
+    public void ServerArmHero10000001PaperArrow()
+    {
+        if (!HasStateAuthority)
+            return;
+
+        Hero10000001PaperArrowArmed = true;
+        _hero10000001PaperArrowLevel = Mathf.Clamp(Skill2Level, 1, maxSkillLevel);
+    }
+
+    public void ServerArmHero10000002ForwardSlide()
+    {
+        if (!HasStateAuthority)
+            return;
+
+        Hero10000002ForwardSlideArmed = true;
+        Hero10000002ForwardSlideRemaining = Mathf.Max(1, forwardSlideSwipesPerCast);
+    }
+
+    public void ServerArmHero10000002ShoveStun(int skillLevel)
+    {
+        if (!HasStateAuthority)
+            return;
+
+        Hero10000002ShoveStunArmed = true;
+        _hero10000002ShoveStunLevel = Mathf.Clamp(skillLevel, 1, maxSkillLevel);
+        _hero10000002ShoveStunRemainingSeconds = Mathf.Max(0.1f, shoveStunWindowSeconds);
+    }
+
+    public bool ServerTryActivateHero10000002LastStand(bool manualTrigger)
+    {
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded() || CharacterModelId != 10000002)
+            return false;
+
+        if (Skill4Level <= 0 || StatusIsInvincibleAtOneHealth)
+            return false;
+
+        if (CurrentHealth <= StatusInvincibilityMinimumHealth)
+            CurrentHealth = StatusInvincibilityMinimumHealth;
+
+        PaperLegendCharacterStatusEffects.ServerApplyInvincibilityAtOneHealth(this, lastStandDurationSeconds);
+
+        Debug.Log($"[PaperLegends][Skill] player={PlayerId} activated hero 10000002 last stand manual={manualTrigger}, duration={lastStandDurationSeconds:0.00}s, hp={CurrentHealth:0.00}.");
+        return true;
+    }
+
+    public void ServerHandleInvincibilityAtOneHealthEnded()
+    {
+        if (!HasStateAuthority || CharacterModelId != 10000002 || Skill4Level <= 0)
+            return;
+
+        float cooldownSeconds = PaperLegendHero10000002SkillSet.ResolveLastStandCooldownSeconds(Skill4Level);
+        if (cooldownSeconds <= 0f)
+            return;
+
+        SetSkillCooldownRemaining(4, cooldownSeconds);
+        Debug.Log($"[PaperLegends][Skill] player={PlayerId} last stand ended. cooldown={cooldownSeconds:0.00}s at level={Skill4Level}.");
+    }
+
+    public bool CanActivateHero10000002LastStand()
+    {
+        return CharacterModelId == 10000002
+            && Skill4Level > 0
+            && IsAlive
+            && !IsMatchEnded()
+            && !StatusIsInvincibleAtOneHealth
+            && GetSkillCooldownRemaining(4) <= 0.01f;
+    }
+
+    public void ServerApplyMoveSlowDebuff(float slowPercent, float durationSeconds)
+    {
+        if (!HasStateAuthority || !IsAlive)
+            return;
+
+        slowPercent = Mathf.Clamp01(slowPercent);
+        durationSeconds = Mathf.Max(0f, durationSeconds);
+        if (slowPercent <= 0f || durationSeconds <= 0f)
+            return;
+
+        MoveSlowMultiplier = Mathf.Clamp01(1f - slowPercent);
+        MoveSlowTimer = TickTimer.CreateFromSeconds(Runner, durationSeconds);
+    }
+
+    public void ServerArmHero10000003WaterBurst(int skillLevel, float inputTimeoutSeconds)
+    {
+        if (!HasStateAuthority)
+            return;
+
+        Hero10000003WaterBurstArmed = true;
+        _hero10000003WaterBurstLevel = Mathf.Clamp(skillLevel, 1, maxSkillLevel);
+        _hero10000003WaterBurstInputRemainingSeconds = Mathf.Max(0.1f, inputTimeoutSeconds);
     }
 
     public void ServerArmHero10000003WavePush(int skillLevel, float inputTimeoutSeconds)
@@ -531,7 +821,24 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         if (damageAmount <= 0f)
             return false;
 
-        CurrentHealth = Mathf.Max(0f, CurrentHealth - damageAmount);
+        float newHealth = CurrentHealth - damageAmount;
+
+        if (CharacterModelId == 10000002 && Skill4Level > 0 && !StatusIsInvincibleAtOneHealth
+            && GetSkillCooldownRemaining(4) <= 0.01f
+            && newHealth <= StatusInvincibilityMinimumHealth)
+        {
+            CurrentHealth = StatusInvincibilityMinimumHealth;
+            ServerTryActivateHero10000002LastStand(manualTrigger: false);
+            return true;
+        }
+
+        if (StatusIsInvincibleAtOneHealth)
+        {
+            CurrentHealth = Mathf.Max(StatusInvincibilityMinimumHealth, newHealth);
+            return true;
+        }
+
+        CurrentHealth = Mathf.Max(0f, newHealth);
         if (CurrentHealth > 0.0001f)
             return true;
 
@@ -595,6 +902,121 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         _wasGrounded = false;
         PublishAuthoritativeTransform();
         return true;
+    }
+
+    public bool ServerApplyDirectionalShove(
+        PaperLegendCharacterNetworkHandler source,
+        Vector3 direction,
+        float horizontalImpulse,
+        float upwardImpulse)
+    {
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded())
+            return false;
+
+        if (source == null || source == this || !source.IsAlive || source.IsSameFaction(this))
+            return false;
+
+        direction.y = 0f;
+        if (direction.sqrMagnitude <= 0.0001f)
+            return false;
+
+        direction.Normalize();
+        CacheComponents();
+        if (_rigidbody == null)
+            return false;
+
+        Vector3 impulse = direction * Mathf.Max(0f, horizontalImpulse)
+            + Vector3.up * Mathf.Max(0f, upwardImpulse);
+
+        _rigidbody.isKinematic = false;
+        _rigidbody.useGravity = true;
+        _rigidbody.WakeUp();
+        _rigidbody.AddForce(impulse, ForceMode.Impulse);
+
+        State = PaperLegendCharacterState.Flicked;
+        IsGrounded = false;
+        _hadAirbornePhase = true;
+        _wasGrounded = false;
+        PublishAuthoritativeTransform();
+        return true;
+    }
+
+    public void ServerApplyStunStatus(float durationSeconds)
+    {
+        _statusController?.ServerApplyStun(durationSeconds);
+    }
+
+    public void ServerClearStunStatus()
+    {
+        _statusController?.ServerClearStun();
+    }
+
+    public bool ServerHasNearbyEnemyForShoveStun(float radius)
+    {
+        if (!HasStateAuthority || !IsAlive)
+            return false;
+
+        radius = Mathf.Max(0.1f, radius);
+        PaperLegendMatchNetworkHost host = PaperLegendMatchNetworkHost.Instance;
+        if (host == null)
+            return false;
+
+        IReadOnlyList<PaperLegendCharacterNetworkHandler> players = host.GetRegisteredPlayers();
+        Vector3 origin = transform.position;
+        for (int i = 0; i < players.Count; i++)
+        {
+            PaperLegendCharacterNetworkHandler candidate = players[i];
+            if (candidate == null || candidate == this || !candidate.IsAlive || IsSameFaction(candidate))
+                continue;
+
+            Vector3 offset = candidate.transform.position - origin;
+            offset.y = 0f;
+            if (offset.sqrMagnitude <= radius * radius)
+                return true;
+        }
+
+        return false;
+    }
+
+    private PaperLegendCharacterNetworkHandler FindRegisteredPlayerById(int playerId)
+    {
+        if (playerId <= 0)
+            return null;
+
+        PaperLegendMatchNetworkHost host = PaperLegendMatchNetworkHost.Instance;
+        if (host == null)
+            return null;
+
+        IReadOnlyList<PaperLegendCharacterNetworkHandler> players = host.GetRegisteredPlayers();
+        for (int i = 0; i < players.Count; i++)
+        {
+            PaperLegendCharacterNetworkHandler candidate = players[i];
+            if (candidate != null && candidate.PlayerId == playerId)
+                return candidate;
+        }
+
+        return null;
+    }
+
+    public bool ServerIsWithinShoveStunRadius(PaperLegendCharacterNetworkHandler target, float radius)
+    {
+        if (target == null)
+            return false;
+
+        radius = Mathf.Max(0.1f, radius);
+        Vector3 offset = target.transform.position - transform.position;
+        offset.y = 0f;
+        return offset.sqrMagnitude <= radius * radius;
+    }
+
+    private float ResolveHero10000002ShoveStunDuration(int level)
+    {
+        level = Mathf.Clamp(level, 1, maxSkillLevel);
+        if (maxSkillLevel <= 1)
+            return shoveStunMaxDurationSeconds;
+
+        float t = (level - 1f) / Mathf.Max(1f, maxSkillLevel - 1f);
+        return Mathf.Lerp(shoveStunMinDurationSeconds, shoveStunMaxDurationSeconds, t);
     }
 
     public bool ServerApplyDirectionalWaveKnockback(
@@ -665,11 +1087,15 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
         CurrentHealth = 0f;
         DeathCount++;
+        LifeStateRevision++;
         State = autoRespawn ? PaperLegendCharacterState.Respawning : PaperLegendCharacterState.Eliminated;
         _respawnCountdown = autoRespawn ? respawnDelaySeconds : 0f;
         RespawnRemainingSeconds = _respawnCountdown;
+        _freeFallSeconds = 0f;
 
         ClearArmedSkillState();
+        ServerClearStunStatus();
+        PaperLegendCharacterStatusEffects.ServerClearInvincibilityAtOneHealth(this);
         StopPhysicsForElimination();
         SetCollidersEnabled(false);
         PublishAuthoritativeTransform();
@@ -680,24 +1106,47 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         if (!HasStateAuthority)
             return;
 
-        transform.SetPositionAndRotation(position, SanitizeRotation(rotation));
+        CacheComponents();
 
+        Quaternion resolvedRotation = SanitizeRotation(rotation);
+
+        SetCollidersEnabled(false);
+
+        _rigidbody.isKinematic = true;
+        _rigidbody.useGravity = false;
+        _rigidbody.linearVelocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.position = position;
+        _rigidbody.rotation = resolvedRotation;
+        transform.SetPositionAndRotation(position, resolvedRotation);
+        Physics.SyncTransforms();
+
+        if (TryGetComponent<NetworkRigidbody3D>(out var networkRigidbody))
+            networkRigidbody.Teleport(position, resolvedRotation);
+
+        SetCollidersEnabled(true);
         _rigidbody.isKinematic = false;
         _rigidbody.useGravity = true;
         _rigidbody.linearVelocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.WakeUp();
 
-        SetCollidersEnabled(true);
         CurrentHealth = MaxHealth;
         State = PaperLegendCharacterState.Idle;
+        LifeStateRevision++;
         IsGrounded = true;
         RespawnRemainingSeconds = 0f;
         _wasGrounded = true;
         _hadAirbornePhase = false;
+        _freeFallSeconds = 0f;
         _lastEliminator = null;
         _hasLastEliminationPosition = false;
         ClearArmedSkillState();
+        ServerClearStunStatus();
+        PaperLegendCharacterStatusEffects.ServerClearInvincibilityAtOneHealth(this);
         PublishAuthoritativeTransform();
+
+        Debug.Log($"[PaperLegends][Respawn] Respawned player={PlayerId} at position={position}, rotation={resolvedRotation.eulerAngles}.");
     }
 
     public Bounds GetWorldBounds()
@@ -744,8 +1193,23 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
             return false;
         }
 
-        if (Hero10000003WavePushArmed)
+        if (Hero10000003WaterBurstArmed || Hero10000003WavePushArmed)
             return true;
+
+        if (Hero10000001PaperArrowArmed)
+            return true;
+
+        if (Hero10000002ForwardSlideArmed && Hero10000002ForwardSlideRemaining > 0)
+            return true;
+
+        if (Hero10000002ShoveStunArmed)
+            return true;
+
+        if (PaperLegendCharacterStatusEffects.BlocksFlickInput(this))
+        {
+            rejectReason = "character is stunned.";
+            return false;
+        }
 
         bool locallyGrounded = IsGrounded || CheckGrounded();
         if (!locallyGrounded)
@@ -787,10 +1251,30 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
     public bool CanUseSkill(int slot)
     {
-        if (!IsAlive || IsMatchEnded())
+        if (!IsAlive || IsMatchEnded() || IsStunned)
+            return false;
+
+        if (GetSkillCooldownRemaining(slot) > 0.01f)
             return false;
 
         return PaperLegendHeroSkillRegistry.CanUseSkill(this, slot);
+    }
+
+    public float GetSkillCooldownRemaining(int slot)
+    {
+        switch (Mathf.Clamp(slot, 1, 4))
+        {
+            case 1:
+                return Skill1CooldownRemaining;
+            case 2:
+                return Skill2CooldownRemaining;
+            case 3:
+                return Skill3CooldownRemaining;
+            case 4:
+                return Skill4CooldownRemaining;
+            default:
+                return 0f;
+        }
     }
 
     private void ConsumeInput(PaperLegendPlayerInputData input)
@@ -814,9 +1298,33 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
         LastProcessedFlickSequence = input.FlickSequence;
 
+        if (Hero10000003WaterBurstArmed)
+        {
+            TryConsumeHero10000003WaterBurst(input);
+            return;
+        }
+
         if (Hero10000003WavePushArmed)
         {
             TryConsumeHero10000003WavePush(input);
+            return;
+        }
+
+        if (Hero10000001PaperArrowArmed)
+        {
+            TryConsumeHero10000001PaperArrow(input);
+            return;
+        }
+
+        if (Hero10000002ForwardSlideArmed && Hero10000002ForwardSlideRemaining > 0)
+        {
+            TryConsumeHero10000002ForwardSlide(input);
+            return;
+        }
+
+        if (Hero10000002ShoveStunArmed)
+        {
+            TryConsumeHero10000002ShoveStun(input);
             return;
         }
 
@@ -827,6 +1335,46 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         }
 
         ApplyFlick(input);
+    }
+
+    private bool TryConsumeHero10000003WaterBurst(PaperLegendPlayerInputData input)
+    {
+        if (!Hero10000003WaterBurstArmed)
+            return false;
+
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded())
+        {
+            ClearHero10000003WaterBurstState();
+            return true;
+        }
+
+        Vector3 direction = ResolveSkillAimDirection(input);
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = ResolveFlickDirection(input);
+
+        direction.y = 0f;
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = Vector3.forward;
+
+        direction.Normalize();
+
+        int level = Mathf.Clamp(_hero10000003WaterBurstLevel, 1, maxSkillLevel);
+        float fallbackDamage = Mathf.Max(1f, waterBurstFallbackDamage > 0f ? waterBurstFallbackDamage : AttackPower);
+        float baseDamage = ResolveConfiguredSkillDamage(1, level, fallbackDamage);
+
+        Hero10000003WaterBurstArmed = false;
+        _hero10000003WaterBurstActive = true;
+        _hero10000003WaterBurstLevel = level;
+        _hero10000003WaterBurstNextBurstIndex = 0;
+        _hero10000003WaterBurstTimerSeconds = 0f;
+        _hero10000003WaterBurstBaseDamage = baseDamage;
+        _hero10000003WaterBurstStartPosition = transform.position;
+        _hero10000003WaterBurstDirection = direction;
+
+        ServerDispatchHero10000003WaterBurstVfx(_hero10000003WaterBurstStartPosition, direction);
+        TickHero10000003WaterBurstSequence(forceImmediate: true);
+        Debug.Log($"[PaperLegends][Skill] Water Burst started by player={PlayerId}, level={level}, direction={direction}, baseDamage={baseDamage:0.0}.");
+        return true;
     }
 
     private bool TryConsumeHero10000003WavePush(PaperLegendPlayerInputData input)
@@ -879,13 +1427,309 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
         ServerDispatchDirectionalSkillEvent(
             PaperLegendHeroSkillId.Hero10000003WavePush,
-            1,
+            2,
             origin,
             wavePushLength,
             direction);
 
         ClearHero10000003WavePushState();
         Debug.Log($"[PaperLegends][Skill] Son Tinh wave push fired by player={PlayerId}, level={level}, direction={direction}, affected={affectedCount}.");
+        return true;
+    }
+
+    private bool TryConsumeHero10000001PaperArrow(PaperLegendPlayerInputData input)
+    {
+        if (!Hero10000001PaperArrowArmed)
+            return false;
+
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded())
+        {
+            ClearHero10000001PaperArrowState();
+            return true;
+        }
+
+        Vector3 direction = ResolveSkillAimDirection(input);
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = ResolveFlickDirection(input);
+
+        direction.y = 0f;
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = transform.forward;
+
+        direction.Normalize();
+
+        int level = Mathf.Clamp(_hero10000001PaperArrowLevel, 1, maxSkillLevel);
+        float force01 = Mathf.Clamp01(input.Force01);
+        bool spawned = ServerSpawnHero10000001PaperArrow(direction, force01, level);
+        ClearHero10000001PaperArrowState();
+
+        if (spawned)
+        {
+            Debug.Log($"[PaperLegends][Skill] player={PlayerId} fired paper arrow: level={level}, direction={direction}, force={force01:0.00}.");
+        }
+        else
+        {
+            Debug.LogWarning($"[PaperLegends][Skill] player={PlayerId} failed to fire paper arrow. prefabAssigned={paperArrowProjectilePrefab != null}.");
+        }
+
+        return true;
+    }
+
+    private bool ServerSpawnHero10000001PaperArrow(Vector3 direction, float force01, int skillLevel)
+    {
+        if (!HasStateAuthority || paperArrowProjectilePrefab == null || Runner == null)
+            return false;
+
+        Vector3 spawnPosition = transform.position
+            + direction * Mathf.Max(0f, paperArrowSpawnForwardOffset)
+            + Vector3.up * Mathf.Max(0f, paperArrowSpawnHeightOffset);
+        Quaternion spawnRotation = Quaternion.LookRotation(direction, Vector3.up);
+
+        NetworkObject spawned = Runner.Spawn(
+            paperArrowProjectilePrefab,
+            spawnPosition,
+            spawnRotation,
+            Object.InputAuthority);
+
+        if (spawned == null)
+            return false;
+
+        if (!spawned.TryGetComponent(out PaperLegendPaperArrowProjectile projectile))
+            return false;
+
+        float fallbackDamage = Mathf.Max(0f, paperArrowBaseImpactDamage + paperArrowImpactDamagePerLevel * Mathf.Max(0, skillLevel - 1));
+        float damage = ResolveConfiguredSkillDamage(2, skillLevel, fallbackDamage);
+        projectile.ServerConfigureAndLaunch(
+            this,
+            direction,
+            force01,
+            skillLevel,
+            damage,
+            paperArrowSlowPercent,
+            paperArrowSlowDurationSeconds);
+
+        return true;
+    }
+
+    private void ClearConfiguredSkillDamageLevels()
+    {
+        for (int slot = 0; slot < SkillDamageSlotCount; slot++)
+        {
+            for (int level = 0; level < SkillDamageLevelCount; level++)
+                _configuredSkillDamageBySlotAndLevel[slot, level] = 0f;
+        }
+    }
+
+    private void ClearConfiguredSkillCooldowns()
+    {
+        for (int slot = 0; slot < _configuredSkillCooldownSeconds.Length; slot++)
+            _configuredSkillCooldownSeconds[slot] = 0f;
+    }
+
+    private float ResolveConfiguredSkillDamage(int slot, int skillLevel, float fallbackDamage)
+    {
+        if (slot < 1 || slot > SkillDamageSlotCount)
+            return Mathf.Max(0f, fallbackDamage);
+
+        int level = Mathf.Clamp(skillLevel, 1, SkillDamageLevelCount);
+        float configuredDamage = _configuredSkillDamageBySlotAndLevel[slot - 1, level - 1];
+        return configuredDamage > 0f ? configuredDamage : Mathf.Max(0f, fallbackDamage);
+    }
+
+    private void TickSkillCooldowns()
+    {
+        float deltaTime = ResolveNetworkDeltaTime();
+        if (deltaTime <= 0f)
+            return;
+
+        Skill1CooldownRemaining = TickCooldownValue(Skill1CooldownRemaining, deltaTime);
+        Skill2CooldownRemaining = TickCooldownValue(Skill2CooldownRemaining, deltaTime);
+        Skill3CooldownRemaining = TickCooldownValue(Skill3CooldownRemaining, deltaTime);
+        Skill4CooldownRemaining = TickCooldownValue(Skill4CooldownRemaining, deltaTime);
+    }
+
+    private static float TickCooldownValue(float remainingSeconds, float deltaTime)
+    {
+        return remainingSeconds > 0f ? Mathf.Max(0f, remainingSeconds - deltaTime) : 0f;
+    }
+
+    private void StartSkillCooldown(int slot)
+    {
+        float cooldownSeconds = ResolveConfiguredSkillCooldown(slot);
+        if (cooldownSeconds <= 0f)
+            return;
+
+        SetSkillCooldownRemaining(slot, cooldownSeconds);
+    }
+
+    private float ResolveConfiguredSkillCooldown(int slot)
+    {
+        if (slot < 1 || slot > _configuredSkillCooldownSeconds.Length)
+            return 0f;
+
+        return Mathf.Max(0f, _configuredSkillCooldownSeconds[slot - 1]);
+    }
+
+    private void SetSkillCooldownRemaining(int slot, float remainingSeconds)
+    {
+        remainingSeconds = Mathf.Max(0f, remainingSeconds);
+        switch (Mathf.Clamp(slot, 1, 4))
+        {
+            case 1:
+                Skill1CooldownRemaining = remainingSeconds;
+                break;
+            case 2:
+                Skill2CooldownRemaining = remainingSeconds;
+                break;
+            case 3:
+                Skill3CooldownRemaining = remainingSeconds;
+                break;
+            case 4:
+                Skill4CooldownRemaining = remainingSeconds;
+                break;
+        }
+    }
+
+    private void ClearSkillCooldowns()
+    {
+        Skill1CooldownRemaining = 0f;
+        Skill2CooldownRemaining = 0f;
+        Skill3CooldownRemaining = 0f;
+        Skill4CooldownRemaining = 0f;
+    }
+
+    private bool TryConsumeHero10000002ForwardSlide(PaperLegendPlayerInputData input)
+    {
+        if (!Hero10000002ForwardSlideArmed || Hero10000002ForwardSlideRemaining <= 0)
+            return false;
+
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded() || CharacterModelId != 10000002)
+        {
+            ClearHero10000002ForwardSlideState();
+            return true;
+        }
+
+        if (!CanAcceptAuthoritativeFlick(out string rejectReason))
+        {
+            Debug.LogWarning($"[PaperLegends][Skill] player={PlayerId} rejected forward slide flick: {rejectReason}");
+            return true;
+        }
+
+        Vector3 direction = ResolveSkillAimDirection(input);
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = ResolveFlickDirection(input);
+
+        direction.y = 0f;
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = transform.forward;
+
+        direction.Normalize();
+
+        float force01 = Mathf.Clamp01(input.Force01);
+        float curvedForce = forceCurve != null ? Mathf.Clamp01(forceCurve.Evaluate(force01)) : force01;
+        int level = Mathf.Clamp(Skill1Level, 1, maxSkillLevel);
+        float horizontalMultiplier = 1f + forwardSlideHorizontalMultiplierPerLevel * Mathf.Max(0, level - 1);
+        if (Skill3Level > 0)
+            horizontalMultiplier += PaperLegendHero10000002SkillSet.ResolveFlickSpeedBonus(Skill3Level);
+
+        float horizontalImpulse = Mathf.Lerp(forwardSlideMinHorizontalImpulse, forwardSlideMaxHorizontalImpulse, curvedForce) * horizontalMultiplier;
+        float upwardImpulse = Mathf.Lerp(forwardSlideMinUpwardImpulse, forwardSlideMaxUpwardImpulse, curvedForce);
+        if (Skill3Level > 0)
+            upwardImpulse *= 1f + PaperLegendHero10000002SkillSet.ResolveFlickSpeedBonus(Skill3Level);
+        Vector3 impulse = direction * horizontalImpulse + Vector3.up * upwardImpulse;
+
+        _rigidbody.WakeUp();
+        if (applyImpulseAtContactPoint)
+            _rigidbody.AddForceAtPosition(impulse, input.ContactWorldPosition, ForceMode.Impulse);
+        else
+            _rigidbody.AddForce(impulse, ForceMode.Impulse);
+
+        _flickCooldownRemaining = flickCooldownSeconds;
+        State = PaperLegendCharacterState.Flicked;
+        _hadAirbornePhase = true;
+
+        Hero10000002ForwardSlideRemaining = Mathf.Max(0, Hero10000002ForwardSlideRemaining - 1);
+        if (Hero10000002ForwardSlideRemaining <= 0)
+            ClearHero10000002ForwardSlideState();
+
+        ServerDispatchDirectionalSkillEvent(
+            PaperLegendHeroSkillId.Hero10000002ForwardSlide,
+            1,
+            transform.position,
+            forwardSlideVfxRadius,
+            direction);
+
+        Debug.Log($"[PaperLegends][Skill] player={PlayerId} forward slide: direction={direction}, force={force01:0.00}, impulse={impulse}, remaining={Hero10000002ForwardSlideRemaining}, level={level}.");
+        return true;
+    }
+
+    private bool TryConsumeHero10000002ShoveStun(PaperLegendPlayerInputData input)
+    {
+        if (!Hero10000002ShoveStunArmed)
+            return false;
+
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded() || CharacterModelId != 10000002)
+        {
+            ClearHero10000002ShoveStunState();
+            return true;
+        }
+
+        if (input.FlickTargetPlayerId <= 0)
+            return true;
+
+        PaperLegendCharacterNetworkHandler target = FindRegisteredPlayerById(input.FlickTargetPlayerId);
+        if (target == null || target == this || !target.IsAlive || IsSameFaction(target))
+        {
+            Debug.LogWarning($"[PaperLegends][Skill] player={PlayerId} rejected shove stun: invalid target playerId={input.FlickTargetPlayerId}.");
+            return true;
+        }
+
+        if (!ServerIsWithinShoveStunRadius(target, shoveStunNearbyRadius))
+        {
+            Debug.LogWarning($"[PaperLegends][Skill] player={PlayerId} rejected shove stun: target player={target.PlayerId} is outside nearby radius.");
+            return true;
+        }
+
+        if (!ServerHasNearbyEnemyForShoveStun(shoveStunNearbyRadius))
+        {
+            ClearHero10000002ShoveStunState();
+            return true;
+        }
+
+        Vector3 direction = ResolveSkillAimDirection(input);
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = ResolveFlickDirection(input);
+
+        direction.y = 0f;
+        if (direction.sqrMagnitude <= 0.0001f)
+            direction = (target.transform.position - transform.position).normalized;
+
+        direction.Normalize();
+
+        float force01 = Mathf.Clamp01(input.Force01);
+        float curvedForce = forceCurve != null ? Mathf.Clamp01(forceCurve.Evaluate(force01)) : force01;
+        int level = Mathf.Clamp(_hero10000002ShoveStunLevel, 1, maxSkillLevel);
+        float horizontalImpulse = Mathf.Lerp(shoveStunMinHorizontalImpulse, shoveStunMaxHorizontalImpulse, curvedForce);
+        float upwardImpulse = Mathf.Lerp(shoveStunMinUpwardImpulse, shoveStunMaxUpwardImpulse, curvedForce);
+        float stunDuration = ResolveHero10000002ShoveStunDuration(level);
+
+        if (!target.ServerApplyDirectionalShove(this, direction, horizontalImpulse, upwardImpulse))
+        {
+            Debug.LogWarning($"[PaperLegends][Skill] player={PlayerId} failed to shove target player={target.PlayerId}.");
+            return true;
+        }
+
+        PaperLegendCharacterStatusEffects.ServerApplyStun(target, stunDuration);
+        ClearHero10000002ShoveStunState();
+
+        ServerDispatchDirectionalSkillEvent(
+            PaperLegendHeroSkillId.Hero10000002ShoveStun,
+            2,
+            target.transform.position,
+            shoveStunVfxRadius,
+            direction);
+
+        Debug.Log($"[PaperLegends][Skill] player={PlayerId} shove stun: target={target.PlayerId}, direction={direction}, force={force01:0.00}, stun={stunDuration:0.00}s, level={level}.");
         return true;
     }
 
@@ -968,6 +1812,12 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
             return false;
         }
 
+        if (PaperLegendCharacterStatusEffects.BlocksFlickInput(this))
+        {
+            rejectReason = "character is stunned.";
+            return false;
+        }
+
         if (_flickCooldownRemaining > 0f)
         {
             rejectReason = $"cooldown remaining {_flickCooldownRemaining:0.00}s.";
@@ -1011,13 +1861,27 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
         _flickCooldownRemaining = flickCooldownSeconds;
         State = PaperLegendCharacterState.Flicked;
+        IsGrounded = false;
         _hadAirbornePhase = true;
+        _wasGrounded = false;
         _hasFlickStartPosition = true;
         _flickStartPosition = transform.position;
-        _activeDistanceDamageLevel = Hero10000001DistanceDamageArmed ? Mathf.Clamp(Skill1Level, 0, maxSkillLevel) : 0;
+        _activeDistanceDamageLevel = ResolveHero10000001PassiveDistanceDamageLevel();
+        bool edgeBounceArmed = Hero10000001EdgeBounceArmed;
         Hero10000001DistanceDamageArmed = false;
         Hero10000001FlickBoostArmed = false;
-        Debug.Log($"[PaperLegends][Input][Server] Applied flick to player={PlayerId}: impulse={impulse}, force={force01:0.00}, direction={direction}, baseFlickMul={_baseFlickForceMultiplier:0.00}, hSkillMul={horizontalSkillMultiplier:0.00}, upSkillMul={upwardSkillMultiplier:0.00}, distanceSkillLevel={_activeDistanceDamageLevel}.");
+        Hero10000001EdgeBounceArmed = false;
+        ClearHero10000001EdgeBounceState();
+        if (CharacterModelId == 10000001 && edgeBounceArmed && Skill4Level > 0)
+        {
+            _hero10000001EdgeBounceActive = true;
+            _remainingHero10000001EdgeBounces = Mathf.Clamp(Skill4Level, 1, PaperLegendHero10000001SkillSet.Skill4MaxLevel);
+            _hero10000001EdgeBounceDirection = direction;
+            _hero10000001EdgeBounceTimerSeconds = Mathf.Max(0.05f, edgeBounceIntervalSeconds);
+            Debug.Log($"[PaperLegends][Skill] player={PlayerId} armed timed edge bounce: remaining={_remainingHero10000001EdgeBounces}, interval={_hero10000001EdgeBounceTimerSeconds:0.00}s, level={Skill4Level}.");
+        }
+
+        //Debug.Log($"[PaperLegends][Input][Server] Applied flick to player={PlayerId}: impulse={impulse}, force={force01:0.00}, direction={direction}, baseFlickMul={_baseFlickForceMultiplier:0.00}, hSkillMul={horizontalSkillMultiplier:0.00}, upSkillMul={upwardSkillMultiplier:0.00}, distanceSkillLevel={_activeDistanceDamageLevel}, edgeBounceRebounds={(_hero10000001EdgeBounceActive ? _remainingHero10000001EdgeBounces : 0)}.");
     }
 
     private void InitializeProgressionState()
@@ -1040,9 +1904,20 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         NetworkScale = SanitizeScale(transform.localScale);
         Hero10000001DistanceDamageArmed = false;
         Hero10000001FlickBoostArmed = false;
+        Hero10000001EdgeBounceArmed = false;
+        ClearHero10000003WaterBurstState();
         ClearHero10000003WavePushState();
+        ClearHero10000001PaperArrowState();
+        ClearHero10000002ForwardSlideState();
+        ClearHero10000002ShoveStunState();
+        ClearHero10000001EdgeBounceState();
+        ClearSkillCooldowns();
         _activeDistanceDamageLevel = 0;
         _hasFlickStartPosition = false;
+        MoveSlowMultiplier = 1f;
+        MoveSlowTimer = TickTimer.None;
+        ServerClearStunStatus();
+        PaperLegendCharacterStatusEffects.ServerClearInvincibilityAtOneHealth(this);
     }
 
     private bool ServerTryUpgradeSkill(int slot)
@@ -1071,6 +1946,13 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
             return false;
 
         int slot = Mathf.Clamp(input.SkillSlot, 1, 4);
+        float cooldownRemaining = GetSkillCooldownRemaining(slot);
+        if (cooldownRemaining > 0.01f)
+        {
+            Debug.LogWarning($"[PaperLegends][Skill] Cast rejected for player={PlayerId}, model={CharacterModelId}, slot={slot}, cooldownRemaining={cooldownRemaining:0.00}s.");
+            return false;
+        }
+
         if (!CanUseSkill(slot))
         {
             Debug.LogWarning($"[PaperLegends][Skill] Cast rejected for player={PlayerId}, model={CharacterModelId}, slot={slot}, level={GetSkillLevel(slot)}, alive={IsAlive}.");
@@ -1082,7 +1964,14 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         bool result = PaperLegendHeroSkillRegistry.TryUseSkill(this, slot);
         _hasPendingSkillTargetPosition = false;
         _pendingSkillTargetWorldPosition = default;
+        if (result && !ShouldDeferSkillCooldownUntilAfterCast(slot))
+            StartSkillCooldown(slot);
         return result;
+    }
+
+    private bool ShouldDeferSkillCooldownUntilAfterCast(int slot)
+    {
+        return CharacterModelId == 10000002 && slot == 4;
     }
 
     private void SetSkillLevel(int slot, int level)
@@ -1105,10 +1994,25 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         }
     }
 
+    private int ResolveHero10000001PassiveDistanceDamageLevel()
+    {
+        if (CharacterModelId != 10000001 || Skill1Level <= 0)
+            return 0;
+
+        return Mathf.Clamp(Skill1Level, 1, maxSkillLevel);
+    }
+
     private void ResolveFlickSkillMultipliers(out float horizontalMultiplier, out float upwardMultiplier)
     {
         horizontalMultiplier = 1f;
         upwardMultiplier = 1f;
+
+        if (CharacterModelId == 10000002 && Skill3Level > 0)
+        {
+            float bonus = PaperLegendHero10000002SkillSet.ResolveFlickSpeedBonus(Skill3Level);
+            horizontalMultiplier += bonus;
+            upwardMultiplier += bonus;
+        }
 
         if (CharacterModelId != 10000001 || !Hero10000001FlickBoostArmed)
             return;
@@ -1174,6 +2078,104 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         }
     }
 
+    private void TickHero10000003WaterBurstTimers()
+    {
+        if (Hero10000003WaterBurstArmed)
+        {
+            _hero10000003WaterBurstInputRemainingSeconds -= ResolveNetworkDeltaTime();
+            if (_hero10000003WaterBurstInputRemainingSeconds <= 0f)
+            {
+                Debug.Log($"[PaperLegends][Skill] Water Burst input timed out for player={PlayerId}.");
+                ClearHero10000003WaterBurstState();
+            }
+        }
+
+        TickHero10000003WaterBurstSequence(forceImmediate: false);
+    }
+
+    private void TickHero10000003WaterBurstSequence(bool forceImmediate)
+    {
+        if (!_hero10000003WaterBurstActive)
+            return;
+
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded())
+        {
+            ClearHero10000003WaterBurstState();
+            return;
+        }
+
+        if (!forceImmediate)
+        {
+            _hero10000003WaterBurstTimerSeconds -= ResolveNetworkDeltaTime();
+            if (_hero10000003WaterBurstTimerSeconds > 0f)
+                return;
+        }
+
+        int burstIndex = _hero10000003WaterBurstNextBurstIndex;
+        if (burstIndex < 0 || burstIndex >= 3)
+        {
+            ClearHero10000003WaterBurstState();
+            return;
+        }
+
+        Vector3 center = _hero10000003WaterBurstStartPosition
+            + _hero10000003WaterBurstDirection * Mathf.Max(0.1f, waterBurstStepDistance) * burstIndex;
+        float multiplier = ResolveHero10000003WaterBurstDamageMultiplier(burstIndex);
+        float damage = Mathf.Max(0f, _hero10000003WaterBurstBaseDamage * multiplier);
+        int affected = ServerApplyHero10000003WaterBurstDamage(center, Mathf.Max(0.1f, waterBurstRadius), damage);
+
+        _hero10000003WaterBurstNextBurstIndex++;
+        _hero10000003WaterBurstTimerSeconds = Mathf.Max(0.05f, waterBurstIntervalSeconds);
+
+        Debug.Log($"[PaperLegends][Skill] Water Burst hit player={PlayerId}, burst={burstIndex + 1}/3, center={center}, damage={damage:0.0}, affected={affected}.");
+
+        if (_hero10000003WaterBurstNextBurstIndex >= 3)
+            ClearHero10000003WaterBurstState();
+    }
+
+    private static float ResolveHero10000003WaterBurstDamageMultiplier(int burstIndex)
+    {
+        switch (Mathf.Clamp(burstIndex, 0, 2))
+        {
+            case 1:
+                return 1.2f;
+            case 2:
+                return 1.5f;
+            default:
+                return 1f;
+        }
+    }
+
+    private int ServerApplyHero10000003WaterBurstDamage(Vector3 center, float radius, float damage)
+    {
+        if (!HasStateAuthority || damage <= 0f || IsMatchEnded())
+            return 0;
+
+        PaperLegendMatchNetworkHost host = PaperLegendMatchNetworkHost.Instance;
+        IReadOnlyList<PaperLegendCharacterNetworkHandler> players = host != null ? host.GetRegisteredPlayers() : null;
+        if (players == null)
+            return 0;
+
+        int affected = 0;
+        float radiusSqr = radius * radius;
+        for (int i = 0; i < players.Count; i++)
+        {
+            PaperLegendCharacterNetworkHandler target = players[i];
+            if (target == null || target == this || !target.IsAlive || IsSameFaction(target))
+                continue;
+
+            Vector3 offset = target.GetWorldBounds().center - center;
+            offset.y = 0f;
+            if (offset.sqrMagnitude > radiusSqr)
+                continue;
+
+            if (target.ServerApplyPinnedDamage(this, damage))
+                affected++;
+        }
+
+        return affected;
+    }
+
     private void TickHero10000003WavePushTimer()
     {
         if (!Hero10000003WavePushArmed)
@@ -1187,6 +2189,19 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         ClearHero10000003WavePushState();
     }
 
+    private void TickHero10000002ShoveStunTimer()
+    {
+        if (!Hero10000002ShoveStunArmed)
+            return;
+
+        _hero10000002ShoveStunRemainingSeconds -= ResolveNetworkDeltaTime();
+        if (_hero10000002ShoveStunRemainingSeconds > 0f)
+            return;
+
+        Debug.Log($"[PaperLegends][Skill] hero 10000002 shove stun timed out for player={PlayerId}.");
+        ClearHero10000002ShoveStunState();
+    }
+
     private void UpdateGroundedState()
     {
         bool grounded = CheckGrounded();
@@ -1197,11 +2212,17 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
             _hadAirbornePhase = true;
             State = PaperLegendCharacterState.Airborne;
             _wasGrounded = false;
+            TickFreeFallSafety();
             return;
         }
 
-        if (!_wasGrounded && _hadAirbornePhase)
-            HandleLanding();
+        _freeFallSeconds = 0f;
+
+        if (!_wasGrounded && _hadAirbornePhase && HandleLanding())
+        {
+            _wasGrounded = false;
+            return;
+        }
 
         if (_rigidbody.linearVelocity.sqrMagnitude <= groundedVelocityThreshold * groundedVelocityThreshold)
             State = PaperLegendCharacterState.Idle;
@@ -1211,12 +2232,62 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         _wasGrounded = true;
     }
 
-    private void HandleLanding()
+    private void TickFreeFallSafety()
     {
-        State = PaperLegendCharacterState.Grounded;
-        _hadAirbornePhase = false;
+        if (!HasStateAuthority || !IsAlive || IsMatchEnded())
+            return;
+
+        _freeFallSeconds += ResolveNetworkDeltaTime();
+        if (_freeFallSeconds < Mathf.Max(0.1f, freeFallRespawnSeconds) && transform.position.y > freeFallRespawnMinY)
+            return;
+
+        ServerRecoverFromFreeFall();
+    }
+
+    private void ServerRecoverFromFreeFall()
+    {
+        if (!HasStateAuthority || !IsAlive)
+            return;
+
+        float preservedHealth = Mathf.Clamp(CurrentHealth, 1f, MaxHealth);
+        Vector3 respawnPosition = _spawnPosition;
+        Quaternion respawnRotation = _spawnRotation;
+        var matchHost = PaperLegendMatchNetworkHost.Instance;
+        if (matchHost != null &&
+            matchHost.TryResolveRespawnPose(
+                this,
+                _lastEliminator,
+                _hasLastEliminationPosition,
+                _lastEliminationPosition,
+                out Vector3 resolvedPosition,
+                out Quaternion resolvedRotation))
+        {
+            respawnPosition = resolvedPosition;
+            respawnRotation = resolvedRotation;
+        }
+
+        Debug.LogWarning($"[PaperLegends][FallSafety] player={PlayerId} recovered after free fall {_freeFallSeconds:0.00}s at y={transform.position.y:0.00}. Respawning to {respawnPosition}.");
+        ServerRespawnAt(respawnPosition, respawnRotation);
+        CurrentHealth = preservedHealth;
+        _freeFallSeconds = 0f;
+        PublishAuthoritativeTransform();
+    }
+
+    private bool HandleLanding()
+    {
         ApplyDistanceLandingDamageSkill();
 
+        if (ShouldKeepDistanceDamageForEdgeBounce())
+        {
+            _hadAirbornePhase = true;
+            State = PaperLegendCharacterState.Flicked;
+            return true;
+        }
+
+        ClearHero10000001EdgeBounceState();
+        State = PaperLegendCharacterState.Grounded;
+        _hadAirbornePhase = false;
+        return false;
     }
 
     private void ApplyDistanceLandingDamageSkill()
@@ -1232,7 +2303,8 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
         if (!TryFindLandingDamageVictim(out PaperLegendCharacterNetworkHandler victim))
         {
-            ClearDistanceLandingDamageState();
+            if (!ShouldKeepDistanceDamageForEdgeBounce())
+                ClearDistanceLandingDamageState();
             return;
         }
 
@@ -1260,8 +2332,151 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     {
         Hero10000001DistanceDamageArmed = false;
         Hero10000001FlickBoostArmed = false;
+        Hero10000001EdgeBounceArmed = false;
+        ClearHero10000003WaterBurstState();
         ClearHero10000003WavePushState();
+        ClearHero10000001PaperArrowState();
+        ClearHero10000002ForwardSlideState();
+        ClearHero10000002ShoveStunState();
+        ClearHero10000001EdgeBounceState();
         ClearDistanceLandingDamageState();
+    }
+
+    private bool ShouldKeepDistanceDamageForEdgeBounce()
+    {
+        return CharacterModelId == 10000001
+            && _hero10000001EdgeBounceActive
+            && _remainingHero10000001EdgeBounces > 0;
+    }
+
+    private void ClearHero10000001EdgeBounceState()
+    {
+        _hero10000001EdgeBounceActive = false;
+        _remainingHero10000001EdgeBounces = 0;
+        _hero10000001EdgeBounceDirection = Vector3.zero;
+        _hero10000001EdgeBounceTimerSeconds = 0f;
+    }
+
+    private void TickHero10000001EdgeBounceTimer()
+    {
+        if (!HasStateAuthority || CharacterModelId != 10000001 || !_hero10000001EdgeBounceActive)
+            return;
+
+        if (_remainingHero10000001EdgeBounces <= 0 || !IsAlive || IsMatchEnded())
+        {
+            ClearHero10000001EdgeBounceState();
+            return;
+        }
+
+        _hero10000001EdgeBounceTimerSeconds -= ResolveNetworkDeltaTime();
+        if (_hero10000001EdgeBounceTimerSeconds > 0f)
+            return;
+
+        ApplyHero10000001TimedEdgeBounce();
+        _hero10000001EdgeBounceTimerSeconds = Mathf.Max(0.05f, edgeBounceIntervalSeconds);
+    }
+
+    private void ApplyHero10000001TimedEdgeBounce()
+    {
+        Vector3 direction = ResolveEdgeBounceDirection();
+        Vector3 impulse = direction * edgeBounceHorizontalImpulse + Vector3.up * edgeBounceUpwardImpulse;
+        CacheComponents();
+        if (_rigidbody == null)
+            return;
+
+        _rigidbody.isKinematic = false;
+        _rigidbody.WakeUp();
+        _rigidbody.linearVelocity = impulse;
+        IsGrounded = false;
+        _wasGrounded = false;
+        _hadAirbornePhase = true;
+        State = PaperLegendCharacterState.Flicked;
+
+        _remainingHero10000001EdgeBounces--;
+        _hero10000001EdgeBounceDirection = direction;
+
+        ServerDispatchHero10000001EdgeBounceFeedback(transform.position, direction);
+
+        Debug.Log($"[PaperLegends][Skill] player={PlayerId} timed edge bounce rebound: direction={direction}, remaining={_remainingHero10000001EdgeBounces}, impulse={impulse}.");
+        if (_remainingHero10000001EdgeBounces <= 0)
+            ClearHero10000001EdgeBounceState();
+    }
+
+    private void ServerDispatchHero10000001EdgeBounceFeedback(Vector3 worldPosition, Vector3 direction)
+    {
+        direction.y = 0f;
+        if (direction.sqrMagnitude > 0.0001f)
+            direction.Normalize();
+
+        Hero10000001EdgeBounceLandingVfxPosition = worldPosition;
+        Hero10000001EdgeBounceLandingVfxDirection = direction;
+        Hero10000001EdgeBounceLandingVfxTick++;
+    }
+
+    private void ServerDispatchHero10000003WaterBurstVfx(Vector3 startPosition, Vector3 direction)
+    {
+        direction.y = 0f;
+        if (direction.sqrMagnitude > 0.0001f)
+            direction.Normalize();
+
+        Hero10000003WaterBurstVfxStartPosition = startPosition;
+        Hero10000003WaterBurstVfxDirection = direction;
+        Hero10000003WaterBurstVfxTick++;
+    }
+
+    private void OnHero10000001EdgeBounceLandingVfxChanged()
+    {
+#if !UNITY_SERVER
+        int tick = Hero10000001EdgeBounceLandingVfxTick;
+        if (tick <= 0 || tick == _lastRenderedHero10000001EdgeBounceLandingVfxTick)
+            return;
+
+        _lastRenderedHero10000001EdgeBounceLandingVfxTick = tick;
+        HeroAudioPlayer.PlaySkillForCharacter(this, (int)PaperLegendHeroSkillId.Hero10000001EdgeBounceRebound, 4);
+        PaperLegendHeroSkillVfxPlayer.PlaySkillVfx(
+            this,
+            (int)PaperLegendHeroSkillId.Hero10000001EdgeBounceRebound,
+            Hero10000001EdgeBounceLandingVfxPosition,
+            edgeBounceVfxRadius,
+            Hero10000001EdgeBounceLandingVfxDirection);
+#endif
+    }
+
+    private void OnHero10000003WaterBurstVfxChanged()
+    {
+#if !UNITY_SERVER
+        int tick = Hero10000003WaterBurstVfxTick;
+        if (tick <= 0 || tick == _lastRenderedHero10000003WaterBurstVfxTick)
+            return;
+
+        _lastRenderedHero10000003WaterBurstVfxTick = tick;
+        HeroAudioPlayer.PlaySkillForCharacter(this, (int)PaperLegendHeroSkillId.Hero10000003WaterBurst, 1);
+        PaperLegendHeroSkillVfxPlayer.PlaySkillVfx(
+            this,
+            (int)PaperLegendHeroSkillId.Hero10000003WaterBurst,
+            Hero10000003WaterBurstVfxStartPosition,
+            waterBurstRadius,
+            Hero10000003WaterBurstVfxDirection);
+#endif
+    }
+
+    private Vector3 ResolveEdgeBounceDirection()
+    {
+        CacheComponents();
+
+        Vector3 velocity = _rigidbody.linearVelocity;
+        velocity.y = 0f;
+        if (velocity.sqrMagnitude > 0.01f)
+            return velocity.normalized;
+
+        Vector3 fallback = _hero10000001EdgeBounceDirection;
+        fallback.y = 0f;
+        if (fallback.sqrMagnitude > 0.01f)
+            return fallback.normalized;
+
+        fallback = transform.forward;
+        fallback.y = 0f;
+        return fallback.sqrMagnitude > 0.01f ? fallback.normalized : Vector3.forward;
     }
 
     private void ClearHero10000003WavePushState()
@@ -1269,6 +2484,47 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         Hero10000003WavePushArmed = false;
         _hero10000003WavePushLevel = 0;
         _hero10000003WavePushRemainingSeconds = 0f;
+    }
+
+    private void ClearHero10000003WaterBurstState()
+    {
+        Hero10000003WaterBurstArmed = false;
+        _hero10000003WaterBurstLevel = 0;
+        _hero10000003WaterBurstInputRemainingSeconds = 0f;
+        _hero10000003WaterBurstActive = false;
+        _hero10000003WaterBurstNextBurstIndex = 0;
+        _hero10000003WaterBurstTimerSeconds = 0f;
+        _hero10000003WaterBurstBaseDamage = 0f;
+        _hero10000003WaterBurstStartPosition = Vector3.zero;
+        _hero10000003WaterBurstDirection = Vector3.zero;
+    }
+
+    private void ClearHero10000001PaperArrowState()
+    {
+        Hero10000001PaperArrowArmed = false;
+        _hero10000001PaperArrowLevel = 0;
+    }
+
+    private void ClearHero10000002ForwardSlideState()
+    {
+        Hero10000002ForwardSlideArmed = false;
+        Hero10000002ForwardSlideRemaining = 0;
+    }
+
+    private void ClearHero10000002ShoveStunState()
+    {
+        Hero10000002ShoveStunArmed = false;
+        _hero10000002ShoveStunLevel = 0;
+        _hero10000002ShoveStunRemainingSeconds = 0f;
+    }
+
+    private void TickMoveSlowDebuff()
+    {
+        if (!HasStateAuthority)
+            return;
+
+        if (MoveSlowMultiplier <= 0.999f && MoveSlowTimer.Expired(Runner))
+            MoveSlowMultiplier = 1f;
     }
 
     private bool TryFindLandingDamageVictim(out PaperLegendCharacterNetworkHandler victim)
@@ -1516,10 +2772,11 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     {
         Vector3 velocity = _rigidbody.linearVelocity;
         Vector3 horizontal = new Vector3(velocity.x, 0f, velocity.z);
-        if (horizontal.sqrMagnitude <= maxHorizontalSpeed * maxHorizontalSpeed)
+        float speedCap = maxHorizontalSpeed * Mathf.Clamp(MoveSlowMultiplier, 0.1f, 1f);
+        if (horizontal.sqrMagnitude <= speedCap * speedCap)
             return;
 
-        horizontal = horizontal.normalized * maxHorizontalSpeed;
+        horizontal = horizontal.normalized * speedCap;
         _rigidbody.linearVelocity = new Vector3(horizontal.x, velocity.y, horizontal.z);
     }
 

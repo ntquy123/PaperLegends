@@ -18,7 +18,7 @@ public static class PaperLegendHeroConfigAssetGenerator
         EnsureFolders();
 
         HeroConfig hero10000001 = CreateHero10000001();
-        HeroConfig thanhGiong = CreateThanhGiong();
+        HeroConfig thanhGiong = CreateHero10000002();
         HeroConfig sonTinh = CreateSonTinh();
         HeroConfig sonTinh10000004 = CreateSonTinh10000004();
         HeroConfig thanSam = CreateThanSam();
@@ -79,7 +79,7 @@ public static class PaperLegendHeroConfigAssetGenerator
 
         SkillConfig[] skills =
         {
-            CreateSkill(heroFolder, heroId, 11400001, 1, "Distance Landing Damage", "The farther the paper hero travels before landing on a target, the higher the damage. Max x4.", false),
+            CreateSkill(heroFolder, heroId, 11400001, 1, "Distance Landing Damage", "Passive. The farther the paper hero travels before landing on a target, the higher the damage. Max x4.", true),
             CreateSkill(heroFolder, heroId, 11400002, 2, "Reserved Skill 2", "Reserved gameplay slot for hero 10000001.", false),
             CreateSkill(heroFolder, heroId, 11400003, 3, "Flick Force Boost", "Boosts the next flick force and lets the camera look farther.", false),
             CreateSkill(heroFolder, heroId, 11400004, 4, "Reserved Skill 4", "Reserved gameplay slot for hero 10000001.", false)
@@ -96,7 +96,7 @@ public static class PaperLegendHeroConfigAssetGenerator
         return hero;
     }
 
-    private static HeroConfig CreateThanhGiong()
+    private static HeroConfig CreateHero10000002()
     {
         const int heroId = 10000002;
         string heroFolder = SkillRoot + "/" + heroId;
@@ -112,17 +112,15 @@ public static class PaperLegendHeroConfigAssetGenerator
 
         SkillConfig[] skills =
         {
-            CreateSkill(heroFolder, heroId, 11400021, 1, "An Bao Nhieu Cung Khong Du", "Passive. While Thanh Giong is level 1-9, experience gained is increased by 25%.", true),
-            CreateSkill(heroFolder, heroId, 11400022, 2, "Tieng Noi Dau Tien", "Thanh Giong shouts: Xin vua ren ngua sat! Nearby enemies are knocked away.", false),
-            CreateSkill(heroFolder, heroId, 11400023, 1, "Tre Quat", "Reserved Phu Dong Thien Vuong skill slot 1.", false),
-            CreateSkill(heroFolder, heroId, 11400024, 2, "Ngua Sat", "Reserved Phu Dong Thien Vuong skill slot 2.", false),
-            CreateSkill(heroFolder, heroId, 11400025, 3, "Roi Sat", "Reserved Phu Dong Thien Vuong skill slot 3.", false),
-            CreateSkill(heroFolder, heroId, 11400026, 4, "Phi Thien", "Reserved Phu Dong Thien Vuong skill slot 4.", false)
+            CreateSkill(heroFolder, heroId, 11400021, 1, "Forward Slide", "After casting, the next 3 swipes on your hero slide forward instead of a paper flick.", false),
+            CreateSkill(heroFolder, heroId, 11400022, 2, "Shove Stun", "After casting, if an enemy is nearby within 3 seconds, swipe on them to shove away and stun for 1-1.8 seconds.", false),
+            CreateSkill(heroFolder, heroId, 11400023, 3, "Flick Speed Boost", "Passive. Increases paper flick flight speed by 10%, 15%, 20%, or 25% based on skill level.", true),
+            CreateSkill(heroFolder, heroId, 11400024, 4, "Last Stand", "Become invincible for 5 seconds. Health cannot drop below 1. Cooldown starts after invincibility ends (60s to 30s by level). Also auto-triggers when health would reach 1.", false),
         };
 
         HeroConfig hero = LoadOrCreateAsset<HeroConfig>(HeroConfigRoot + "/HeroConfig_ThanhGiong.asset");
         hero.heroId = heroId.ToString();
-        hero.heroName = "Thanh Giong";
+        hero.heroName = "Hero 10000002";
         hero.nameKey = "hero_10000002_name";
         hero.audioConfig = audio;
         hero.vfxConfig = vfx;
@@ -147,8 +145,8 @@ public static class PaperLegendHeroConfigAssetGenerator
 
         SkillConfig[] skills =
         {
-            CreateSkill(heroFolder, heroId, 11400031, 1, "Song Day", "After casting, the next flick direction releases a wave that pushes paper heroes hit by the wave.", false),
-            CreateSkill(heroFolder, heroId, 11400032, 2, "Reserved Skill 2", "Reserved gameplay slot for Son Tinh.", false),
+            CreateSkill(heroFolder, heroId, 11400031, 1, "Water Burst", "After casting, swipe a direction to erupt 3 water bursts in a line. Bursts deal 100%, 120%, then 150% damage.", false, 7f, 10f),
+            CreateSkill(heroFolder, heroId, 11400032, 2, "Wave Push", "After casting, the next flick direction releases a wave that pushes paper heroes hit by the wave.", false, 8f),
             CreateSkill(heroFolder, heroId, 11400033, 3, "Reserved Skill 3", "Reserved gameplay slot for Son Tinh.", false),
             CreateSkill(heroFolder, heroId, 11400034, 4, "Reserved Skill 4", "Reserved gameplay slot for Son Tinh.", false)
         };
@@ -237,7 +235,9 @@ public static class PaperLegendHeroConfigAssetGenerator
         int slot,
         string skillName,
         string description,
-        bool isPassive)
+        bool isPassive,
+        float cooldown = 0f,
+        float damage = 0f)
     {
         SkillConfig skill = LoadOrCreateAsset<SkillConfig>($"{folder}/SkillConfig_{skillId}_{SanitizeFileName(skillName)}.asset");
         skill.heroId = heroId;
@@ -246,6 +246,8 @@ public static class PaperLegendHeroConfigAssetGenerator
         skill.skillName = skillName;
         skill.description = description;
         skill.isPassive = isPassive;
+        skill.cooldown = Mathf.Max(0f, cooldown);
+        skill.damage = Mathf.Max(0f, damage);
         EditorUtility.SetDirty(skill);
         return skill;
     }
