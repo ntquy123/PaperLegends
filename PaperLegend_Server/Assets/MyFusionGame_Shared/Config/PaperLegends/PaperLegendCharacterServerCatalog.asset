@@ -16,12 +16,12 @@ MonoBehaviour:
   - modelId: 10000001
     characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
   - modelId: 10000002
-    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+    characterPrefab: {fileID: -1632721308300336962, guid: c56f5ab6273c9be489b5c571a3560d21, type: 3}
   - modelId: 10000003
-    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+    characterPrefab: {fileID: -1632721308300336962, guid: 168840500ab76d646b9ee0a500fabc87, type: 3}
   - modelId: 10000004
-    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+    characterPrefab: {fileID: -1632721308300336962, guid: 76e22c23bc1399c4a874f3a9661b8aaa, type: 3}
   - modelId: 10000005
-    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+    characterPrefab: {fileID: -1632721308300336962, guid: d013544fbfd66c64e8a22eed20059c5f, type: 3}
   - modelId: 10000006
-    characterPrefab: {fileID: -1632721308300336962, guid: 1e0ebf4432112634288b8e989543afed, type: 3}
+    characterPrefab: {fileID: -1632721308300336962, guid: 96eded83254825240bd8cb8c682b1919, type: 3}

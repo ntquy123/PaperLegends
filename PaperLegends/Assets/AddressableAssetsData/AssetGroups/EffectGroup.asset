@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - EffectLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 226e448248c440b4693005622b1d117b
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400033.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 257ab52bac758e34495756d94384eb7e
     m_Address: Assets/AddressableAsset/Skills/11000007.png
     m_ReadOnly: 0
@@ -63,8 +69,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - EffectLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47e9d39aac3ea3746b5de2aa47d92660
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400022.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4d5c8c32182df03488f53803523d698e
     m_Address: Assets/AddressableAsset/Skills/11000013.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e27e63e933b2c9489f58535b5c1c35c
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400032.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - EffectLabel
@@ -105,6 +123,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - EffectLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7466727432f34d24b965ce61dc1f9971
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400023.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7510d54ed719f704db5deb946bb6366c
     m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400002.png
     m_ReadOnly: 0
@@ -119,6 +143,24 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7ac4d21e11d470247aff3e0e7922f3f1
     m_Address: Assets/AddressableAsset/Items/Culi/EffectBall/vip1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c040f0332bf435468cd75a372f0e642
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400034.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8402533a3185e3b4686cd18e8be529d6
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400021.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 841b6d25225fca24db2f8c40f88ba7ce
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400043.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - EffectLabel
@@ -147,6 +189,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - EffectLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9dd6fd0effcb57643a02adb8d19012b2
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400031.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3223f6e3f8d143459cd720a27aaf368
     m_Address: Assets/AddressableAsset/Skills/Ball/11400003.png
     m_ReadOnly: 0
@@ -159,8 +207,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - EffectLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc5b701454e33694da247bb16c861b37
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400044.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c6be3ef134c23c04eba477314e6a068e
     m_Address: Assets/AddressableAsset/Skills/Ball/11400002.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9e28fb31db936f4da2cff162a368415
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400042.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - EffectLabel
@@ -179,6 +239,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e382081402948934f8e04bffeff9dc94
     m_Address: Assets/AddressableAsset/Skills/11000004.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EffectLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed0322a47c767844e85d553b082518ec
+    m_Address: Assets/AddressableAsset/PaperLegends/SkillIcons/11400041.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - EffectLabel

@@ -75,6 +75,11 @@
             "AssetGuid": "15128887bd447954089f22127e16fcc1",
             "AssetPath": "Assets/MyFusionGame_Shared/Prefab/NetWorkObject/EffectSkill/PaperArrowNetwork.prefab",
             "AssetName": "PaperArrowNetwork"
+        },
+        {
+            "AssetGuid": "c4d8e2f61a905b7c3e1f8a4b6d2c9e07",
+            "AssetPath": "Assets/MyFusionGame_Shared/Prefab/NetWorkObject/EffectSkill/HomingSwordNetwork.prefab",
+            "AssetName": "HomingSwordNetwork"
         }
     ]
 }

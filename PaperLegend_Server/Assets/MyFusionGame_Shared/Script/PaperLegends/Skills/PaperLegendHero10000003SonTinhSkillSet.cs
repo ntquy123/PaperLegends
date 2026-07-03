@@ -22,7 +22,7 @@ public sealed class PaperLegendHero10000003SonTinhSkillSet : IPaperLegendHeroSki
         if (character == null || skillLevel <= 0)
             return false;
 
-        return slot == 1 || slot == 2;
+        return slot >= 1 && slot <= PaperLegendHeroSkillRegistry.MaxSkillSlots;
     }
 
     public bool CanUpgradeSkill(PaperLegendCharacterNetworkHandler character, int slot, int currentSkillLevel)
@@ -43,9 +43,18 @@ public sealed class PaperLegendHero10000003SonTinhSkillSet : IPaperLegendHeroSki
                 return true;
 
             case 2:
+                if (character.TryGetPendingSkillTargetPosition(out _))
+                    return character.ServerTryCastHero10000003WavePushArea(skillLevel);
+
                 character.ServerArmHero10000003WavePush(skillLevel, DirectionInputTimeoutSeconds);
                 Debug.Log($"[PaperLegends][Skill] Son Tinh player={character.PlayerId} armed Wave Push level={skillLevel}. Waiting for next flick input direction.");
                 return true;
+
+            case 3:
+                return character.ServerTryCastHero10000003GravityWell(skillLevel);
+
+            case 4:
+                return character.ServerTryCastHero10000003TidalCataclysm(skillLevel);
         }
 
         return false;
@@ -70,8 +79,8 @@ public sealed class PaperLegendHero10000003SonTinhSkillSet : IPaperLegendHeroSki
         {
             CreateSkill(1, PaperLegendHeroSkillId.Hero10000003WaterBurst, "Water Burst", "After casting, swipe a direction to erupt 3 water bursts in a line. The second and third bursts deal increased damage.", 10f, 7f),
             CreateSkill(2, PaperLegendHeroSkillId.Hero10000003WavePush, "Wave Push", "After casting, the next flick direction releases a wave that pushes paper heroes hit by the wave.", 0f, 8f),
-            CreateSkill(3, PaperLegendHeroSkillId.Hero10000003ReservedSkill3, "Reserved Skill 3", "Reserved Son Tinh skill slot."),
-            CreateSkill(4, PaperLegendHeroSkillId.Hero10000003ReservedSkill4, "Reserved Skill 4", "Reserved Son Tinh skill slot.")
+            CreateSkill(3, PaperLegendHeroSkillId.Hero10000003GravityWell, "Tidal Vortex", "Press and drag to place a vortex on the ground. After 1 second, enemies in the area are pulled in, take light damage, and are slowed.", 8f, 9f),
+            CreateSkill(4, PaperLegendHeroSkillId.Hero10000003TidalCataclysm, "Tidal Cataclysm", "Press and drag to place a massive water blast, then stand still for 3 seconds to charge it. Moving during the charge fails the skill and still triggers cooldown.", 22f, 16f)
         };
     }
 

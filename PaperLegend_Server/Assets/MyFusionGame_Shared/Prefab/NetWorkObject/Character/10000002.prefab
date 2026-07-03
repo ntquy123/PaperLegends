@@ -1,0 +1,367 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1683764603200025119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5044262558110951299}
+  - component: {fileID: 4684568325910783015}
+  - component: {fileID: -4464468578925565393}
+  - component: {fileID: -1632721308300336962}
+  - component: {fileID: 2715285335373550791}
+  - component: {fileID: 2331905563655293696}
+  m_Layer: 0
+  m_Name: 10000002
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5044262558110951299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683764603200025119}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 0.05, z: 0.7}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 325508010251377018}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4684568325910783015
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683764603200025119}
+  m_Material: {fileID: 13400000, guid: bc4acc6f33a011b43b1b9e094e662718, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &-4464468578925565393
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683764603200025119}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &-1632721308300336962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683764603200025119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2742321762
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2715285335373550791}
+  - {fileID: 2331905563655293696}
+  ForceRemoteRenderTimeframe: 0
+--- !u!114 &2715285335373550791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683764603200025119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 325508010251377018}
+  UsePreciseRotation: 1
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01
+--- !u!114 &2331905563655293696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683764603200025119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d821eb5d61557947a4efc51acf0a5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallbackPlayerId: 0
+  fallbackTeam: 0
+  fallbackFactionId: 0
+  minHorizontalImpulse: 1.2
+  maxHorizontalImpulse: 4.5
+  minUpwardImpulse: 0.8
+  maxUpwardImpulse: 2.6
+  flickCooldownSeconds: 0.45
+  maxHorizontalSpeed: 6
+  maxAngularVelocity: 12
+  applyImpulseAtContactPoint: 1
+  forceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fallbackPaperWeight: 1
+  fallbackPaperBounce: 0.35
+  fallbackPaperFriction: 0.5
+  fallbackFlickForceMultiplier: 1
+  minPaperWeight: 0.1
+  maxPaperWeight: 10
+  minFlickForceMultiplier: 0.2
+  maxFlickForceMultiplier: 4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  groundProbeStartHeight: 0.25
+  groundProbeDistance: 0.45
+  groundedVelocityThreshold: 0.18
+  enableLandingKill: 1
+  landingTargetMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  landingKillBoxOffset: {x: 0, y: 0.08, z: 0}
+  landingKillBoxHalfExtents: {x: 0.35, y: 0.12, z: 0.35}
+  landingHitBufferSize: 16
+  defaultMaxHealth: 100
+  defaultAttack: 15
+  defaultAttackSpeed: 1
+  slowestPinnedKillSeconds: 2
+  fastestPinnedKillSeconds: 0.5
+  lowAttackSpeedReference: 10
+  highAttackSpeedReference: 25
+  pinnedMinVerticalSeparation: 0.02
+  pinnedMinHorizontalOverlap: 0.03
+  autoRespawn: 1
+  respawnDelaySeconds: 5
+  freeFallRespawnSeconds: 7
+  freeFallRespawnMinY: -12
+  maxLevel: 25
+  baseExperienceToNextLevel: 100
+  experienceGrowthPerLevel: 25
+  maxSkillLevel: 4
+  distanceDamagePerMeterPerLevel: 0.18
+  distanceDamageMaxMultiplier: 4
+  distanceLandingBaseDamageScale: 1
+  flickBoostHorizontalMultiplierPerLevel: 0.28
+  flickBoostUpwardMultiplierPerLevel: 0.12
+  edgeBounceHorizontalImpulse: 2.2
+  edgeBounceUpwardImpulse: 1.1
+  edgeBounceIntervalSeconds: 0.55
+  edgeBounceVfxRadius: 0.65
+  paperArrowProjectilePrefab: {fileID: 6151195512541387585, guid: 15128887bd447954089f22127e16fcc1, type: 3}
+  paperArrowSpawnForwardOffset: 0.45
+  paperArrowSpawnHeightOffset: 0.12
+  paperArrowBaseImpactDamage: 10
+  paperArrowImpactDamagePerLevel: 3
+  paperArrowSlowPercent: 0.3
+  paperArrowSlowDurationSeconds: 2.5
+  forwardSlideSwipesPerCast: 3
+  forwardSlideMinHorizontalImpulse: 2.2
+  forwardSlideMaxHorizontalImpulse: 7.8
+  forwardSlideMinUpwardImpulse: 0.04
+  forwardSlideMaxUpwardImpulse: 0.28
+  forwardSlideHorizontalMultiplierPerLevel: 0.14
+  forwardSlideVfxRadius: 0.55
+  shoveStunWindowSeconds: 3
+  shoveStunNearbyRadius: 2.8
+  shoveStunMinHorizontalImpulse: 5.5
+  shoveStunMaxHorizontalImpulse: 10.5
+  shoveStunMinUpwardImpulse: 0.45
+  shoveStunMaxUpwardImpulse: 1.15
+  shoveStunMinDurationSeconds: 1
+  shoveStunMaxDurationSeconds: 1.8
+  shoveStunVfxRadius: 0.65
+  lastStandDurationSeconds: 5
+  lastStandAuraVfxRadius: 1.25
+  lastStandMinimumHealth: 1
+  stunVelocityDampingPerSecond: 6
+  stunFreezeVelocityThreshold: 0.35
+  waterBurstRadius: 1.05
+  waterBurstStepDistance: 2.5
+  waterBurstIntervalSeconds: 0.3
+  waterBurstFallbackDamage: 10
+  wavePushLength: 5.5
+  wavePushHalfWidth: 1.15
+  wavePushOriginForwardOffset: 0.35
+  wavePushBaseHorizontalImpulse: 4.25
+  wavePushHorizontalImpulsePerLevel: 0.7
+  wavePushBaseUpwardImpulse: 0.55
+  wavePushUpwardImpulsePerLevel: 0.12
+  gravityWellRadius: 4
+  gravityWellPullHorizontalImpulse: 5.5
+  gravityWellPullUpwardImpulse: 0.25
+  gravityWellFallbackDamage: 8
+  gravityWellSlowDurationSeconds: 3
+  tidalCataclysmRadius: 6.5
+  tidalCataclysmFallbackDamage: 22
+  thunderStormRadius: 3.2
+  thunderStormStrikeRadius: 0.85
+  thunderStormCastDelaySeconds: 1
+  thunderStormStrikeIntervalSeconds: 0.65
+  thunderStormBaseDamage: 16
+  thunderStormDamagePerLevel: 4
+  proxySmoothTime: 0.035
+  proxyRotationLerpSpeed: 24
+  _PlayerId: 0
+  _Team: 0
+  _FactionId: 0
+  _CharacterModelId: 0
+  _HeroFormId: 0
+  _VisualModelVariantId: 0
+  _State: 0
+  _NetworkPosition: {x: 0, y: 0, z: 0}
+  _NetworkRotation: {x: 0, y: 0, z: 0, w: 0}
+  _NetworkScale: {x: 0, y: 0, z: 0}
+  _IsGrounded:
+    _value: 0
+  _LastProcessedFlickSequence: 0
+  _KillCount: 0
+  _DeathCount: 0
+  _LifeStateRevision: 0
+  _Level: 0
+  _CurrentExperience: 0
+  _ExperienceToNextLevel: 0
+  _TotalExperience: 0
+  _RespawnRemainingSeconds: 0
+  _MaxHealth: 0
+  _CurrentHealth: 0
+  _AttackPower: 0
+  _AttackSpeed: 0
+  _SkillUpgradePoints: 0
+  _Skill1Level: 0
+  _Skill2Level: 0
+  _Skill3Level: 0
+  _Skill4Level: 0
+  _Skill1CooldownRemaining: 0
+  _Skill2CooldownRemaining: 0
+  _Skill3CooldownRemaining: 0
+  _Skill4CooldownRemaining: 0
+  _Hero10000001DistanceDamageArmed:
+    _value: 0
+  _Hero10000001FlickBoostArmed:
+    _value: 0
+  _Hero10000001EdgeBounceArmed:
+    _value: 0
+  _Hero10000001PaperArrowArmed:
+    _value: 0
+  _Hero10000002ForwardSlideArmed:
+    _value: 0
+  _Hero10000002ForwardSlideRemaining: 0
+  _Hero10000002ShoveStunArmed:
+    _value: 0
+  _Hero10000003WaterBurstArmed:
+    _value: 0
+  _Hero10000003WavePushArmed:
+    _value: 0
+  _Hero10000003TidalCataclysmCharging:
+    _value: 0
+  _MoveSlowMultiplier: 0
+  _StatusIsStunned:
+    _value: 0
+  _StatusIsInvincibleAtOneHealth:
+    _value: 0
+--- !u!1 &6042057684277724223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 325508010251377018}
+  m_Layer: 0
+  m_Name: InterpolationTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &325508010251377018
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6042057684277724223}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5044262558110951299}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -19,6 +19,7 @@ public class SkillManager : MonoBehaviour
     private const int BallSkillIdMin = 11400000;
     private const int BallSkillIdMaxExclusive = 11500000;
     private const int PaperLegendHero10000001ModelId = 10000001;
+    private const int PaperLegendHero10000004ModelId = 10000004;
     private const int PaperLegendMaxSkillSlots = 4;
     public static SkillManager Instance;
     // Kỹ năng đã sử dụng trong lượt hiện tại của từng người chơi
@@ -541,7 +542,7 @@ public class SkillManager : MonoBehaviour
         backgroundRect.sizeDelta = chamCatHoldUISize;
 
         var backgroundImage = background.GetComponent<Image>();
-        backgroundImage.sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
+        backgroundImage.sprite = PaperLegendUiSpriteFactory.GetSolidSprite();
         backgroundImage.color = new Color(1f, 1f, 1f, 0.2f);
         backgroundImage.type = Image.Type.Simple;
 
@@ -554,7 +555,7 @@ public class SkillManager : MonoBehaviour
         fillRect.sizeDelta = chamCatHoldUISize;
 
         _chamCatHoldFill = fill.GetComponent<Image>();
-        _chamCatHoldFill.sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/Knob.psd");
+        _chamCatHoldFill.sprite = PaperLegendUiSpriteFactory.GetSolidSprite();
         _chamCatHoldFill.color = new Color(1f, 1f, 1f, 0.9f);
         _chamCatHoldFill.type = Image.Type.Filled;
         _chamCatHoldFill.fillMethod = Image.FillMethod.Radial360;
@@ -1043,6 +1044,7 @@ public class SkillManager : MonoBehaviour
             bool canUpgrade = handler.CanUpgradeSkill(slot);
             bool isPassive = skill != null && skill.isPassive;
             float cooldownRemaining = handler.GetSkillCooldownRemaining(slot);
+            bool blockManualSkillClick = ShouldBlockManualPaperLegendSkillClick(modelId, slot, skillId);
 
             GameObject item = itemRect.gameObject;
             item.SetActive(true);
@@ -1052,8 +1054,10 @@ public class SkillManager : MonoBehaviour
             Image skillImage = item.GetComponent<Image>();
             Button skillButton = item.GetComponent<Button>();
             GameObject notUseOverlay = item.transform.Find("NotUseImage")?.gameObject;
+            GameObject passiveIcon = FindPaperLegendPassiveSkillIcon(item.transform);
 
             HideUnavailableOverlay(notUseOverlay);
+            SetPaperLegendPassiveSkillIcon(passiveIcon, isPassive);
             if (skillImage != null)
             {
                 skillImage.DOKill();
@@ -1071,12 +1075,31 @@ public class SkillManager : MonoBehaviour
                 skillButton.onClick.RemoveAllListeners();
                 skillButton.interactable = canUse && !isPassive;
                 int capturedSlot = slot;
-                skillButton.onClick.AddListener(() => OnClickPaperLegendSkill(capturedSlot));
+                if (!blockManualSkillClick)
+                    skillButton.onClick.AddListener(() => OnClickPaperLegendSkill(capturedSlot));
             }
 
-            if (!canUse && (!isPassive || level <= 0))
+            if (cooldownRemaining > 0.01f && !isPassive)
                 ShowUnavailableSkill(notUseOverlay, skillImage, skillButton);
         }
+    }
+
+    private static GameObject FindPaperLegendPassiveSkillIcon(Transform skillItem)
+    {
+        if (skillItem == null)
+            return null;
+
+        Transform passive = skillItem.Find("PassiveIcon")
+            ?? skillItem.Find("PassiveSkillIcon")
+            ?? skillItem.Find("PassiveBadge")
+            ?? skillItem.Find("PassiveOverlay");
+        return passive != null ? passive.gameObject : null;
+    }
+
+    private static void SetPaperLegendPassiveSkillIcon(GameObject passiveIcon, bool visible)
+    {
+        if (passiveIcon != null)
+            passiveIcon.SetActive(visible);
     }
 
     private bool TryRenderPaperLegendSkillSlotViews(List<PaperLegendHeroSkillData> skillList, PaperLegendCharacterNetworkHandler handler)
@@ -1117,6 +1140,7 @@ public class SkillManager : MonoBehaviour
             bool canUpgrade = handler.CanUpgradeSkill(slot);
             float cooldownRemaining = handler.GetSkillCooldownRemaining(slot);
             string skillName = skill != null ? ResolvePaperLegendLocalizedText(skill.name) : null;
+            bool blockManualSkillClick = ShouldBlockManualPaperLegendSkillClick(handler.CharacterModelId, slot, skillId);
 
             view.gameObject.SetActive(true);
             view.transform.SetSiblingIndex(index);
@@ -1131,10 +1155,19 @@ public class SkillManager : MonoBehaviour
                 OnClickPaperLegendSkill,
                 OnClickPaperLegendUpgradeSkill,
                 skill != null && skill.isPassive,
-                cooldownRemaining);
+                cooldownRemaining,
+                blockManualSkillClick);
         }
 
         return true;
+    }
+
+    private static bool ShouldBlockManualPaperLegendSkillClick(int modelId, int slot, int skillId)
+    {
+        if (modelId != PaperLegendHero10000004ModelId)
+            return false;
+
+        return slot == 2 && skillId == (int)PaperLegendHeroSkillId.Hero10000004ReservedSkill2;
     }
 
     private static string ResolvePaperLegendLocalizedText(string key)
@@ -1456,18 +1489,22 @@ public class SkillManager : MonoBehaviour
 
     private void OnClickPaperLegendSkill(int slot)
     {
-        if (TryGetLocalPaperLegendHandler(out PaperLegendCharacterNetworkHandler handler) &&
-            handler.CharacterModelId == 10000005 &&
-            slot == 4)
+        if (TryGetLocalPaperLegendHandler(out PaperLegendCharacterNetworkHandler handler))
         {
-            Vector2 fallbackTargetPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            PaperLegendFlickInputCollector.BeginTargetedSkillUse(
-                slot,
-                (int)PaperLegendHeroSkillId.Hero10000005ThunderStorm,
-                fallbackTargetPosition);
-            PaperLegendFlickInputCollector.EndTargetedSkillUse(fallbackTargetPosition, canceled: false);
-            PlaySkillClickSound();
-            return;
+            if (handler.CharacterModelId == PaperLegendHero10000004ModelId && slot == 2)
+                return;
+
+            if (handler.CharacterModelId == 10000005 && slot == 4)
+            {
+                Vector2 fallbackTargetPosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+                PaperLegendFlickInputCollector.BeginTargetedSkillUse(
+                    slot,
+                    (int)PaperLegendHeroSkillId.Hero10000005ThunderStorm,
+                    fallbackTargetPosition);
+                PaperLegendFlickInputCollector.EndTargetedSkillUse(fallbackTargetPosition, canceled: false);
+                PlaySkillClickSound();
+                return;
+            }
         }
 
         PaperLegendFlickInputCollector.QueueSkillUse(slot);

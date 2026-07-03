@@ -19,6 +19,7 @@ using UnityEngine.Networking;
 public class UgsToFirebaseAuth : MonoBehaviour
 {
     public static UgsToFirebaseAuth Instance;
+    [SerializeField] private bool bypassGooglePlayGamesLoginForTesting = true;
     private FirebaseAuth _auth;
     private FirebaseUser _currentFirebaseUser;
     private AuthenticationProviderType _lastProviderType = AuthenticationProviderType.Anonymous;
@@ -73,6 +74,12 @@ public class UgsToFirebaseAuth : MonoBehaviour
     // Đăng nhập Google Play Games
     public void SignInWithGoogle()
     {
+        if (bypassGooglePlayGamesLoginForTesting)
+        {
+            SignInWithLocalTestAccount();
+            return;
+        }
+
 #if UNITY_EDITOR
         if (Application.isEditor)
         {
@@ -96,6 +103,35 @@ public class UgsToFirebaseAuth : MonoBehaviour
         }
 
         _ = SignInWithGoogleInternalAsync();
+    }
+
+    private void SignInWithLocalTestAccount()
+    {
+        string localUid = GetStableLocalTestUid();
+        Debug.Log($"[AUTH TEST] Bypassing Google Play Games login. Using local test uid '{localUid}'.");
+        CurrentAvatarUrl = null;
+        _lastProviderType = AuthenticationProviderType.Anonymous;
+        _ = NotifyBackendLoginAsync(localUid, string.Empty, AuthenticationProviderType.Anonymous, CurrentAvatarUrl);
+    }
+
+    private static string GetStableLocalTestUid()
+    {
+        const string prefsKey = "paper_legends_local_test_uid";
+        string uid = PlayerPrefs.GetString(prefsKey, string.Empty);
+        if (string.IsNullOrWhiteSpace(uid))
+        {
+            string deviceId = SystemInfo.deviceUniqueIdentifier;
+            if (string.IsNullOrWhiteSpace(deviceId) || deviceId == SystemInfo.unsupportedIdentifier)
+            {
+                deviceId = Guid.NewGuid().ToString("N");
+            }
+
+            uid = $"local-test-{deviceId}";
+            PlayerPrefs.SetString(prefsKey, uid);
+            PlayerPrefs.Save();
+        }
+
+        return uid;
     }
 
     public void HandleSocialLogin(AuthenticationProviderType providerType)
@@ -155,7 +191,7 @@ public class UgsToFirebaseAuth : MonoBehaviour
     private Task<SignInStatus> AuthenticateWithGoogleAsync()
     {
         var tcs = new TaskCompletionSource<SignInStatus>();
-        PlayGamesPlatform.Instance.Authenticate(status =>
+        PlayGamesPlatform.Instance.ManuallyAuthenticate(status =>
         {
             tcs.TrySetResult(status);
         });

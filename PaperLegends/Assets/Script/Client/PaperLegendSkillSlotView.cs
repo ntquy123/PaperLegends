@@ -11,11 +11,15 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
 {
     private const int BallSkillIdMin = 11400000;
     private const int BallSkillIdMaxExclusive = 11500000;
+    private const float Hero10000003WavePushTargetRadius = 2.8f;
+    private const float Hero10000003GravityWellTargetRadius = 4f;
+    private const float Hero10000003TidalCataclysmTargetRadius = 6.5f;
 
     [Header("Skill")]
     [SerializeField] private Button skillButton;
     [SerializeField] private Image skillIconImage;
     [SerializeField] private GameObject unavailableOverlay;
+    [SerializeField] private GameObject passiveIcon;
     [SerializeField] private TMP_Text skillNameText;
     [SerializeField] private TMP_Text levelText;
 
@@ -33,6 +37,7 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
     private int _loadVersion;
     private bool _upgradeVisible;
     private bool _targetedSkillPointerActive;
+    private bool _blockSkillClick;
 
     private void Awake()
     {
@@ -47,6 +52,9 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
             _targetedSkillPointerActive = false;
             PaperLegendFlickInputCollector.EndTargetedSkillUse(Vector2.zero, canceled: true);
         }
+
+        if (PaperLegendFlickInputCollector.IsTargetedChargeAimingOrCharging)
+            PaperLegendFlickInputCollector.CancelTargetedChargeAiming();
 
         transform.DOKill(true);
         if (skillIconImage != null)
@@ -68,7 +76,8 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
         Action<int> onSkillClicked,
         Action<int> onUpgradeClicked,
         bool isPassive = false,
-        float cooldownRemainingSeconds = 0f)
+        float cooldownRemainingSeconds = 0f,
+        bool blockSkillClick = false)
     {
         ResolveReferences();
         BindButtons();
@@ -76,6 +85,7 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
         _slot = Mathf.Clamp(slot, 1, 4);
         _onSkillClicked = onSkillClicked;
         _onUpgradeClicked = onUpgradeClicked;
+        _blockSkillClick = blockSkillClick;
 
         if (skillNameText != null)
             skillNameText.text = string.IsNullOrWhiteSpace(skillName) ? $"Skill {_slot}" : skillName;
@@ -89,9 +99,13 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
         }
 
         bool skillInteractable = canUse && !isPassive;
+        bool isCoolingDown = cooldownRemainingSeconds > 0.01f && !isPassive;
 
         if (unavailableOverlay != null)
-            unavailableOverlay.SetActive(!canUse && (!isPassive || level <= 0));
+            unavailableOverlay.SetActive(isCoolingDown);
+
+        if (passiveIcon != null)
+            passiveIcon.SetActive(isPassive);
 
         if (skillButton != null)
             skillButton.interactable = skillInteractable;
@@ -151,6 +165,16 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
                 unavailableOverlay = overlay.gameObject;
         }
 
+        if (passiveIcon == null)
+        {
+            Transform passive = transform.Find("PassiveIcon")
+                ?? transform.Find("PassiveSkillIcon")
+                ?? transform.Find("PassiveBadge")
+                ?? transform.Find("PassiveOverlay");
+            if (passive != null)
+                passiveIcon = passive.gameObject;
+        }
+
         if (levelText == null)
         {
             Transform label = transform.Find("LevelText") ?? transform.Find("Level") ?? transform.Find("Charges");
@@ -186,6 +210,9 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
         if (IsTargetedSkill())
             return;
 
+        if (_blockSkillClick)
+            return;
+
         transform.DOKill();
         transform.localScale = Vector3.one;
         transform.DOPunchScale(Vector3.one * 0.08f, 0.18f, 8, 0.65f);
@@ -198,7 +225,7 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
             return;
 
         _targetedSkillPointerActive = true;
-        PaperLegendFlickInputCollector.BeginTargetedSkillUse(_slot, _skillId, eventData.position);
+        PaperLegendFlickInputCollector.BeginTargetedSkillUse(_slot, _skillId, eventData.position, ResolveTargetedSkillRadius());
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -220,7 +247,24 @@ public sealed class PaperLegendSkillSlotView : MonoBehaviour, IPointerDownHandle
 
     private bool IsTargetedSkill()
     {
-        return _skillId == (int)PaperLegendHeroSkillId.Hero10000005ThunderStorm;
+        return _skillId == (int)PaperLegendHeroSkillId.Hero10000005ThunderStorm
+            || _skillId == (int)PaperLegendHeroSkillId.Hero10000003WavePush
+            || _skillId == (int)PaperLegendHeroSkillId.Hero10000003GravityWell
+            || _skillId == (int)PaperLegendHeroSkillId.Hero10000003TidalCataclysm;
+    }
+
+    private float ResolveTargetedSkillRadius()
+    {
+        if (_skillId == (int)PaperLegendHeroSkillId.Hero10000003WavePush)
+            return Hero10000003WavePushTargetRadius;
+
+        if (_skillId == (int)PaperLegendHeroSkillId.Hero10000003GravityWell)
+            return Hero10000003GravityWellTargetRadius;
+
+        if (_skillId == (int)PaperLegendHeroSkillId.Hero10000003TidalCataclysm)
+            return Hero10000003TidalCataclysmTargetRadius;
+
+        return -1f;
     }
 
     private void HandleUpgradeClicked()

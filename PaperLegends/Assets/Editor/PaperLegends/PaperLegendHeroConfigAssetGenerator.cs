@@ -11,6 +11,7 @@ public static class PaperLegendHeroConfigAssetGenerator
     private const string VfxRoot = HeroConfigRoot + "/Vfx";
     private const string SkillRoot = HeroConfigRoot + "/Skills";
     private const string AddressableRoot = "Assets/AddressableAsset/PaperLegends";
+    private const string EffectSkillPrefabRoot = "Assets/Prefab/EffectSkill";
 
     [MenuItem("Tools/Paper Legends/Create Default Hero Config Assets")]
     public static void CreateDefaultHeroConfigs()
@@ -147,8 +148,8 @@ public static class PaperLegendHeroConfigAssetGenerator
         {
             CreateSkill(heroFolder, heroId, 11400031, 1, "Water Burst", "After casting, swipe a direction to erupt 3 water bursts in a line. Bursts deal 100%, 120%, then 150% damage.", false, 7f, 10f),
             CreateSkill(heroFolder, heroId, 11400032, 2, "Wave Push", "After casting, the next flick direction releases a wave that pushes paper heroes hit by the wave.", false, 8f),
-            CreateSkill(heroFolder, heroId, 11400033, 3, "Reserved Skill 3", "Reserved gameplay slot for Son Tinh.", false),
-            CreateSkill(heroFolder, heroId, 11400034, 4, "Reserved Skill 4", "Reserved gameplay slot for Son Tinh.", false)
+            CreateSkill(heroFolder, heroId, 11400033, 3, "Tidal Vortex", "Press and drag to place a vortex on the ground. After 1 second, enemies in the area are pulled in, take light damage, and are slowed.", false, 9f, 8f),
+            CreateSkill(heroFolder, heroId, 11400034, 4, "Tidal Cataclysm", "Hold a point on the map for 3 seconds to charge a massive water blast. Your hero tenses up visibly while charging.", false, 16f, 22f)
         };
 
         HeroConfig hero = LoadOrCreateAsset<HeroConfig>(HeroConfigRoot + "/HeroConfig_SonTinh.asset");
@@ -178,10 +179,10 @@ public static class PaperLegendHeroConfigAssetGenerator
 
         SkillConfig[] skills =
         {
-            CreateSkill(heroFolder, heroId, 11400041, 1, "Reserved Skill 1", "Reserved gameplay slot for hero 10000004.", false),
-            CreateSkill(heroFolder, heroId, 11400042, 2, "Reserved Skill 2", "Reserved gameplay slot for hero 10000004.", false),
-            CreateSkill(heroFolder, heroId, 11400043, 3, "Reserved Skill 3", "Reserved gameplay slot for hero 10000004.", false),
-            CreateSkill(heroFolder, heroId, 11400044, 4, "Reserved Skill 4", "Reserved gameplay slot for hero 10000004.", false)
+            CreateSkill(heroFolder, heroId, 11400041, 1, "Homing Sword", "After casting, swipe a direction to launch a sword beam. It homes toward the nearest enemy hit and deals light damage with a 90% slow for 2 to 5 seconds based on skill level.", false, 7f, 8f),
+            CreateSkill(heroFolder, heroId, 11400042, 2, "Rush Paper Speed", "Double-tap an enemy to instantly dash near them. For 5 seconds your paper flick becomes much faster to fly and fall, up to x3 speed at max level. No damage.", false, 9f, 0f),
+            CreateSkill(heroFolder, heroId, 11400043, 3, "Pin Dodge", "Passive. While an enemy is pinning you, each damage tick has a 15% to 30% chance to dodge, quickly sliding just far enough to escape the pin without losing health.", true),
+            CreateSkill(heroFolder, heroId, 11400044, 4, "Pin Critical Strike", "Passive. While pinning an enemy, each damage burst has a 25% chance to critically strike for x2, x3, or x4 attack damage by skill level. Crits show orange damage numbers.", true),
         };
 
         HeroConfig hero = LoadOrCreateAsset<HeroConfig>(HeroConfigRoot + "/HeroConfig_SonTinh_10000004.asset");
@@ -248,8 +249,30 @@ public static class PaperLegendHeroConfigAssetGenerator
         skill.isPassive = isPassive;
         skill.cooldown = Mathf.Max(0f, cooldown);
         skill.damage = Mathf.Max(0f, damage);
+        TryAssignEffectSkillVfx(skill);
         EditorUtility.SetDirty(skill);
         return skill;
+    }
+
+    private static void TryAssignEffectSkillVfx(SkillConfig skill)
+    {
+        if (skill == null || skill.heroId <= 0 || skill.skillId <= 0)
+            return;
+
+        string vfxPath = $"{EffectSkillPrefabRoot}/{skill.heroId}/vfx_{skill.skillId}.prefab";
+        GameObject vfxPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(vfxPath);
+        if (vfxPrefab == null)
+            return;
+
+        skill.castVfxPrefab = vfxPrefab;
+        skill.castVfxLifetimeSeconds = skill.skillId switch
+        {
+            11400031 => 2.5f,
+            11400032 => 3f,
+            11400033 => 3.5f,
+            11400034 => 5f,
+            _ => skill.castVfxLifetimeSeconds > 0f ? skill.castVfxLifetimeSeconds : 2.5f
+        };
     }
 
     private static T LoadOrCreateAsset<T>(string path) where T : ScriptableObject

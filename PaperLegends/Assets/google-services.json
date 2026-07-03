@@ -1,28 +1,20 @@
 {
   "project_info": {
-    "project_number": "985676794783",
-    "project_id": "banculifirebase",
-    "storage_bucket": "banculifirebase.firebasestorage.app"
+    "project_number": "750965086072",
+    "project_id": "paperlegendsfirebase",
+    "storage_bucket": "paperlegendsfirebase.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:985676794783:android:884a6775c4d88412520baa",
+        "mobilesdk_app_id": "1:750965086072:android:20789f82d5316f03845a8d",
         "android_client_info": {
           "package_name": "com.gamenhalam.paperlegends"
         }
       },
       "oauth_client": [
         {
-          "client_id": "985676794783-o6j8qo1hlgahmt90ghbh137og5ro6elp.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.gamenhalam.paperlegends",
-            "certificate_hash": "c2d63e59be40685883d9b2f561a3066b0f03fc35"
-          }
-        },
-        {
-          "client_id": "985676794783-pr19nper1a9tr92jn04d5lbsjcnu4n5n.apps.googleusercontent.com",
+          "client_id": "750965086072-de05g4gg9bci8tlks1caspgqp2istuo2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.gamenhalam.paperlegends",
@@ -30,20 +22,20 @@
           }
         },
         {
-          "client_id": "985676794783-7th1m47qu6cbju45tu5ihi0mlb13riic.apps.googleusercontent.com",
+          "client_id": "750965086072-97p56qq9bvp1d3omq644pfqf9306nrlj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD944d81_IGWYfUbrJkSJ4kX72Zu-9cpcI"
+          "current_key": "AIzaSyBlHPwvLZ5iaU-OoFZSQBjwcvK1dyOcOPk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "985676794783-7th1m47qu6cbju45tu5ihi0mlb13riic.apps.googleusercontent.com",
+              "client_id": "750965086072-97p56qq9bvp1d3omq644pfqf9306nrlj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

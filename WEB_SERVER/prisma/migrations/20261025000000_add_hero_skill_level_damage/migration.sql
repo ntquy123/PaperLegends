@@ -31,6 +31,26 @@ SET
 WHERE "code" = '11400031';
 
 UPDATE "HeroSkill"
+SET
+  "damage" = 8,
+  "damageLevel1" = 8,
+  "damageLevel2" = 11,
+  "damageLevel3" = 14,
+  "damageLevel4" = 17,
+  "cooldown" = 9
+WHERE "code" = '11400033';
+
+UPDATE "HeroSkill"
+SET
+  "damage" = 22,
+  "damageLevel1" = 22,
+  "damageLevel2" = 27,
+  "damageLevel3" = 32,
+  "damageLevel4" = 37,
+  "cooldown" = 16
+WHERE "code" = '11400034';
+
+UPDATE "HeroSkill"
 SET "cooldown" = CASE "code"
   WHEN '11400001' THEN 0
   WHEN '11400002' THEN 6
@@ -42,8 +62,8 @@ SET "cooldown" = CASE "code"
   WHEN '11400024' THEN 60
   WHEN '11400031' THEN 7
   WHEN '11400032' THEN 8
-  WHEN '11400033' THEN 0
-  WHEN '11400034' THEN 0
+  WHEN '11400033' THEN 9
+  WHEN '11400034' THEN 16
   WHEN '11400041' THEN 0
   WHEN '11400042' THEN 0
   WHEN '11400043' THEN 0

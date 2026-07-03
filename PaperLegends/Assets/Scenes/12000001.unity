@@ -17887,9 +17887,9 @@ MonoBehaviour:
   transitionSpeed: 2
   followSpeed: 5
   closeOffset: {x: 0, y: 0.5, z: -1}
-  paperLegendFollowFov: 48
-  paperLegendFollowOffset: {x: 0, y: 9, z: -1.2}
-  paperLegendLookAtHeight: 0.05
+  paperLegendFollowFov: 40
+  paperLegendFollowOffset: {x: 0.8, y: 6.4, z: -6.2}
+  paperLegendLookAtHeight: 0.45
   paperLegendFollowDamping: 0.25
   paperLegendFollowPriority: 20
   offset: {x: 0, y: 1.5, z: 0}

@@ -42,8 +42,8 @@ public enum PaperLegendHeroSkillId : int
 
     Hero10000003WaterBurst = 11400031,
     Hero10000003WavePush = 11400032,
-    Hero10000003ReservedSkill3 = 11400033,
-    Hero10000003ReservedSkill4 = 11400034,
+    Hero10000003GravityWell = 11400033,
+    Hero10000003TidalCataclysm = 11400034,
 
     Hero10000004ReservedSkill1 = 11400041,
     Hero10000004ReservedSkill2 = 11400042,
@@ -65,10 +65,13 @@ public struct PaperLegendPlayerInputData : INetworkInput
     public Vector3 AimWorldDirection;
     public float Force01;
     public int FlickTargetPlayerId;
+    public NetworkBool Hero10000002ForwardSlideRequested;
+    public NetworkBool Hero10000004HomingSwordRequested;
     public NetworkBool SkillRequested;
     public int SkillSlot;
     public NetworkBool SkillTargetWorldPositionSet;
     public Vector3 SkillTargetWorldPosition;
     public NetworkBool SkillUpgradeRequested;
     public int SkillUpgradeSlot;
+    public int SkillTargetPlayerId;
 }

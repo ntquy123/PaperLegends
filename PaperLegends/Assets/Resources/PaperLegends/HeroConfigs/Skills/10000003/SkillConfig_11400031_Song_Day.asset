@@ -21,7 +21,7 @@ MonoBehaviour:
   cooldown: 7
   castSound: {fileID: 0}
   castVfx: {fileID: 0}
-  castVfxPrefab: {fileID: 0}
+  castVfxPrefab: {fileID: 2586947100091486788, guid: 775ee592c697a06478204bf01511fb6f, type: 3}
   castVfxLifetimeSeconds: 2.5
   damage: 10
   isPassive: 0

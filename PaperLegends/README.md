@@ -332,3 +332,24 @@ gồm:
 3. [Networked, OnChangedRender(nameof(OnHeldPositionChanged))]  1 kỹ thuật khai báo biến khi mà nó đổi thì hàm được gắn sẽ gọi toàn bộ client
 4. Kỹ thuật khai báo 1 hàm để gọi cho cả client và server:
 khi muốn gọi 1 hàm mà muốn cả 2 đều sử dụng thì phía client bọc thêm #if UNITY_SERVER
+
+
+## cách tạo key để lấy SHA1 trên đăng nhập oa client google
+C:\Program Files\Java\jdk-24\bin>keytool -printcert -jarfile "E:\my project\PaperLegendsProject\apkfile\tesst_v1.apk"
+Signer #1:
+
+Certificate #1:
+Owner: O=GameNhaLam
+Issuer: O=GameNhaLam
+Serial number: 5e7b8b03
+Valid from: Tue Jul 22 15:23:04 GMT+07:00 2025 until: Wed Jul 10 15:23:04 GMT+07:00 2075
+Certificate fingerprints:
+         SHA1: AD:5E:D2:72:99:4E:C0:11:EE:F4:03:A2:F5:32:8A:35:C0:68:F2:9D
+         SHA256: BA:20:71:C6:C8:5A:E3:96:49:94:EF:33:94:68:FD:D6:E9:A5:40:E9:2A:6F:91:14:D2:3A:54:4F:22:89:4D:85
+Signature algorithm name: SHA1withRSA (weak)
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+
+Warning:
+The certificate uses the SHA1withRSA signature algorithm which is considered a security risk.

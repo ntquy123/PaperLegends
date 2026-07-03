@@ -15,10 +15,10 @@ MonoBehaviour:
   heroId: 10000004
   skillId: 11400042
   slot: 2
-  skillName: Reserved Skill 2
-  description: Reserved gameplay slot for hero 10000004.
+  skillName: Rush Paper Speed
+  description: Double-tap an enemy to instantly dash near them. For 5 seconds your paper flick becomes much faster to fly and fall, up to x3 speed at max level. No damage.
   iconRef: {fileID: 0}
-  cooldown: 0
+  cooldown: 9
   castSound: {fileID: 0}
   castVfx: {fileID: 0}
   damage: 0

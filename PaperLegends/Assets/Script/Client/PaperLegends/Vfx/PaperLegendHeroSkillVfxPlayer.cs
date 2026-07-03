@@ -229,7 +229,9 @@ public sealed class PaperLegendHeroSkillVfxPlayer : MonoBehaviour
         vfxObject.transform.position = worldPosition;
 
         ParticleSystem particleSystem = vfxObject.AddComponent<ParticleSystem>();
+        particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         ParticleSystem.MainModule main = particleSystem.main;
+        main.playOnAwake = false;
         main.duration = 0.65f;
         main.loop = false;
         main.startLifetime = new ParticleSystem.MinMaxCurve(0.35f, 0.75f);

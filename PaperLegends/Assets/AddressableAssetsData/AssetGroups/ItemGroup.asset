@@ -45,8 +45,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemLabel
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2767bd4b18b49ac469a85c3484852668
-    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000003.png
+  - m_GUID: 2a4bfc3b5b6aee349a0872ee5982f325
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000004.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
@@ -165,8 +165,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemLabel
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a0f35eecc32bae646ac7200fae0de6de
-    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000004.png
+  - m_GUID: a257dd61b5f71544fb424eddbf6f51ad
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPortraits/10000004.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel
@@ -195,6 +195,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemLabel
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af9a0fb241f52fc47988511be1a17ffb
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroIcons/10000003.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: afab8f093533acf488cb8549c3363102
     m_Address: Assets/AddressableAsset/Items/ImageItem/99000014.png
     m_ReadOnly: 0
@@ -215,6 +221,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bae6532fc9c3c4b44a09c4bbc263d120
     m_Address: Assets/AddressableAsset/Items/ImageItem/88000001.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemLabel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c6cbd064d5f0f874b951847bd0fb359b
+    m_Address: Assets/AddressableAsset/PaperLegends/HeroPortraits/10000003.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemLabel

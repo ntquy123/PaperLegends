@@ -32,7 +32,7 @@ public sealed class PaperLegendHero10000002SkillSet : IPaperLegendHeroSkillSet
         if (character == null || skillLevel <= 0 || slot < 1 || slot > PaperLegendHeroSkillRegistry.MaxSkillSlots)
             return false;
 
-        if (slot == 3)
+        if (slot == 1 || slot == 3)
             return false;
 
         if (slot == 4)
@@ -54,9 +54,7 @@ public sealed class PaperLegendHero10000002SkillSet : IPaperLegendHeroSkillSet
         switch (Mathf.Clamp(slot, 1, PaperLegendHeroSkillRegistry.MaxSkillSlots))
         {
             case 1:
-                character.ServerArmHero10000002ForwardSlide();
-                Debug.Log($"[PaperLegends][Skill] player={character.PlayerId} armed hero 10000002 skill 1: forward slide level={skillLevel}.");
-                return true;
+                return false;
 
             case 2:
                 character.ServerArmHero10000002ShoveStun(skillLevel);
@@ -100,6 +98,7 @@ public sealed class PaperLegendHero10000002SkillSet : IPaperLegendHeroSkillSet
                 code = ((int)PaperLegendHeroSkillId.Hero10000002ForwardSlide).ToString(),
                 name = "skill_11400021_name",
                 description = "skill_11400021_description",
+                isPassive = true,
                 isActive = true
             },
             new PaperLegendHeroSkillData
