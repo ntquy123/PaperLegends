@@ -204,11 +204,17 @@ public class PaperLegendWorldHealthBar : MonoBehaviour
     private void SetVisible(bool visible)
     {
         GameObject root = ResolveVisualRoot();
-        if (root != null && root.activeSelf != visible)
+        // Never deactivate this component's own GameObject: doing so stops LateUpdate,
+        // so the bar could never turn itself back on (causes it to blink out permanently).
+        // Only toggle a dedicated generated child root; otherwise rely on CanvasGroup alpha.
+        if (root != null && root != gameObject && root.activeSelf != visible)
             root.SetActive(visible);
 
         if (canvasGroup != null)
+        {
             canvasGroup.alpha = visible ? 1f : 0f;
+            canvasGroup.blocksRaycasts = false;
+        }
     }
 
     private void UpdateWorldTransform()

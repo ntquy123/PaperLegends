@@ -34,9 +34,9 @@ public class CameraRotation : MonoBehaviour
     public Vector3 closeOffset = new Vector3(0, 0.5f, -1f); // Khoảng cách camera với viên bi
 
     [Header("PAPER LEGENDS CAMERA")]
-    private float paperLegendFollowFov = 40f;
-    [SerializeField] private Vector3 paperLegendFollowOffset = new Vector3(0.8f, 6.4f, -6.2f);
-    [SerializeField] private float paperLegendLookAtHeight = 0.45f;
+    private float paperLegendFollowFov = 42f;
+    [SerializeField] private Vector3 paperLegendFollowOffset = new Vector3(0f, 8.5f, -5.3f);
+    [SerializeField] private float paperLegendLookAtHeight = 0.5f;
     [SerializeField] private float paperLegendFollowDamping = 0.25f;
     [SerializeField] private int paperLegendFollowPriority = 20;
 
