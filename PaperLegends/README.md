@@ -17,7 +17,7 @@ Gameplay lấy cảm giác chiến thuật từ MOBA như Liên Quân nhưng thu
 - Online board game hành động.
 - Đấu tướng giấy theo lượt ngắn hoặc bán real-time tùy mode.
 - Một đường duy nhất, có nhà chính hai bên.
-- Hỗ trợ solo và đội 3v3.
+-  chế độ 4 free all
 - Tập trung vào vật lý, căn lực, kỹ năng và va chạm.
 
 ## Cấu trúc workspace

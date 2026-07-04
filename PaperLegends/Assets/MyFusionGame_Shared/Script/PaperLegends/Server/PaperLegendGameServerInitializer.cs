@@ -141,6 +141,8 @@ public sealed class PaperLegendGameServerInitializer : MonoBehaviour
             matchHost.ConfigureSpawnPoints(ResolveConfiguredRespawnPoints(config));
         }
 
+        ConfigureDrumObjectiveFromMapHost(loadedScene);
+
         var authorityMap = BuildPlayerAuthorityMap(quickMatchServer, players.Select(p => p.playerId));
         bool spawned = SpawnPaperCharacters(runner, manager, loadedScene, players, maxPlayers, authorityMap, config, heroStatsByModelId);
         if (!spawned)
@@ -441,7 +443,11 @@ public sealed class PaperLegendGameServerInitializer : MonoBehaviour
             manager.RegisterPlayerObject(playerInfo.playerId, spawned);
 
             if (config.EnableBotAi && isBotPlayer)
+            {
+                handler.ServerApplyBotSkillProgression();
+                PaperLegendBotSkillController.Ensure().RegisterBotCharacter(handler);
                 PaperLegendBotFlickController.Ensure().RegisterBotCharacter(handler);
+            }
         }
 
         return true;
@@ -617,6 +623,36 @@ public sealed class PaperLegendGameServerInitializer : MonoBehaviour
     private static bool HasAnyTransform(Transform[] points)
     {
         return points != null && points.Any(point => point != null);
+    }
+
+    private void ConfigureDrumObjectiveFromMapHost(Scene loadedScene)
+    {
+        var legacyHost = GameSessionNetWork_Host.Instance;
+        if (legacyHost == null || legacyHost.DrumObjectiveObject == null)
+        {
+            Debug.LogWarning($"[PaperLegends][Drum] No '{SceneLogicConfig.PaperLegendDrumObjectiveTag}' trigger was configured on the server host. Drum scoring is disabled for this map.");
+            return;
+        }
+
+        if (loadedScene.IsValid() && legacyHost.DrumObjectiveObject.gameObject.scene != loadedScene)
+        {
+            Debug.LogWarning($"[PaperLegends][Drum] Configured DrumObjective trigger belongs to scene '{legacyHost.DrumObjectiveObject.gameObject.scene.name}', expected '{loadedScene.name}'.");
+            return;
+        }
+
+        var trigger = legacyHost.DrumObjectiveObject.GetComponent<Collider>();
+        if (trigger == null)
+        {
+            Debug.LogWarning("[PaperLegends][Drum] Configured DrumObjective object has no collider. Drum scoring is disabled.");
+            return;
+        }
+
+        trigger.isTrigger = true;
+        var zone = legacyHost.DrumObjectiveObject.GetComponent<PaperLegendServerDrumObjectiveZone>();
+        if (zone == null)
+            zone = legacyHost.DrumObjectiveObject.gameObject.AddComponent<PaperLegendServerDrumObjectiveZone>();
+
+        zone.ConfigureFromMapAnchor(legacyHost.DrumObjectiveObject);
     }
 
     private void ResolveExperiencePickupPose(

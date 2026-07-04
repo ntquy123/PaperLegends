@@ -24,6 +24,8 @@ public class ServerMapHelper
         "Wall",
         "BallPlayer",
         "RingBall",
+        SceneLogicConfig.PaperLegendDrumTag,
+        SceneLogicConfig.PaperLegendDrumObjectiveTag,
         SceneLogicConfig.PaperLegendSpawnTag
     };
 
@@ -38,7 +40,9 @@ public class ServerMapHelper
         "Rain",
         "House",
         "Tree",
-        "Wall"
+        "Wall",
+        SceneLogicConfig.PaperLegendDrumTag,
+        SceneLogicConfig.PaperLegendDrumObjectiveTag
     };
 
     private readonly Dictionary<string, GameSessionNetWork_Host> _mapHostTemplates = new(StringComparer.OrdinalIgnoreCase);
@@ -361,6 +365,8 @@ public class ServerMapHelper
             host.PaperLegendSpawnPoints = new List<Transform>();
         }
 
+        host.TrongDongObject = null;
+        host.DrumObjectiveObject = null;
         host.LstLocationExam.Clear();
         host.LstLocationStartPoint.Clear();
         host.LstLocationGatherPoint.Clear();
@@ -654,6 +660,18 @@ public class ServerMapHelper
             return;
         }
 
+        if (IsPaperLegendDrumTag(tag))
+        {
+            host.TrongDongObject = transform;
+            return;
+        }
+
+        if (IsPaperLegendDrumObjectiveTag(tag))
+        {
+            host.DrumObjectiveObject = transform;
+            return;
+        }
+
         if (string.Equals(tag, "SpawnPoint", StringComparison.OrdinalIgnoreCase))
         {
             host.SpawnPlayerPoint = transform;
@@ -757,6 +775,23 @@ public class ServerMapHelper
             }
         }
 
+        if (IsPaperLegendDrumTag(entry.tag) && anchorTransform != null)
+        {
+            host.TrongDongObject = anchorTransform;
+            Debug.Log($"[ServerMapHelper][PaperLegends] TrongDong configured from template: {GetHierarchyPath(anchorTransform)} collider={collider?.GetType().Name ?? "null"}");
+            return;
+        }
+
+        if (IsPaperLegendDrumObjectiveTag(entry.tag) && anchorTransform != null)
+        {
+            host.DrumObjectiveObject = anchorTransform;
+            if (collider != null)
+                collider.isTrigger = true;
+
+            Debug.Log($"[ServerMapHelper][PaperLegends] DrumObjective configured from template: {GetHierarchyPath(anchorTransform)} collider={collider?.GetType().Name ?? "null"} trigger={collider?.isTrigger.ToString() ?? "null"}");
+            return;
+        }
+
         if (IsBananaSpawnTag(entry.tag) && anchorTransform != null)
         {
             var anchorKey = BuildAnchorKey(entry.tag, entry.hierarchyPath);
@@ -783,6 +818,26 @@ public class ServerMapHelper
         }
 
         return string.Equals(tag, SceneLogicConfig.PaperLegendSpawnTag, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsPaperLegendDrumTag(string tag)
+    {
+        if (string.IsNullOrWhiteSpace(tag))
+        {
+            return false;
+        }
+
+        return string.Equals(tag, SceneLogicConfig.PaperLegendDrumTag, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsPaperLegendDrumObjectiveTag(string tag)
+    {
+        if (string.IsNullOrWhiteSpace(tag))
+        {
+            return false;
+        }
+
+        return string.Equals(tag, SceneLogicConfig.PaperLegendDrumObjectiveTag, StringComparison.OrdinalIgnoreCase);
     }
 
     private static string GetHierarchyPath(Transform transform)

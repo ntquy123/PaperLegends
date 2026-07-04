@@ -12,6 +12,7 @@ public sealed class CoreShootingTutorialController : MonoBehaviour
     private const float BigBallScalePerLevel = 0.15f;
     private const float TutorialBallDiameterMultiplier = 0.8f;
     private const float TutorialPlayerScaleMultiplier = 0.5f;
+    private const bool EnableCoreShootingTutorialAfterLogin = false;
 
     public static CoreShootingTutorialController Instance { get; private set; }
     private static bool showNewPlayerGiftPopupAfterMenuLoad;
@@ -101,6 +102,12 @@ public sealed class CoreShootingTutorialController : MonoBehaviour
 #if UNITY_SERVER
         return false;
 #else
+        if (!EnableCoreShootingTutorialAfterLogin)
+        {
+            showNewPlayerGiftPopupAfterMenuLoad = false;
+            return false;
+        }
+
         if (player == null || player.UserId <= 0 || player.IsTutorialCompleted)
         {
             return false;

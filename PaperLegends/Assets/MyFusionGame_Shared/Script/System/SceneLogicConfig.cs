@@ -12,6 +12,8 @@ using UnityEditor;
 public class SceneLogicConfig : ScriptableObject
 {
     public const string PaperLegendSpawnTag = "paper_legend_spawn";
+    public const string PaperLegendDrumTag = "TrongDong";
+    public const string PaperLegendDrumObjectiveTag = "DrumObjective";
     public const int PaperLegendSpawnPointCount = 4;
 
     private static readonly HashSet<string> IgnoredSystemTags = new(StringComparer.OrdinalIgnoreCase)

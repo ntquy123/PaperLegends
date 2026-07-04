@@ -123,6 +123,8 @@ public class GameSessionNetWork_Host : NetworkBehaviour
     public List<Transform> LstLocationGatherPoint = new List<Transform>();
     public List<Transform> LstLocationStartPoint = new List<Transform>();
     public List<Transform> PaperLegendSpawnPoints = new List<Transform>();
+    public Transform TrongDongObject;
+    public Transform DrumObjectiveObject;
     public List<Transform> BananaSpawnPoints = new List<Transform>();
     public List<GameObject> ActiveBananaPeels = new List<GameObject>();
     private IReadOnlyList<TurnOrderEntry> TurnOrderListInternal => GetTurnOrderSnapshot();

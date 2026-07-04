@@ -25,6 +25,8 @@ TagManager:
   - paper_legend_spawn
   - BallPlayer
   - RingBall
+  - TrongDong
+  - DrumObjective
   layers:
   - Default
   - TransparentFX

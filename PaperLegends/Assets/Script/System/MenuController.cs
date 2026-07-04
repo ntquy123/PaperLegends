@@ -18,6 +18,8 @@ public class MenuController : MonoBehaviour
     private const int MarketUnlockLevel = 5;
     private const float LockedMenuButtonAlpha = 0.35f;
     private const string AutoMenuLockOverlayName = "AutoMenuLockOverlay";
+    private const bool EnableCompanionSelectionDuringAccountCreation = false;
+    private const int TemporaryDefaultCompanionBallItemId = 0;
 
     [Header("UI PANEL CONFIG")]
     [FormerlySerializedAs("MainMenu")]
@@ -1876,7 +1878,7 @@ public class MenuController : MonoBehaviour
 
         if (pendingSocialLoginModel != null)
         {
-            if (selectedCompanionBallItemId <= 0)
+            if (selectedCompanionBallItemId <= 0 && EnableCompanionSelectionDuringAccountCreation)
             {
                 Debug.LogWarning("Bạn cần chọn viên bi đồng hành trước khi đặt tên nhân vật.");
                 ShowCompanionSelectionPanel();
@@ -1940,6 +1942,10 @@ public class MenuController : MonoBehaviour
         }
 
         playerName = desiredName;
+        if (!EnableCompanionSelectionDuringAccountCreation && selectedCompanionBallItemId <= 0)
+        {
+            selectedCompanionBallItemId = ResolveTemporaryDefaultCompanionBallItemId();
+        }
 
         SetLoadingScreenVisible(true);
 
@@ -2153,6 +2159,18 @@ public class MenuController : MonoBehaviour
 
     private void ShowCompanionSelectionPanel()
     {
+        if (!EnableCompanionSelectionDuringAccountCreation)
+        {
+            selectedCompanionBallItemId = ResolveTemporaryDefaultCompanionBallItemId();
+            if (companionSelectionPanel != null)
+            {
+                companionSelectionPanel.SetActive(false);
+            }
+
+            ShowPlayerNamePanel();
+            return;
+        }
+
         if (LoginSocialPanel != null)
         {
             LoginSocialPanel.SetActive(false);
@@ -2182,6 +2200,31 @@ public class MenuController : MonoBehaviour
             }
         }
     }
+
+    private int ResolveTemporaryDefaultCompanionBallItemId()
+    {
+        int savedItemId = PlayerPrefs.GetInt("SelectedCompanionBallItemId", TemporaryDefaultCompanionBallItemId);
+        if (savedItemId > 0)
+        {
+            return savedItemId;
+        }
+
+        if (companionBallOptions != null)
+        {
+            foreach (var option in companionBallOptions)
+            {
+                if (option != null && option.ItemId > 0)
+                {
+                    PlayerPrefs.SetInt("SelectedCompanionBallItemId", option.ItemId);
+                    PlayerPrefs.Save();
+                    return option.ItemId;
+                }
+            }
+        }
+
+        return TemporaryDefaultCompanionBallItemId;
+    }
+
     public void ReloadPlayerInfoData()
     {
         StartCoroutine(loadInfor());

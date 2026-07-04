@@ -227,6 +227,7 @@ public class PaperLegendMatchNetworkHost : NetworkBehaviour
             assistants[i].ServerGrantExperience(assistExperienceReward, PaperLegendExperienceSource.Assist);
 
         victim.ServerEliminate(attacker);
+        GameScoreManager.Instance?.RegisterKill(attacker, victim);
 
         AddFactionKill(attacker.FactionId);
 
@@ -237,6 +238,14 @@ public class PaperLegendMatchNetworkHost : NetworkBehaviour
 
         CheckKillLimit(attacker);
         return true;
+    }
+
+    public void ReportScoreLimitWinner(PaperLegendCharacterNetworkHandler winner)
+    {
+        if (!CanWriteMatchState() || IsMatchEnded || winner == null)
+            return;
+
+        EndMatch(winner);
     }
 
     public void ApplyBaseDamage(PaperLegendTeam targetTeam, int damage)

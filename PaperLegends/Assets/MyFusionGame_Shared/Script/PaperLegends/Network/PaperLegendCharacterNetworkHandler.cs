@@ -262,6 +262,14 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
 
     public bool CanAcceptLocalFlick => CanAcceptLocalFlickInput(out _);
 
+    public bool HasPendingBotSkillFollowUp =>
+        Hero10000003WaterBurstArmed
+        || Hero10000003WavePushArmed
+        || Hero10000001PaperArrowArmed
+        || Hero10000004HomingSwordArmed
+        || Hero10000002ShoveStunArmed
+        || (Hero10000002ForwardSlideArmed && Hero10000002ForwardSlideRemaining > 0);
+
     public bool IsStunned => StatusIsStunned;
 
     public bool IsInvincibleAtOneHealth => StatusIsInvincibleAtOneHealth;
@@ -427,6 +435,7 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
             State = PaperLegendCharacterState.Idle;
             PublishAuthoritativeTransform();
             PaperLegendMatchNetworkHost.Instance?.RegisterPlayer(this);
+            GameScoreManager.Instance?.RegisterPlayer(this);
         }
 
         ConfigureRigidbodyForAuthority();
@@ -1058,6 +1067,14 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         return true;
     }
 
+    public void ServerTryApplyBotInput(PaperLegendPlayerInputData input)
+    {
+        if (!HasStateAuthority)
+            return;
+
+        ConsumeInput(input);
+    }
+
     public void ServerAddKill()
     {
         if (!HasStateAuthority)
@@ -1113,6 +1130,11 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         {
             SkillUpgradePoints += levelsGained;
             PaperLegendHeroSkillRegistry.NotifyHeroLevelChanged(this, oldLevel, Level);
+
+#if UNITY_SERVER
+            if (BotPlayerController.Instance != null && BotPlayerController.Instance.IsBotPlayer(PlayerId))
+                ServerApplyBotSkillProgression();
+#endif
         }
 
         Debug.Log($"[PaperLegends][XP] player={PlayerId} +{amount} xp source={source} level={Level} xp={CurrentExperience}/{ExperienceToNextLevel}");
@@ -1137,6 +1159,9 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
         if (attacker.IsPinningCharacter(this)
             && ServerTryHero10000004PinDodge(attacker))
             return true;
+
+        // Server-side score assist tracking. Replace this hook if damage ownership moves to a new HP/combat class.
+        GameScoreManager.Instance?.RecordDamage(attacker, this);
 
         float newHealth = CurrentHealth - damageAmount;
 
@@ -2637,6 +2662,67 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
             case 4:
                 Skill4Level = level;
                 break;
+        }
+    }
+
+    public void ServerApplyBotSkillProgression()
+    {
+        if (!HasStateAuthority)
+            return;
+
+        if (!TryGetBotSkillUpgradePriority(CharacterModelId, out int[] priority))
+            return;
+
+        int upgradeBudget = Mathf.Clamp(Level, 1, maxSkillLevel * priority.Length);
+        SetSkillLevel(1, 0);
+        SetSkillLevel(2, 0);
+        SetSkillLevel(3, 0);
+        SetSkillLevel(4, 0);
+        SkillUpgradePoints = 0;
+
+        int priorityIndex = 0;
+        int safety = 0;
+        while (upgradeBudget > 0 && safety++ < 64)
+        {
+            int slot = priority[priorityIndex % priority.Length];
+            priorityIndex++;
+
+            int currentLevel = GetSkillLevel(slot);
+            if (currentLevel >= maxSkillLevel)
+                continue;
+
+            if (!PaperLegendHeroSkillRegistry.CanUpgradeSkill(this, slot))
+                continue;
+
+            SetSkillLevel(slot, currentLevel + 1);
+            upgradeBudget--;
+        }
+
+        Debug.Log($"[PaperLegends][BOT][Skill] player={PlayerId} model={CharacterModelId} matchLevel={Level} skills=[{Skill1Level},{Skill2Level},{Skill3Level},{Skill4Level}].");
+    }
+
+    private static bool TryGetBotSkillUpgradePriority(int heroModelId, out int[] priority)
+    {
+        switch (heroModelId)
+        {
+            case PaperLegendHero10000001SkillSet.HeroId:
+                priority = new[] { 2, 3, 4, 1 };
+                return true;
+            case PaperLegendHero10000002SkillSet.HeroId:
+                priority = new[] { 2, 4, 1, 3 };
+                return true;
+            case PaperLegendHero10000003SonTinhSkillSet.HeroId:
+                priority = new[] { 1, 2, 3, 4 };
+                return true;
+            case PaperLegendHero10000004SonTinhSkillSet.HeroId:
+                priority = new[] { 2, 1, 3, 4 };
+                return true;
+            case PaperLegendHero10000005ThanSamSkillSet.HeroId:
+                priority = new[] { 4, 1, 2, 3 };
+                return true;
+            default:
+                priority = null;
+                return false;
         }
     }
 
@@ -4249,6 +4335,9 @@ public class PaperLegendCharacterNetworkHandler : NetworkBehaviour
     {
         if (PaperLegendMatchNetworkHost.Instance != null)
             PaperLegendMatchNetworkHost.Instance.UnregisterPlayer(this);
+
+        if (GameScoreManager.Instance != null)
+            GameScoreManager.Instance.UnregisterPlayer(this);
     }
 
     private void OnDrawGizmosSelected()
